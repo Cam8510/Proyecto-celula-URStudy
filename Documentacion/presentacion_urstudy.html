@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URStudy | Presentación</title>
+
+  <style>
+    :root {
+      --navy: #1d2154;
+      --blue: #6564d5;
+      --purple: #a078e8;
+      --lavender: #eee9ff;
+      --white: #ffffff;
+      --text: #24243f;
+      --muted: #777892;
+      --line: #deddf0;
+      --soft: #f7f6ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #d7d6e5;
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      overflow: hidden;
+    }
+
+    .presentation {
+      width: 100vw;
+      height: 100vh;
+      min-height: 580px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      padding: 46px 7.5% 54px;
+      background: var(--soft);
+      position: relative;
+      animation: appear 0.35s ease;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateX(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .top-line {
+      height: 7px;
+      width: 170px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      background: linear-gradient(
+        90deg,
+        var(--navy) 0 33.33%,
+        var(--blue) 33.33% 66.66%,
+        var(--purple) 66.66% 100%
+      );
+    }
+
+    .slide-label {
+      color: var(--blue);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      color: var(--navy);
+      font-size: clamp(2.6rem, 6vw, 5.4rem);
+      line-height: 0.95;
+      letter-spacing: -2px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      color: var(--navy);
+      font-size: clamp(1.8rem, 3.2vw, 3rem);
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    h3 {
+      color: var(--navy);
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: clamp(1rem, 1.7vw, 1.35rem);
+      line-height: 1.5;
+      max-width: 720px;
+    }
+
+    .two-columns {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+      flex: 1;
+    }
+
+    .three-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      align-items: stretch;
+      flex: 1;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 8px 22px rgba(29, 33, 84, 0.07);
+    }
+
+    .card.purple {
+      background: var(--lavender);
+      border-color: #d5c7ff;
+    }
+
+    .card.dark {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: var(--white);
+    }
+
+    .card.dark h3 {
+      color: var(--white);
+    }
+
+    .card .number {
+      color: var(--purple);
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .card.dark .number {
+      color: #cec5ff;
+    }
+
+    .card p,
+    .card li {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.38;
+    }
+
+    .card.dark p,
+    .card.dark li {
+      color: #e7e5ff;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 19px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    .placeholder {
+      min-height: 320px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: var(--muted);
+      background:
+        linear-gradient(135deg, rgba(101, 100, 213, 0.1), rgba(160, 120, 232, 0.18)),
+        var(--white);
+      border: 2px dashed #bab7eb;
+      border-radius: 24px;
+      padding: 24px;
+    }
+
+    .placeholder strong {
+      display: block;
+      color: var(--navy);
+      font-size: 1.1rem;
+      margin-bottom: 7px;
+    }
+
+    .placeholder img {
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 360px;
+        object-fit: contain;
+        display: block;
+        border-radius: 16px;
+        }
+
+.image-box {
+  padding: 10px;
+  min-height: 320px;
+  background: white;
+  border: 1px solid #deddf0;
+  border-style: solid;
+}
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 26px;
+    }
+
+    .tag {
+      color: var(--navy);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 8px 13px;
+      border-radius: 99px;
+      background: var(--lavender);
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+    }
+
+    .flow-step {
+      min-width: 118px;
+      flex: 1;
+      padding: 13px 10px;
+      text-align: center;
+      color: var(--navy);
+      font-size: 0.86rem;
+      font-weight: 700;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .arrow {
+      color: var(--purple);
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    .metric-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .metric {
+      flex: 1;
+      padding: 16px 10px;
+      text-align: center;
+      background: var(--white);
+      border-radius: 16px;
+      border: 1px solid var(--line);
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--navy);
+      font-size: 1.75rem;
+    }
+
+    .metric span {
+      color: var(--muted);
+      display: block;
+      font-size: 0.73rem;
+      line-height: 1.2;
+      margin-top: 5px;
+    }
+
+    .hero-shape {
+      width: 100%;
+      height: 430px;
+      border-radius: 32px;
+      background: linear-gradient(
+        90deg,
+        var(--navy) 0 33.33%,
+        var(--blue) 33.33% 66.66%,
+        var(--purple) 66.66% 100%
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 24px 50px rgba(29, 33, 84, 0.22);
+    }
+
+    .hero-shape span {
+      color: white;
+      font-size: clamp(4rem, 9vw, 7rem);
+      font-weight: 900;
+      letter-spacing: -5px;
+    }
+
+    .footer {
+      position: absolute;
+      left: 7.5%;
+      right: 7.5%;
+      bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+
+    .progress {
+      height: 5px;
+      width: 180px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #dfdeeb;
+    }
+
+    .progress div {
+      height: 100%;
+      background: linear-gradient(90deg, var(--navy), var(--blue), var(--purple));
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .controls {
+      position: fixed;
+      right: 25px;
+      bottom: 22px;
+      display: flex;
+      gap: 9px;
+      z-index: 20;
+    }
+
+    .controls button {
+      width: 43px;
+      height: 43px;
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      background: var(--navy);
+      box-shadow: 0 7px 16px rgba(29, 33, 84, 0.25);
+    }
+
+    .controls button:hover {
+      background: var(--blue);
+    }
+
+    .closing {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .closing h1 {
+      font-size: clamp(3rem, 7vw, 6rem);
+    }
+
+    .closing .subtitle {
+      margin: 0 auto;
+    }
+
+    @media (max-width: 800px) {
+      body {
+        overflow: auto;
+      }
+
+      .presentation {
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .slide {
+        min-height: 100vh;
+        height: auto;
+        padding: 34px 7% 75px;
+      }
+
+      .two-columns,
+      .three-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-shape {
+        height: 230px;
+      }
+
+      .placeholder {
+        min-height: 220px;
+      }
+    }
+
+    @media print {
+      body {
+        overflow: visible;
+        background: white;
+      }
+
+      .presentation {
+        height: auto;
+        overflow: visible;
+      }
+
+      .slide,
+      .slide.active {
+        display: flex !important;
+        width: 100vw;
+        height: 100vh;
+        page-break-after: always;
+      }
+
+      .controls {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="presentation">
+
+    <!-- DIAPOSITIVA 1 -->
+    <section class="slide active">
+      <div class="two-columns">
+        <div>
+          <div class="top-line"></div>
+          <div class="slide-label">Proyecto de ingeniería de software</div>
+          <h1>URStudy</h1>
+          <p class="subtitle">
+            Plataforma de gestión de monitorías universitarias para conectar
+            estudiantes, monitores y procesos institucionales.
+          </p>
+
+          <div class="tags">
+            <span class="tag">Investigación</span>
+            <span class="tag">Requisitos</span>
+            <span class="tag">Prototipo</span>
+            <span class="tag">Usabilidad</span>
+          </div>
+
+          <p style="margin-top: 42px; color: var(--muted); font-size: 0.83rem;">
+            Camila Camacho Castellanos &nbsp;|&nbsp; Maria Fernanda Valeriano Pulido<br>
+            Universidad del Rosario
+          </p>
+        </div>
+
+        <div class="hero-shape">
+          <span>UR</span>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>URStudy — Plataforma de Monitorías</span>
+        <div class="progress"><div style="width: 11%;"></div></div>
+      </div>
+    </section>
+
+    <!-- DIAPOSITIVA 2 -->
+    <section class="slide">
+      <div class="top-line"></div>
+      <div class="slide-label">01 — Contexto</div>
+      <h2>Problema identificado</h2>
+
+      <div class="two-columns">
+        <div>
+          <p class="subtitle">
+            Las monitorías se gestionan con canales dispersos y coordinación manual.
+            Esto dificulta encontrar apoyo académico confiable y organizar las sesiones.
+          </p>
+
+          <div class="cards">
+            <div class="card">
+              <div class="number">01</div>
+              <h3>Estudiantes</h3>
+              <p>Les cuesta identificar monitores confiables, disponibles y adecuados para su necesidad.</p>
+            </div>
+
+            <div class="card">
+              <div class="number">02</div>
+              <h3>Monitores</h3>
+              <p>Necesitan visibilidad, control de su disponibilidad y gestión de solicitudes.</p>
+            </div>
+
+            <div class="card">
+              <div class="number">03</div>
+              <h3>Proceso</h3>
+              <p>Hay poca trazabilidad y existe riesgo de reservas duplicadas o información desactualizada.</p>
+            </div>
+
+            <div class="card purple">
+              <div class="number">UR</div>
+              <h3>Propuesta</h3>
+              <p>Centralizar búsqueda, solicitud, confirmación, seguimiento y calificación.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="placeholder">
+          <img src= "problema.png" alt="Problema identificado">
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>Problema y propuesta de valor</span>
+        <div class="progress"><div style="width: 22%;"></div></div>
+      </div>
+    </section>
+
+    <!-- DIAPOSITIVA 3 -->
+    <section class="slide">
+      <div class="top-line"></div>
+      <div class="slide-label">02 — Investigación</div>
+      <h2>Lo que aprendimos de los usuarios</h2>
+
+      <div class="three-columns">
+        <div class="card dark">
+          <div class="number">E</div>
+          <h3>Estudiantes</h3>
+          <ul>
+            <li>Quieren comparar opciones con claridad.</li>
+            <li>Valoran disponibilidad, tarifa y calificación.</li>
+            <li>Necesitan solicitar apoyo rápidamente.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="number">M</div>
+          <h3>Monitores</h3>
+          <ul>
+            <li>Requieren agenda organizada.</li>
+            <li>Necesitan administrar solicitudes.</li>
+            <li>Buscan seguridad y visibilidad.</li>
+          </ul>
+        </div>
+
+        <div class="card purple">
+          <div class="number">A</div>
+          <h3>Administración</h3>
+          <ul>
+            <li>Debe verificar soportes.</li>
+            <li>Gestiona materias y acreditaciones.</li>
+            <li>Busca mayor trazabilidad.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px; text-align: center;">
+        <div class="placeholder" style="min-height: 130px;">
+          <img src="Mapa_estudiantes.png" alt="Prototipo estudiante">
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>Mapas de empatía</span>
+        <div class="progress"><div style="width: 33%;"></div></div>
+      </div>
+    </section>
+
+    <!-- DIAPOSITIVA 4 -->
+    <section class="slide">
+      <div class="top-line"></div>
+      <div class="slide-label">03 — Requisitos</div>
+      <h2>Alcance del producto mínimo viable</h2>
+
+      <div class="two-columns">
+        <div class="card dark" style="height: 100%;">
+          <h3>Incluido en el MVP</h3>
+          <ul>
+            <li>Registro e inicio de sesión institucional.</li>
+            <li>Perfiles de estudiante y monitor.</li>
+            <li>Publicaciones y disponibilidad.</li>
+            <li>Búsqueda por materia, fecha, hora y modalidad.</li>
+            <li>Solicitud, aceptación, rechazo y confirmación.</li>
+            <li>Historial y calificación.</li>
+          </ul>
+        </div>
+
+        <div class="card purple" style="height: 100%;">
+          <h3>Mejoras futuras</h3>
+          <ul>
+            <li>Recordatorios y reprogramación.</li>
+            <li>Favoritos y autocompletado.</li>
+            <li>Vista semanal avanzada.</li>
+            <li>Integración con Google Calendar.</li>
+            <li>Pagos integrados.</li>
+          </ul>
+
+          <div style="margin-top: 28px;">
+            <span class="tag">Must have</span>
+            <span class="tag">Should have</span>
+            <span class="tag">Could have</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>Priorización MoSCoW</span>
+        <div class="progress"><div style="width: 44%;"></div></div>
+      </div>
+    </section>
+
+    <!-- DIAPOSITIVA 5 -->
+    <section class="slide">
+      <div class="top-line"></div>
+      <div class="slide-label">04 — Organización</div>
+      <h2>De necesidades a historias de usuario</h2>
+
+      <div class="two-columns">
+        <div>
+          <p class="subtitle">
+            Los requisitos se transformaron en <strong>36 historias de usuario</strong>
+            organizadas en Trello, con criterios de aceptación para frontend,
+            backend y persistencia.
+          </p>
+
+          <div class="flow">
+            <div class="flow-step">Mapas de empatía</div>
+            <div class="arrow">→</div>
+            <div class="flow-step">Requisitos</div>
+            <div class="arrow">→</div>
+            <div class="flow-step">Historias</div>
+            <div class="arrow">→</div>
+            <div class="flow-step">Prototipo</div>
+          </div>
+
+          <div class="cards" style="margin-top: 26px;">
+            <div class="card">
+              <h3>Flujo estudiante</h3>
+              <p>Busca, compara, solicita, consulta historial y califica.</p>
+            </div>
+
+            <div class="card">
+              <h3>Flujo monitor</h3>
+              <p>Publica, organiza disponibilidad y gestiona solicitudes.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="placeholder">
+          <img src="trello.png" alt="Tablero de trello">
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>Historias de usuario y trazabilidad</span>
+        <div class="progress"><div style="width: 55%;"></div></div>
+      </div>
+    </section>
+
+    <!-- DIAPOSITIVA 6 -->
+    <section class="slide">
+      <div class="top-line"></div>
+      <div class="slide-label">05 — Diseño técnico</div>
+      <h2>Arquitectura y modelo de clases</h2>
+
+      <div class="two-columns">
+        <div>
+          <div class="card">
+            <h3>Arquitectura modular</h3>
+            <div class="flow">
+              <div class="flow-step">Frontend<br><small>HTML, CSS, JS</small></div>
+              <div class="arrow">→</div>
+              <div class="flow-step">Backend<br><small>Node.js + Express</small></div>
+              <div class="arrow">→</div>
+              <div class="flow-step">Datos<br><small>MongoDB Atlas</small></div>
+            </div>
+          </div>
+
+          <div class="cards" style="margin-top: 14px;">
+            <div class="card purple">
+              <h3>Entidades</h3>
+              <p>Usuario, perfiles, materia, publicación, disponibilidad y solicitud.</p>
+            </div>
+
+            <div class="card">
+              <h3>Seguimiento</h3>
+              <p>Monitoría, cancelación, historial, calificación y reputación.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="placeholder">
+          <img src="diagrama_clases.png" alt="Diagrama de clases">
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>Arquitectura modular y entidades del sistema</span>
+        <div class="progress"><div style="width: 66%;"></div></div>
+      </div>
+    </section>
+
+    <!-- DIAPOSITIVA 7 -->
+    <section class="slide">
+      <div class="top-line"></div>
+      <div class="slide-label">06 — Prototipo</div>
+      <h2>Diseño de interfaz en Figma</h2>
+
+      <div class="two-columns">
+        <div class="placeholder">
+          <img src="vista_estudiante.png" alt="Prototipo estudiante">
+        </div>
+
+        <div class="placeholder">
+          <img src="vista_monitor.png" alt="Prototipo monitor">
+        </div>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric">
+          <strong>2</strong>
+          <span>Roles operativos<br>evaluados</span>
+        </div>
+        <div class="metric">
+          <strong>36</strong>
+          <span>Historias de usuario<br>definidas</span>
+        </div>
+        <div class="metric">
+          <strong>MVP</strong>
+          <span>Flujos prioritarios<br>prototipados</span>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>Prototipos de baja y alta fidelidad</span>
+        <div class="progress"><div style="width: 77%;"></div></div>
+      </div>
+    </section>
+
+    <!-- DIAPOSITIVA 8 -->
+    <section class="slide">
+      <div class="top-line"></div>
+      <div class="slide-label">07 — Validación</div>
+      <h2>Pruebas de usabilidad con Maze</h2>
+
+      <div class="two-columns">
+        <div>
+          <div class="cards">
+            <div class="card dark">
+              <h3>Monitores</h3>
+              <p>Disponibilidad: 4 respuestas.<br>Reservas y solicitudes: 2 respuestas.</p>
+              <div class="number">9/10</div>
+              <p>Experiencia promedio.</p>
+            </div>
+
+            <div class="card purple">
+              <h3>Estudiantes</h3>
+              <p>Reserva de monitoría e historial: 2 respuestas registradas.</p>
+              <div class="number">8/10</div>
+              <p>Experiencia registrada.</p>
+            </div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric">
+              <strong>36.9 s</strong>
+              <span>Disponibilidad<br>monitor</span>
+            </div>
+            <div class="metric">
+              <strong>41.4 s</strong>
+              <span>Reservas<br>monitor</span>
+            </div>
+            <div class="metric">
+              <strong>66.9 s</strong>
+              <span>Reserva e historial<br>estudiante</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="placeholder">
+          <img src="maze.png" alt="Pruebas de usabilidad en Maze">
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>Pruebas con estudiantes y monitores</span>
+        <div class="progress"><div style="width: 88%;"></div></div>
+      </div>
+    </section>
+
+    <!-- DIAPOSITIVA 9 -->
+    <section class="slide closing">
+      <div class="top-line"></div>
+      <div class="slide-label">08 — Iteración</div>
+      <h1>Hallazgos y próximos pasos</h1>
+
+      <div class="cards" style="max-width: 950px; width: 100%; margin: 15px auto 25px;">
+        <div class="card">
+          <h3>Mejoras identificadas</h3>
+          <ul>
+            <li>Calendario consolidado para el monitor.</li>
+            <li>Regreso visible a solicitudes.</li>
+            <li>Estado correcto al cancelar una sesión.</li>
+          </ul>
+        </div>
+
+        <div class="card purple">
+          <h3>Próxima iteración</h3>
+          <ul>
+            <li>Reforzar la identidad institucional.</li>
+            <li>Agregar foto y recomendaciones de monitores.</li>
+            <li>Ampliar pruebas con estudiantes.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="subtitle">
+        URStudy no se diseñó solo desde una idea: se construyó a partir de investigación,
+        requisitos, prototipos y retroalimentación de usuarios.
+      </p>
+
+      <div class="tags" style="justify-content: center;">
+        <span class="tag">Investigar</span>
+        <span class="tag">Diseñar</span>
+        <span class="tag">Probar</span>
+        <span class="tag">Mejorar</span>
+      </div>
+
+      <div class="footer">
+        <span>URStudy — Universidad del Rosario</span>
+        <div class="progress"><div style="width: 100%;"></div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="controls">
+    <button onclick="previousSlide()" aria-label="Diapositiva anterior">←</button>
+    <button onclick="nextSlide()" aria-label="Diapositiva siguiente">→</button>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll(".slide");
+
+    function showSlide(index) {
+      if (index < 0) currentSlide = slides.length - 1;
+      if (index >= slides.length) currentSlide = 0;
+
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      currentSlide++;
+      showSlide(currentSlide);
+    }
+
+    function previousSlide() {
+      currentSlide--;
+      showSlide(currentSlide);
+    }
+    
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === " ") {
+        nextSlide();
+      }
+
+      if (event.key === "ArrowLeft") {
+        previousSlide();
+      }
+    });
+  </script>
+</body>
+</html>
