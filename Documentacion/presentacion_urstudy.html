@@ -42,9 +42,11 @@
       display: none;
       width: 100%;
       height: 100%;
-      padding: 46px 7.5% 54px;
+      min-height: 0;
+      padding: 28px 7.5% 52px;
       background: var(--soft);
       position: relative;
+      overflow: hidden;
       animation: appear 0.35s ease;
     }
 
@@ -58,6 +60,7 @@
         opacity: 0;
         transform: translateX(16px);
       }
+
       to {
         opacity: 1;
         transform: translateX(0);
@@ -67,8 +70,9 @@
     .top-line {
       height: 7px;
       width: 170px;
+      flex-shrink: 0;
       border-radius: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       background: linear-gradient(
         90deg,
         var(--navy) 0 33.33%,
@@ -79,10 +83,11 @@
 
     .slide-label {
       color: var(--blue);
-      font-size: 0.75rem;
+      flex-shrink: 0;
+      font-size: 0.72rem;
       font-weight: 800;
       letter-spacing: 1.8px;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
       text-transform: uppercase;
     }
 
@@ -103,51 +108,63 @@
 
     h2 {
       color: var(--navy);
+      flex-shrink: 0;
       font-size: clamp(1.8rem, 3.2vw, 3rem);
       letter-spacing: -1px;
-      margin-bottom: 12px;
+      line-height: 1.08;
+      margin-bottom: 10px;
     }
 
     h3 {
       color: var(--navy);
-      font-size: 1rem;
-      margin-bottom: 8px;
+      font-size: 0.98rem;
+      margin-bottom: 6px;
     }
 
     .subtitle {
       color: var(--muted);
-      font-size: clamp(1rem, 1.7vw, 1.35rem);
-      line-height: 1.5;
+      font-size: clamp(0.96rem, 1.55vw, 1.22rem);
+      line-height: 1.4;
       max-width: 720px;
+      margin-bottom: 10px;
     }
 
     .two-columns {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 32px;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 28px;
       align-items: center;
       flex: 1;
+      min-height: 0;
+      margin-top: auto;
+      margin-bottom: auto;
     }
 
     .three-columns {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 16px;
       align-items: stretch;
       flex: 1;
+      min-height: 0;
+      margin-top: auto;
+      margin-bottom: auto;
     }
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      align-content: center;
     }
 
     .card {
+      min-width: 0;
+      overflow: hidden;
       background: var(--white);
       border: 1px solid var(--line);
       border-radius: 18px;
-      padding: 18px;
+      padding: 15px;
       box-shadow: 0 8px 22px rgba(29, 33, 84, 0.07);
     }
 
@@ -168,8 +185,9 @@
 
     .card .number {
       color: var(--purple);
-      font-size: 1.8rem;
+      font-size: 1.55rem;
       font-weight: 800;
+      line-height: 1;
       margin-bottom: 5px;
     }
 
@@ -180,8 +198,12 @@
     .card p,
     .card li {
       color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.38;
+      font-size: 0.81rem;
+      line-height: 1.32;
+    }
+
+    .card p {
+      margin-bottom: 0;
     }
 
     .card.dark p,
@@ -190,61 +212,63 @@
     }
 
     ul {
-      margin: 8px 0 0;
-      padding-left: 19px;
+      margin: 7px 0 0;
+      padding-left: 18px;
     }
 
     li {
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
     .placeholder {
-      min-height: 320px;
       width: 100%;
+      height: 100%;
+      min-height: 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
       text-align: center;
       color: var(--muted);
       background:
-        linear-gradient(135deg, rgba(101, 100, 213, 0.1), rgba(160, 120, 232, 0.18)),
+        linear-gradient(135deg, rgba(101, 100, 213, 0.10), rgba(160, 120, 232, 0.18)),
         var(--white);
       border: 2px dashed #bab7eb;
       border-radius: 24px;
-      padding: 24px;
+      padding: 10px;
     }
 
     .placeholder strong {
       display: block;
       color: var(--navy);
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       margin-bottom: 7px;
     }
 
     .placeholder img {
-        width: 100%;
-        height: 100%;
-        max-width: 100%;
-        max-height: 360px;
-        object-fit: contain;
-        display: block;
-        border-radius: 16px;
-        }
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+      object-fit: contain;
+      object-position: center;
+      border-radius: 15px;
+    }
 
-.image-box {
-  padding: 10px;
-  min-height: 320px;
-  background: white;
-  border: 1px solid #deddf0;
-  border-style: solid;
-}
+    .image-box {
+      min-height: 0;
+      padding: 10px;
+      background: var(--white);
+      border: 1px solid var(--line);
+    }
 
     .tags {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 26px;
+      margin-top: 22px;
     }
 
     .tag {
@@ -260,18 +284,18 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      margin-top: 22px;
+      gap: 7px;
+      margin-top: 16px;
       flex-wrap: wrap;
     }
 
     .flow-step {
-      min-width: 118px;
+      min-width: 100px;
       flex: 1;
-      padding: 13px 10px;
+      padding: 11px 8px;
       text-align: center;
       color: var(--navy);
-      font-size: 0.86rem;
+      font-size: 0.78rem;
       font-weight: 700;
       background: var(--white);
       border: 1px solid var(--line);
@@ -280,19 +304,21 @@
 
     .arrow {
       color: var(--purple);
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: bold;
     }
 
     .metric-row {
       display: flex;
       gap: 12px;
-      margin-top: 16px;
+      flex-shrink: 0;
+      margin-top: 12px;
     }
 
     .metric {
       flex: 1;
-      padding: 16px 10px;
+      min-width: 0;
+      padding: 12px 8px;
       text-align: center;
       background: var(--white);
       border-radius: 16px;
@@ -302,20 +328,20 @@
     .metric strong {
       display: block;
       color: var(--navy);
-      font-size: 1.75rem;
+      font-size: 1.45rem;
     }
 
     .metric span {
       color: var(--muted);
       display: block;
-      font-size: 0.73rem;
+      font-size: 0.7rem;
       line-height: 1.2;
-      margin-top: 5px;
+      margin-top: 4px;
     }
 
     .hero-shape {
       width: 100%;
-      height: 430px;
+      height: min(56vh, 430px);
       border-radius: 32px;
       background: linear-gradient(
         90deg,
@@ -340,12 +366,12 @@
       position: absolute;
       left: 7.5%;
       right: 7.5%;
-      bottom: 18px;
+      bottom: 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       color: var(--muted);
-      font-size: 0.72rem;
+      font-size: 0.7rem;
     }
 
     .progress {
@@ -388,18 +414,94 @@
       background: var(--blue);
     }
 
+    /* AJUSTES INDIVIDUALES PARA CENTRADO Y ALTURAS */
+
+    /* Diapositiva 2: problema */
+    .slide:nth-of-type(2) .two-columns {
+      max-height: calc(100vh - 155px);
+    }
+
+    .slide:nth-of-type(2) .cards {
+      gap: 12px;
+    }
+
+    .slide:nth-of-type(2) .card {
+      min-height: 122px;
+    }
+
+    .slide:nth-of-type(2) .placeholder {
+      max-height: 420px;
+    }
+
+    /* Diapositiva 3: investigación */
+    .slide:nth-of-type(3) .three-columns {
+      flex: 0 0 auto;
+      max-height: 235px;
+    }
+
+    .slide:nth-of-type(3) .card {
+      padding: 14px;
+    }
+
+    .slide:nth-of-type(3) .placeholder {
+      height: 145px !important;
+      min-height: 145px !important;
+    }
+
+    /* Diapositiva 5: Trello */
+    .slide:nth-of-type(5) .two-columns {
+      max-height: calc(100vh - 165px);
+    }
+
+    .slide:nth-of-type(5) .placeholder {
+      max-height: 410px;
+    }
+
+    /* Diapositiva 6: diagrama */
+    .slide:nth-of-type(6) .two-columns {
+      max-height: calc(100vh - 165px);
+    }
+
+    .slide:nth-of-type(6) .placeholder {
+      max-height: 410px;
+    }
+
+    /* Diapositiva 7: prototipos */
+    .slide:nth-of-type(7) .two-columns {
+      max-height: calc(100vh - 260px);
+    }
+
+    .slide:nth-of-type(7) .placeholder {
+      max-height: 300px;
+    }
+
+    /* Diapositiva 8: Maze */
+    .slide:nth-of-type(8) .two-columns {
+      max-height: calc(100vh - 175px);
+    }
+
+    .slide:nth-of-type(8) .placeholder {
+      max-height: 405px;
+    }
+
     .closing {
       justify-content: center;
       align-items: center;
       text-align: center;
+      padding-bottom: 60px;
     }
 
     .closing h1 {
-      font-size: clamp(3rem, 7vw, 6rem);
+      font-size: clamp(2.7rem, 5.4vw, 4.8rem);
     }
 
     .closing .subtitle {
       margin: 0 auto;
+    }
+
+    .closing .top-line,
+    .closing .slide-label {
+      align-self: center;
     }
 
     @media (max-width: 800px) {
@@ -415,12 +517,14 @@
       .slide {
         min-height: 100vh;
         height: auto;
+        overflow: visible;
         padding: 34px 7% 75px;
       }
 
       .two-columns,
       .three-columns {
         grid-template-columns: 1fr;
+        max-height: none !important;
       }
 
       .cards {
@@ -432,7 +536,16 @@
       }
 
       .placeholder {
-        min-height: 220px;
+        min-height: 220px !important;
+      }
+
+      .slide:nth-of-type(3) .placeholder {
+        height: 220px !important;
+      }
+
+      .footer {
+        position: static;
+        margin-top: 25px;
       }
     }
 
@@ -471,7 +584,9 @@
         <div>
           <div class="top-line"></div>
           <div class="slide-label">Proyecto de ingeniería de software</div>
+
           <h1>URStudy</h1>
+
           <p class="subtitle">
             Plataforma de gestión de monitorías universitarias para conectar
             estudiantes, monitores y procesos institucionales.
@@ -505,6 +620,7 @@
     <section class="slide">
       <div class="top-line"></div>
       <div class="slide-label">01 — Contexto</div>
+
       <h2>Problema identificado</h2>
 
       <div class="two-columns">
@@ -541,8 +657,8 @@
           </div>
         </div>
 
-        <div class="placeholder">
-          <img src= "problema.png" alt="Problema identificado">
+        <div class="placeholder image-box">
+          <img src="problema.png" alt="Problema identificado">
         </div>
       </div>
 
@@ -556,6 +672,7 @@
     <section class="slide">
       <div class="top-line"></div>
       <div class="slide-label">02 — Investigación</div>
+
       <h2>Lo que aprendimos de los usuarios</h2>
 
       <div class="three-columns">
@@ -590,9 +707,9 @@
         </div>
       </div>
 
-      <div style="margin-top: 20px; text-align: center;">
-        <div class="placeholder" style="min-height: 130px;">
-          <img src="Mapa_estudiantes.png" alt="Prototipo estudiante">
+      <div style="margin-top: 12px; text-align: center; height: 145px;">
+        <div class="placeholder image-box">
+          <img src="Mapa_estudiantes.png" alt="Mapa de empatía de estudiantes">
         </div>
       </div>
 
@@ -606,6 +723,7 @@
     <section class="slide">
       <div class="top-line"></div>
       <div class="slide-label">03 — Requisitos</div>
+
       <h2>Alcance del producto mínimo viable</h2>
 
       <div class="two-columns">
@@ -649,6 +767,7 @@
     <section class="slide">
       <div class="top-line"></div>
       <div class="slide-label">04 — Organización</div>
+
       <h2>De necesidades a historias de usuario</h2>
 
       <div class="two-columns">
@@ -669,7 +788,7 @@
             <div class="flow-step">Prototipo</div>
           </div>
 
-          <div class="cards" style="margin-top: 26px;">
+          <div class="cards" style="margin-top: 20px;">
             <div class="card">
               <h3>Flujo estudiante</h3>
               <p>Busca, compara, solicita, consulta historial y califica.</p>
@@ -682,8 +801,8 @@
           </div>
         </div>
 
-        <div class="placeholder">
-          <img src="trello.png" alt="Tablero de trello">
+        <div class="placeholder image-box">
+          <img src="trello.png" alt="Tablero de Trello">
         </div>
       </div>
 
@@ -697,12 +816,14 @@
     <section class="slide">
       <div class="top-line"></div>
       <div class="slide-label">05 — Diseño técnico</div>
+
       <h2>Arquitectura y modelo de clases</h2>
 
       <div class="two-columns">
         <div>
           <div class="card">
             <h3>Arquitectura modular</h3>
+
             <div class="flow">
               <div class="flow-step">Frontend<br><small>HTML, CSS, JS</small></div>
               <div class="arrow">→</div>
@@ -725,7 +846,7 @@
           </div>
         </div>
 
-        <div class="placeholder">
+        <div class="placeholder image-box">
           <img src="diagrama_clases.png" alt="Diagrama de clases">
         </div>
       </div>
@@ -740,14 +861,15 @@
     <section class="slide">
       <div class="top-line"></div>
       <div class="slide-label">06 — Prototipo</div>
+
       <h2>Diseño de interfaz en Figma</h2>
 
       <div class="two-columns">
-        <div class="placeholder">
+        <div class="placeholder image-box">
           <img src="vista_estudiante.png" alt="Prototipo estudiante">
         </div>
 
-        <div class="placeholder">
+        <div class="placeholder image-box">
           <img src="vista_monitor.png" alt="Prototipo monitor">
         </div>
       </div>
@@ -757,10 +879,12 @@
           <strong>2</strong>
           <span>Roles operativos<br>evaluados</span>
         </div>
+
         <div class="metric">
           <strong>36</strong>
           <span>Historias de usuario<br>definidas</span>
         </div>
+
         <div class="metric">
           <strong>MVP</strong>
           <span>Flujos prioritarios<br>prototipados</span>
@@ -777,6 +901,7 @@
     <section class="slide">
       <div class="top-line"></div>
       <div class="slide-label">07 — Validación</div>
+
       <h2>Pruebas de usabilidad con Maze</h2>
 
       <div class="two-columns">
@@ -802,10 +927,12 @@
               <strong>36.9 s</strong>
               <span>Disponibilidad<br>monitor</span>
             </div>
+
             <div class="metric">
               <strong>41.4 s</strong>
               <span>Reservas<br>monitor</span>
             </div>
+
             <div class="metric">
               <strong>66.9 s</strong>
               <span>Reserva e historial<br>estudiante</span>
@@ -813,7 +940,7 @@
           </div>
         </div>
 
-        <div class="placeholder">
+        <div class="placeholder image-box">
           <img src="maze.png" alt="Pruebas de usabilidad en Maze">
         </div>
       </div>
@@ -828,9 +955,10 @@
     <section class="slide closing">
       <div class="top-line"></div>
       <div class="slide-label">08 — Iteración</div>
+
       <h1>Hallazgos y próximos pasos</h1>
 
-      <div class="cards" style="max-width: 950px; width: 100%; margin: 15px auto 25px;">
+      <div class="cards" style="max-width: 950px; width: 100%; margin: 15px auto 22px;">
         <div class="card">
           <h3>Mejoras identificadas</h3>
           <ul>
@@ -880,8 +1008,13 @@
     const slides = document.querySelectorAll(".slide");
 
     function showSlide(index) {
-      if (index < 0) currentSlide = slides.length - 1;
-      if (index >= slides.length) currentSlide = 0;
+      if (index < 0) {
+        currentSlide = slides.length - 1;
+      }
+
+      if (index >= slides.length) {
+        currentSlide = 0;
+      }
 
       slides.forEach((slide, i) => {
         slide.classList.toggle("active", i === currentSlide);
@@ -897,7 +1030,6 @@
       currentSlide--;
       showSlide(currentSlide);
     }
-    
 
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowRight" || event.key === " ") {
