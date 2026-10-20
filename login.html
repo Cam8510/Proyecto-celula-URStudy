@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iniciar sesión | URStudy</title>
+<meta name="description" content="Inicia sesión en URStudy con tu correo institucional de la Universidad del Rosario.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primario: #1D2154;
+    --acento: #6564D5;
+    --purpura: #A078E8;
+    --lavanda: #EEE9FF;
+    --fondo: #F7F6FF;
+    --exito: #22C55E;
+    --advertencia: #EAB308;
+    --error: #EF4444;
+    --info: #3B82F6;
+    --texto: #1D2154;
+    --texto-suave: #5D6088;
+    --linea: #E1DCF7;
+    --superficie: #FFFFFF;
+    --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --cuerpo: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--cuerpo); background: var(--fondo); color: var(--texto); line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; }
+  a { color: inherit; text-decoration: none; }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 0; background: none; }
+  :focus-visible { outline: 3px solid var(--purpura); outline-offset: 3px; border-radius: 8px; }
+
+  /* Header */
+  .topbar { background: rgba(247,246,255,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--linea); }
+  .topbar .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 28px; height: 68px; }
+  .logo { display: flex; flex-direction: column; line-height: 1.05; text-decoration: none; }
+  .logo b { font-family: var(--display); font-weight: 800; font-size: 24px; letter-spacing: -.02em; color: var(--primario); }
+  .logo small { font-size: 11px; color: var(--texto-suave); }
+
+  /* Contenedor principal */
+  .main-wrap { display: grid; place-items: center; padding: 48px 24px; }
+  .card {
+    background: var(--superficie); border: 1px solid var(--linea); border-radius: 24px;
+    padding: 40px; max-width: 460px; width: 100%; box-shadow: 0 12px 40px rgba(29,33,84,.08);
+  }
+  .card header { text-align: center; margin-bottom: 32px; }
+  .card header h1 { font-family: var(--display); font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .card header p { color: var(--texto-suave); font-size: 15px; }
+
+  /* Formulario */
+  .campo { margin-bottom: 20px; }
+  .campo label { display: block; font-weight: 600; font-size: 14px; color: var(--texto-suave); margin-bottom: 8px; }
+  .campo input {
+    width: 100%; padding: 14px 16px; border: 1.5px solid var(--linea); border-radius: 12px;
+    font-size: 15px; transition: border-color .15s, box-shadow .15s;
+  }
+  .campo input:focus { border-color: var(--acento); box-shadow: 0 0 0 3px rgba(101,100,213,.15); outline: 0; }
+  .campo input::placeholder { color: #A8ABCA; }
+  .campo .error { font-size: 13px; color: var(--error); margin-top: 6px; display: none; }
+  .campo.error input { border-color: var(--error); }
+  .campo.error .error { display: block; }
+
+  /* Recordar y recuperar */
+  .opciones { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 14px; }
+  .recordar { display: flex; align-items: center; gap: 8px; color: var(--texto-suave); }
+  .recordar input { width: 18px; height: 18px; accent-color: var(--acento); }
+  .recuperar { color: var(--acento); font-weight: 600; text-decoration: underline; }
+
+  /* Botón */
+  .btn-primario {
+    width: 100%; background: var(--acento); color: #fff; font-weight: 700; font-size: 16px;
+    padding: 16px; border-radius: 14px; transition: background .15s, transform .1s;
+  }
+  .btn-primario:hover { background: #5453C4; }
+  .btn-primario:active { transform: scale(.98); }
+  .btn-primario:disabled { background: var(--lavanda); color: #9A9CC0; cursor: not-allowed; }
+
+  /* Divider */
+  .divider { display: flex; align-items: center; gap: 12px; margin: 24px 0; color: var(--texto-suave); font-size: 14px; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--linea); }
+
+  /* Footer del card */
+  .card-footer { text-align: center; margin-top: 24px; font-size: 14px; color: var(--texto-suave); }
+  .card-footer a { color: var(--acento); font-weight: 600; }
+
+  /* Footer página */
+  footer { border-top: 1px solid var(--linea); padding: 24px; text-align: center; font-size: 14px; color: var(--texto-suave); }
+
+  /* Mensaje de error */
+  .error-box {
+    display: none; background: rgba(239,68,68,.1); border: 1.5px solid var(--error);
+    border-radius: 14px; padding: 16px; text-align: center; margin-bottom: 24px;
+  }
+  .error-box.ver { display: block; }
+  .error-box b { display: block; color: var(--error); font-weight: 700; margin-bottom: 6px; }
+  .error-box p { font-size: 14px; color: #A83131; }
+
+  /* Modal de recuperación */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(29,33,84,.5); backdrop-filter: blur(4px);
+    display: none; place-items: center; z-index: 60; padding: 24px;
+  }
+  .modal-backdrop.ver { display: grid; }
+  .modal {
+    background: #fff; border-radius: 24px; max-width: 460px; width: 100%;
+    box-shadow: 0 20px 50px rgba(29,33,84,.35); overflow: hidden;
+  }
+  .modal header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--linea); }
+  .modal header h3 { font-family: var(--display); font-size: 20px; }
+  .modal .cuerpo { padding: 24px; }
+  .modal footer { padding: 16px 24px; border-top: 1px solid var(--linea); display: flex; justify-content: flex-end; gap: 10px; }
+  .btn-sec { background: var(--lavanda); color: var(--acento); font-weight: 700; padding: 12px 20px; border-radius: 12px; }
+  .btn-sec:hover { filter: brightness(.96); }
+
+  @media (max-width: 560px) {
+    .card { padding: 28px 20px; }
+    .opciones { flex-direction: column; align-items: flex-start; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="logo" href="inicio.html" aria-label="URStudy, Universidad del Rosario">
+      <b>URStudy</b>
+      <small>Universidad del Rosario</small>
+    </a>
+  </div>
+</header>
+
+<main class="main-wrap">
+  <div class="card">
+    <header>
+      <h1>Bienvenido de nuevo</h1>
+      <p>Inicia sesión con tu correo institucional</p>
+    </header>
+
+    <div class="error-box" id="error-box">
+      <b>⚠️ Error al iniciar sesión</b>
+      <p id="error-mensaje">Correo o contraseña incorrectos</p>
+    </div>
+
+    <form id="form-login" novalidate>
+      <!-- Correo -->
+      <div class="campo" id="campo-email">
+        <label for="email">Correo institucional</label>
+        <input type="email" id="email" name="email" placeholder="ejemplo@urosario.edu.co" required autocomplete="email">
+        <div class="error">Ingresa un correo válido</div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="campo" id="campo-pass">
+        <label for="pass">Contraseña</label>
+        <input type="password" id="pass" name="pass" placeholder="Tu contraseña" required autocomplete="current-password">
+        <div class="error">Ingresa tu contraseña</div>
+      </div>
+
+      <!-- Opciones -->
+      <div class="opciones">
+        <label class="recordar">
+          <input type="checkbox" id="recordar" name="recordar">
+          Recordarme
+        </label>
+        <a href="#" class="recuperar" id="btn-recuperar">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <button type="submit" class="btn-primario" id="btn-ingresar">Iniciar sesión</button>
+    </form>
+
+    <div class="card-footer">
+      ¿No tienes cuenta? <a href="registro.html">Crear cuenta</a>
+    </div>
+  </div>
+</main>
+
+<!-- Modal de recuperación de contraseña -->
+<div class="modal-backdrop" id="modal-recuperar" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-recuperar">
+  <div class="modal">
+    <header>
+      <h3 id="titulo-recuperar">Recuperar contraseña</h3>
+      <button aria-label="Cerrar" id="cerrar-modal">✕</button>
+    </header>
+    <div class="cuerpo">
+      <p style="color:var(--texto-suave); margin-bottom:16px;">Ingresa tu correo institucional y te enviaremos un enlace para restablecer tu contraseña.</p>
+      <form id="form-recuperar">
+        <div class="campo" id="campo-recuperar-email">
+          <label for="recuperar-email">Correo institucional</label>
+          <input type="email" id="recuperar-email" placeholder="ejemplo@urosario.edu.co" required>
+          <div class="error">Ingresa un correo válido</div>
+        </div>
+      </form>
+    </div>
+    <footer>
+      <button type="button" class="btn-sec" id="cancelar-recuperar">Cancelar</button>
+      <button type="submit" form="form-recuperar" class="btn-primario" style="padding:12px 20px">Enviar enlace</button>
+    </footer>
+  </div>
+</div>
+
+<footer>
+  <span>URStudy, Universidad del Rosario © 2026</span>
+</footer>
+
+<script>
+  const $ = s => document.querySelector(s);
+  const form = $('#form-login');
+  const emailInput = $('#email');
+  const passInput = $('#pass');
+  const errorBox = $('#error-box');
+  const btnIngresar = $('#btn-ingresar');
+
+  // Validación
+  function validarEmail() {
+    const campo = $('#campo-email');
+    const email = emailInput.value.trim();
+    const valido = email.endsWith('@urosario.edu.co') && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    campo.classList.toggle('error', !valido && email.length > 0);
+    return valido;
+  }
+
+  function validarPass() {
+    const campo = $('#campo-pass');
+    const pass = passInput.value;
+    const valido = pass.length >= 1;
+    campo.classList.toggle('error', !valido && pass.length > 0);
+    return valido;
+  }
+
+  emailInput.addEventListener('blur', validarEmail);
+  passInput.addEventListener('blur', validarPass);
+
+  // Submit
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    errorBox.classList.remove('ver');
+
+    const emailValido = validarEmail();
+    const passValido = validarPass();
+
+    if (!emailValido || !passValido) {
+      return;
+    }
+
+    const email = emailInput.value.trim();
+    const pass = passInput.value;
+
+    // Simular autenticación
+    btnIngresar.disabled = true;
+    btnIngresar.textContent = 'Iniciando sesión...';
+
+    setTimeout(() => {
+      // Credenciales de prueba
+      const usuariosPrueba = [
+        { email: 'sofia.martinez@urosario.edu.co', pass: '12345678', rol: 'estudiante', nombre: 'Sofía Martínez' },
+        { email: 'carlos.ruiz@urosario.edu.co', pass: '12345678', rol: 'monitor', nombre: 'Carlos Ruiz' },
+        { email: 'admin@urosario.edu.co', pass: 'admin123', rol: 'admin', nombre: 'Administrador' }
+      ];
+
+      const usuario = usuariosPrueba.find(u => u.email === email && u.pass === pass);
+
+      if (usuario) {
+        // Guardar sesión simulada
+        localStorage.setItem('usuario', JSON.stringify(usuario));
+        
+        // Redirigir según rol
+        if (usuario.rol === 'admin') {
+          window.location.href = 'index-admin.html';
+        } else if (usuario.rol === 'monitor') {
+          window.location.href = 'index-monitor.html';
+        } else {
+          window.location.href = 'index.html';
+        }
+      } else {
+        errorBox.classList.add('ver');
+        $('#error-mensaje').textContent = 'Correo o contraseña incorrectos. Intenta de nuevo.';
+        btnIngresar.disabled = false;
+        btnIngresar.textContent = 'Iniciar sesión';
+      }
+    }, 1200);
+  });
+
+  // Limpiar errores al escribir
+  form.querySelectorAll('input').forEach(input => {
+    input.addEventListener('input', () => {
+      input.closest('.campo')?.classList.remove('error');
+      errorBox.classList.remove('ver');
+    });
+  });
+
+  // Modal de recuperación
+  const modal = $('#modal-recuperar');
+  const btnRecuperar = $('#btn-recuperar');
+  const cerrarModal = $('#cerrar-modal');
+  const cancelarRecuperar = $('#cancelar-recuperar');
+  const formRecuperar = $('#form-recuperar');
+
+  btnRecuperar.addEventListener('click', e => {
+    e.preventDefault();
+    modal.classList.add('ver');
+    modal.setAttribute('aria-hidden', 'false');
+  });
+
+  cerrarModal.addEventListener('click', () => {
+    modal.classList.remove('ver');
+    modal.setAttribute('aria-hidden', 'true');
+  });
+
+  cancelarRecuperar.addEventListener('click', () => {
+    modal.classList.remove('ver');
+    modal.setAttribute('aria-hidden', 'true');
+  });
+
+  formRecuperar.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = $('#recuperar-email').value.trim();
+    
+    if (!email.endsWith('@urosario.edu.co')) {
+      $('#campo-recuperar-email').classList.add('error');
+      return;
+    }
+
+    alert(`Te enviamos un enlace de recuperación a ${email}. Revisa tu correo.`);
+    modal.classList.remove('ver');
+    modal.setAttribute('aria-hidden', 'true');
+  });
+
+  // Cerrar modal con Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal.classList.contains('ver')) {
+      modal.classList.remove('ver');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  });
+</script>
+</body>
+</html>

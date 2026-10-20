@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>URStudy | Panel de Administrador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primario: #1D2154;
+    --acento: #6564D5;
+    --purpura: #A078E8;
+    --lavanda: #EEE9FF;
+    --fondo: #F7F6FF;
+    --exito: #22C55E;
+    --advertencia: #EAB308;
+    --error: #EF4444;
+    --info: #3B82F6;
+
+    --texto: #1D2154;
+    --texto-suave: #5D6088;
+    --linea: #E1DCF7;
+    --superficie: #FFFFFF;
+
+    --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --cuerpo: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--cuerpo);
+    background: var(--fondo);
+    color: var(--texto);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 0; background: none; }
+  :focus-visible { outline: 3px solid var(--purpura); outline-offset: 2px; border-radius: 6px; }
+
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Barra superior ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(247, 246, 255, .92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--linea);
+  }
+  .topbar .wrap { display: flex; align-items: center; gap: 32px; height: 68px; }
+  .logo { display: flex; flex-direction: column; line-height: 1.05; text-decoration: none; color: var(--primario); }
+  .logo b { font-family: var(--display); font-weight: 800; font-size: 24px; letter-spacing: -.02em; }
+  .logo small { font-size: 11px; color: var(--texto-suave); }
+  .nav { display: flex; gap: 4px; margin-right: auto; }
+  .nav a {
+    text-decoration: none; color: var(--texto-suave); font-weight: 600; font-size: 15px;
+    padding: 8px 14px; border-radius: 999px; transition: background .15s, color .15s;
+  }
+  .nav a:hover { background: var(--lavanda); color: var(--primario); }
+  .nav a[aria-current="page"] { background: var(--primario); color: #fff; }
+  .usuario { display: flex; align-items: center; gap: 14px; position: relative; }
+  
+  .campana-wrap { position: relative; }
+  .campana { position: relative; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; }
+  .campana:hover { background: var(--lavanda); }
+  .campana i {
+    position: absolute; top: 3px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px;
+    border-radius: 9px; background: var(--error); color: #fff; font-style: normal; font-size: 11px; font-weight: 700;
+    display: grid; place-items: center;
+  }
+  .notif-panel {
+    position: absolute; right: 0; top: 52px; width: 340px; background: #fff; border: 1px solid var(--linea);
+    border-radius: 18px; box-shadow: 0 12px 40px rgba(29,33,84,.25); z-index: 70; display: none;
+  }
+  .notif-panel.ver { display: block; }
+  .notif-panel header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--linea); }
+  .notif-panel header h4 { font-family: var(--display); font-size: 16px; }
+  .notif-panel .lista { max-height: 360px; overflow-y: auto; }
+  .notif-item { display: flex; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--linea); }
+  .notif-item:last-child { border-bottom: 0; }
+  .notif-item .icono { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+  .notif-item .icono.sol { background: var(--lavanda); color: var(--acento); }
+  .notif-item .icono.rec { background: rgba(34,197,94,.12); color: var(--exito); }
+  .notif-item .icono.aviso { background: rgba(234,179,8,.15); color: var(--advertencia); }
+  .notif-item .txt { flex: 1; }
+  .notif-item .txt b { display: block; font-size: 14px; margin-bottom: 3px; }
+  .notif-item .txt p { font-size: 13px; color: var(--texto-suave); line-height: 1.35; }
+  .notif-item time { font-size: 11px; color: var(--texto-suave); }
+  .notif-panel footer { padding: 12px 18px; border-top: 1px solid var(--linea); text-align: center; }
+  .notif-panel footer a { font-size: 13px; color: var(--acento); font-weight: 600; text-decoration: none; }
+
+  .yo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .yo:hover { background: var(--lavanda); border-radius: 10px; }
+  .yo div { text-align: right; line-height: 1.2; }
+  .yo b { font-size: 14px; display: block; }
+  .yo span { font-size: 12px; color: var(--texto-suave); }
+
+  .av {
+    --s: 44px;
+    width: var(--s); height: var(--s); border-radius: 50%; flex: none;
+    display: grid; place-items: center; color: #fff; font-family: var(--display); font-weight: 700;
+    font-size: calc(var(--s) * .38); letter-spacing: .01em; position: relative;
+  }
+  .c1 { background: var(--acento); }
+  .c2 { background: var(--purpura); }
+  .c3 { background: var(--info); }
+  .c4 { background: var(--primario); box-shadow: inset 0 0 0 2px var(--purpura); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--primario); color: #fff;
+    border-radius: 32px; margin-top: 24px; padding: 48px 48px 36px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before, .hero::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
+  .hero::before { width: 380px; height: 380px; right: -110px; top: -150px; background: var(--acento); opacity: .55; }
+  .hero::after { width: 200px; height: 200px; right: 150px; top: 120px; background: var(--purpura); opacity: .28; }
+  .hero > * { position: relative; z-index: 1; }
+  .saludo { font-size: 16px; color: #CFCBF5; margin-bottom: 10px; }
+  .hero h1 {
+    font-family: var(--display); font-weight: 800; letter-spacing: -.03em;
+    font-size: clamp(34px, 5.2vw, 58px); line-height: 1.03; max-width: 14em;
+  }
+  .hero p { max-width: 580px; color: #CFCBF5; margin-top: 12px; font-size: 16px; }
+
+  .acciones-hero { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+  .btn {
+    background: var(--acento); color: #fff; font-weight: 700; padding: 14px 24px; border-radius: 16px;
+    transition: background .15s, transform .1s;
+  }
+  .btn:hover { background: #5453C4; }
+  .btn:active { transform: scale(.97); }
+  .btn-sec {
+    background: rgba(255,255,255,.12); color: #fff; font-weight: 700; padding: 14px 24px; border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.25);
+  }
+  .btn-sec:hover { background: rgba(255,255,255,.18); }
+
+  /* ---------- Contenido principal ---------- */
+  .main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 1fr); gap: 40px; margin: 48px auto 96px; align-items: start; }
+
+  .titulo-seccion { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+  .titulo-seccion h2 { font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+  .titulo-seccion p { font-size: 14px; color: var(--texto-suave); }
+
+  /* Tarjetas */
+  .card { background: var(--superficie); border: 1px solid var(--linea); border-radius: 24px; padding: 22px; }
+  .card h3 { font-family: var(--display); font-size: 18px; margin-bottom: 16px; }
+
+  /* Estadísticas */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat { background: var(--lavanda); border-radius: 20px; padding: 18px; text-align: center; }
+  .stat b { display: block; font-family: var(--display); font-size: 28px; color: var(--primario); }
+  .stat span { font-size: 13px; color: var(--texto-suave); }
+
+  /* Tablas */
+  .tabla-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--linea); }
+  th { font-weight: 700; color: var(--texto-suave); font-size: 13px; text-transform: uppercase; letter-spacing: .02em; }
+  td { font-size: 14px; }
+  tr:last-child td { border-bottom: 0; }
+  tr:hover td { background: var(--fondo); }
+
+  .estado { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 11px; border-radius: 999px; }
+  .ok { background: rgba(34,197,94,.16); color: #12803A; }
+  .pend { background: rgba(234,179,8,.2); color: #8A6A00; }
+  .rev { background: rgba(59,130,246,.15); color: #1D5CC7; }
+  .urgente { background: rgba(239,68,68,.14); color: #C42B2B; }
+  .info-badge { background: rgba(59,130,246,.12); color: var(--info); }
+
+  /* Acciones en tabla */
+  .acciones-tabla { display: flex; gap: 6px; }
+  .btn-xs { padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; }
+  .btn-xs.sec { background: var(--lavanda); color: var(--acento); }
+  .btn-xs.danger { background: rgba(239,68,68,.12); color: var(--error); }
+  .btn-xs.success { background: rgba(34,197,94,.12); color: var(--exito); }
+
+  /* Soportes */
+  .soportes { display: grid; gap: 12px; }
+  .soporte-item {
+    display: flex; align-items: center; gap: 14px; background: var(--fondo); border: 1px solid var(--linea);
+    border-radius: 16px; padding: 16px;
+  }
+  .soporte-item .icono {
+    width: 44px; height: 44px; border-radius: 12px; background: var(--lavanda);
+    display: grid; place-items: center; color: var(--acento); font-size: 18px;
+  }
+  .soporte-item .info { flex: 1; }
+  .soporte-item .info b { display: block; font-size: 15px; }
+  .soporte-item .info span { font-size: 13px; color: var(--texto-suave); }
+  .soporte-item .acciones { display: flex; gap: 8px; }
+
+  /* Materias */
+  .materias-lista { display: grid; gap: 10px; }
+  .materia-item {
+    display: flex; justify-content: space-between; align-items: center; background: var(--fondo);
+    border: 1px solid var(--linea); border-radius: 14px; padding: 14px 16px;
+  }
+  .materia-item b { font-size: 15px; }
+  .materia-item .switch {
+    width: 44px; height: 24px; border-radius: 99px; background: var(--linea); position: relative; transition: background .15s;
+  }
+  .materia-item .switch::after {
+    content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%;
+    background: #fff; transition: transform .15s;
+  }
+  .materia-item .switch.on { background: var(--exito); }
+  .materia-item .switch.on::after { transform: translateX(20px); }
+
+  /* Usuarios */
+  .usuarios-lista { display: grid; gap: 12px; }
+  .usuario-item {
+    display: flex; align-items: center; gap: 14px; background: var(--superficie); border: 1px solid var(--linea);
+    border-radius: 16px; padding: 16px;
+  }
+  .usuario-item .avatar { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-family: var(--display); font-weight: 700; }
+  .usuario-item .info { flex: 1; }
+  .usuario-item .info b { display: block; font-size: 15px; }
+  .usuario-item .info span { font-size: 13px; color: var(--texto-suave); }
+
+  /* ---------- Modal ---------- */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(29,33,84,.5); backdrop-filter: blur(4px);
+    display: none; place-items: center; z-index: 60; padding: 24px;
+  }
+  .modal-backdrop.ver { display: grid; }
+  .modal {
+    background: #fff; border-radius: 24px; max-width: 620px; width: 100%;
+    box-shadow: 0 20px 50px rgba(29,33,84,.35); overflow: hidden;
+  }
+  .modal header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--linea); }
+  .modal header h3 { font-family: var(--display); font-size: 20px; }
+  .modal .cuerpo { padding: 24px; display: grid; gap: 16px; max-height: 70vh; overflow-y: auto; }
+  .campo { display: grid; gap: 6px; }
+  .campo label { font-weight: 600; font-size: 14px; color: var(--texto-suave); }
+  .campo input, .campo select, .campo textarea {
+    border: 1.5px solid var(--linea); border-radius: 12px; padding: 12px 14px; font-size: 15px; width: 100%;
+  }
+  .campo textarea { min-height: 90px; resize: vertical; }
+  .campo .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal footer { padding: 16px 24px; border-top: 1px solid var(--linea); display: flex; justify-content: flex-end; gap: 10px; }
+  .btn-sec-modal { background: var(--lavanda); color: var(--acento); font-weight: 700; padding: 12px 20px; border-radius: 12px; }
+  .btn-sec-modal:hover { filter: brightness(.96); }
+
+  /* ---------- Aviso ---------- */
+  .aviso {
+    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 24px); opacity: 0; pointer-events: none;
+    background: var(--primario); color: #fff; padding: 14px 22px; border-radius: 16px; font-weight: 600;
+    box-shadow: 0 14px 30px rgba(29,33,84,.3); transition: opacity .2s, transform .2s; z-index: 50; max-width: calc(100% - 32px);
+  }
+  .aviso.ver { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---------- Barra inferior móvil ---------- */
+  .tabbar { display: none; }
+
+  @media (max-width: 1100px) {
+    .main { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .wrap { padding: 0 16px; }
+    .nav, .yo div { display: none; }
+    .topbar .wrap { justify-content: space-between; }
+    .hero { padding: 32px 22px 26px; border-radius: 26px; }
+    .acciones-hero { flex-direction: column; }
+    .btn, .btn-sec { width: 100%; }
+    .stats { grid-template-columns: 1fr; }
+    .tabla-wrap { overflow-x: auto; }
+    table { min-width: 600px; }
+    .tabbar {
+      display: grid; grid-template-columns: repeat(4, 1fr); position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+      background: #fff; border-top: 1px solid var(--linea); padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+    }
+    .tabbar a { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; font-weight: 600; color: var(--texto-suave); text-decoration: none; padding: 4px; }
+    .tabbar a[aria-current="page"] { color: var(--acento); }
+    .main { margin-bottom: 120px; }
+    .aviso { bottom: 84px; }
+    .notif-panel { right: -60px; top: 48px; width: 300px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Modal de nueva materia (RQF013) -->
+<div class="modal-backdrop" id="modal-materia" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-materia">
+  <div class="modal">
+    <header>
+      <h3 id="titulo-materia">Nueva materia</h3>
+      <button aria-label="Cerrar" id="cerrar-materia">✕</button>
+    </header>
+    <form class="cuerpo" id="form-materia">
+      <div class="campo">
+        <label for="mat-nombre">Nombre de la materia</label>
+        <input type="text" id="mat-nombre" placeholder="Ej: Cálculo Diferencial" required>
+      </div>
+      <div class="campo">
+        <label for="mat-codigo">Código</label>
+        <input type="text" id="mat-codigo" placeholder="Ej: CALC-101" required>
+      </div>
+      <div class="campo">
+        <label for="mat-facultad">Facultad</label>
+        <select id="mat-facultad" required>
+          <option value="">Selecciona</option>
+          <option value="ingenieria">Ingeniería</option>
+          <option value="economia">Economía</option>
+          <option value="matematicas">Matemáticas</option>
+          <option value="derecho">Derecho</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="mat-creditos">Créditos</label>
+        <input type="number" id="mat-creditos" min="1" max="6" required>
+      </div>
+    </form>
+    <footer>
+      <button type="button" class="btn-sec-modal" id="cancelar-materia">Cancelar</button>
+      <button type="submit" form="form-materia" class="btn">Crear materia</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Modal de edición de materia (RQF013) -->
+<div class="modal-backdrop" id="modal-editar-materia" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-editar-materia">
+  <div class="modal">
+    <header>
+      <h3 id="titulo-editar-materia">Editar materia</h3>
+      <button aria-label="Cerrar" id="cerrar-editar-materia">✕</button>
+    </header>
+    <form class="cuerpo" id="form-editar-materia">
+      <input type="hidden" id="edit-mat-id">
+      <div class="campo">
+        <label for="edit-nombre">Nombre de la materia</label>
+        <input type="text" id="edit-nombre" required>
+      </div>
+      <div class="campo">
+        <label for="edit-codigo">Código</label>
+        <input type="text" id="edit-codigo" required>
+      </div>
+      <div class="campo">
+        <label for="edit-facultad">Facultad</label>
+        <select id="edit-facultad" required>
+          <option value="ingenieria">Ingeniería</option>
+          <option value="economia">Economía</option>
+          <option value="matematicas">Matemáticas</option>
+          <option value="derecho">Derecho</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="edit-creditos">Créditos</label>
+        <input type="number" id="edit-creditos" min="1" max="6" required>
+      </div>
+    </form>
+    <footer>
+      <button type="button" class="btn-sec-modal" id="cancelar-editar-materia">Cancelar</button>
+      <button type="submit" form="form-editar-materia" class="btn">Guardar cambios</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Modal de detalle de soporte (RQF006) -->
+<div class="modal-backdrop" id="modal-soporte" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-soporte">
+  <div class="modal">
+    <header>
+      <h3 id="titulo-soporte">Verificar soporte académico</h3>
+      <button aria-label="Cerrar" id="cerrar-soporte">✕</button>
+    </header>
+    <div class="cuerpo" id="soporte-detalle">
+      <!-- Se llena dinámicamente -->
+    </div>
+    <footer>
+      <button type="button" class="btn-sec-modal" id="rechazar-soporte">Rechazar</button>
+      <button type="button" class="btn" id="aprobar-soporte">Aprobar</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Modal de Configuración -->
+<div class="modal-backdrop" id="modal-config" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-config">
+  <div class="modal">
+    <header>
+      <h3 id="titulo-config">Configuración</h3>
+      <button aria-label="Cerrar" id="cerrar-config">✕</button>
+    </header>
+    <div class="cuerpo">
+      <div class="campo">
+        <label>Preferencias de notificaciones (RQF038)</label>
+        <div style="display:grid; gap:10px;">
+          <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
+            <input type="checkbox" id="notif-email" checked style="width:18px; height:18px;">
+            Notificaciones por correo electrónico
+          </label>
+          <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
+            <input type="checkbox" id="notif-push" checked style="width:18px; height:18px;">
+            Notificaciones push en la plataforma
+          </label>
+        </div>
+      </div>
+      <div class="campo">
+        <label>Seguridad (RQNF001, RQNF002, RQNF006)</label>
+        <p style="font-size:14px; color:var(--texto-suave); margin:6px 0 10px;">
+          Contraseñas almacenadas con hashing seguro. Comunicación cifrada HTTPS. Secretos gestionados por variables de entorno.
+        </p>
+      </div>
+      <div class="campo">
+        <label>Respaldo de datos (RQNF008)</label>
+        <p style="font-size:14px; color:var(--texto-suave); margin:6px 0 10px;">
+          Último respaldo: <b>Hoy, 2:00 AM</b>. Próximo respaldo automático en 22 horas.
+        </p>
+        <button type="button" class="btn-sec-modal" id="btn-respaldo">Crear respaldo ahora</button>
+      </div>
+    </div>
+    <footer>
+      <button type="button" class="btn-sec-modal" id="btn-cerrar-sesion">Cerrar sesión</button>
+      <button type="button" class="btn" id="guardar-config">Guardar</button>
+    </footer>
+  </div>
+</div>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="URStudy, Universidad del Rosario">
+      <b>URStudy</b>
+      <small>Universidad del Rosario</small>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#" aria-current="page">Inicio</a>
+      <a href="#soportes">Soportes</a>
+      <a href="#materias">Materias</a>
+      <a href="#usuarios">Usuarios</a>
+      <a href="#monitorias">Monitorías</a>
+      <a href="#config" id="nav-config">Configuración</a>
+    </nav>
+    <div class="usuario">
+      <div class="campana-wrap">
+        <button class="campana" aria-label="Notificaciones" id="btn-notif">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <i id="notif-count">3</i>
+        </button>
+        <div class="notif-panel" id="notif-panel" aria-hidden="true">
+          <header>
+            <h4>Notificaciones</h4>
+            <button id="cerrar-notif" aria-label="Cerrar">✕</button>
+          </header>
+          <div class="lista" id="notif-lista"></div>
+          <footer><a href="#" id="ver-todas">Ver todas</a></footer>
+        </div>
+      </div>
+      <div class="yo" id="btn-yo">
+        <div><b id="usuario-nombre">Administrador</b><span id="usuario-rol">Admin</span></div>
+        <span class="av c4" style="--s:42px" aria-hidden="true" id="avatar-usuario">AD</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="titulo-hero">
+    <p class="saludo">Hola, Admin 👋</p>
+    <h1 id="titulo-hero">Panel de Administración</h1>
+    <p>Gestiona materias, verifica soportes académicos de monitores, supervisa usuarios y monitorías de la plataforma.</p>
+
+    <div class="acciones-hero">
+      <button type="button" class="btn" id="btn-nueva-materia">+ Nueva materia</button>
+      <button type="button" class="btn-sec" id="btn-ver-reportes">Ver reportes</button>
+    </div>
+  </section>
+
+  <div class="main">
+
+    <!-- Columna principal -->
+    <div style="display:grid; gap:40px;">
+
+      <!-- Estadísticas -->
+      <section>
+        <div class="stats">
+          <div class="stat">
+            <b id="stat-usuarios">1,248</b>
+            <span>Usuarios totales</span>
+          </div>
+          <div class="stat">
+            <b id="stat-monitores">86</b>
+            <span>Monitores activos</span>
+          </div>
+          <div class="stat">
+            <b id="stat-materias">42</b>
+            <span>Materias en catálogo</span>
+          </div>
+          <div class="stat">
+            <b id="stat-monitorias">328</b>
+            <span>Monitorías este mes</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Soportes académicos (RQF006) -->
+      <section id="soportes" class="card" aria-labelledby="t-soportes">
+        <div class="titulo-seccion">
+          <h2 id="t-soportes">Soportes académicos pendientes</h2>
+          <p id="conteo-soportes"></p>
+        </div>
+        <div class="soportes" id="lista-soportes"></div>
+      </section>
+
+      <!-- Materias (RQF013) -->
+      <section id="materias" class="card" aria-labelledby="t-materias">
+        <div class="titulo-seccion">
+          <h2 id="t-materias">Gestión de materias</h2>
+          <p id="conteo-materias"></p>
+        </div>
+        <div class="tabla-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Materia</th>
+                <th>Facultad</th>
+                <th>Créditos</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-materias"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Usuarios -->
+      <section id="usuarios" class="card" aria-labelledby="t-usuarios">
+        <div class="titulo-seccion">
+          <h2 id="t-usuarios">Usuarios recientes</h2>
+        </div>
+        <div class="usuarios-lista" id="lista-usuarios"></div>
+      </section>
+
+      <!-- Monitorías (RQF029, RQF036) -->
+      <section id="monitorias" class="card" aria-labelledby="t-monitorias">
+        <div class="titulo-seccion">
+          <h2 id="t-monitorias">Monitorías recientes</h2>
+        </div>
+        <div class="tabla-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Estudiante</th>
+                <th>Monitor</th>
+                <th>Materia</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Calif.</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-monitorias"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Columna lateral -->
+    <aside class="lateral" style="display:grid; gap:32px; position:sticky; top:92px; align-items:start;">
+
+      <!-- Accesos rápidos -->
+      <section class="card" aria-labelledby="t-accesos">
+        <div class="titulo-seccion"><h2 id="t-accesos" style="font-size:18px">Accesos rápidos</h2></div>
+        <div style="display:grid; gap:10px;">
+          <button type="button" class="btn-sec" style="text-align:left;" id="btn-ir-soportes">Ver soportes pendientes</button>
+          <button type="button" class="btn-sec" style="text-align:left;" id="btn-ir-materias">Gestionar materias</button>
+          <button type="button" class="btn-sec" style="text-align:left;" id="btn-ir-usuarios">Ver usuarios</button>
+          <button type="button" class="btn-sec" style="text-align:left;" id="btn-ir-monitorias">Reporte de monitorías</button>
+        </div>
+      </section>
+
+      <!-- Actividad reciente -->
+      <section class="card" aria-labelledby="t-actividad">
+        <div class="titulo-seccion"><h2 id="t-actividad" style="font-size:18px">Actividad reciente</h2></div>
+        <div class="solicitudes" id="lista-actividad">
+          <!-- Se llena con JS -->
+        </div>
+      </section>
+
+      <!-- Estado del sistema -->
+      <section class="card" aria-labelledby="t-sistema">
+        <div class="titulo-seccion"><h2 id="t-sistema" style="font-size:18px">Estado del sistema</h2></div>
+        <div style="display:grid; gap:12px; font-size:14px;">
+          <div style="display:flex; justify-content:space-between;"><span>Usuarios en línea</span><b class="ok">24</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Solicitudes pendientes</span><b class="pend">5</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Soportes por verificar</span><b class="rev">3</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Último respaldo</span><b>Hoy 2:00 AM</b></div>
+        </div>
+      </section>
+
+    </aside>
+  </div>
+</div>
+
+<nav class="tabbar" aria-label="Navegación móvil">
+  <a href="#" aria-current="page"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</a>
+  <a href="#soportes"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Soportes</a>
+  <a href="#materias"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>Materias</a>
+  <a href="#usuarios"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuarios</a>
+</nav>
+
+<div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+<script>
+  // Datos simulados
+  const soportes = [
+    { id: 1, monitor: 'Carlos Ruiz', email: 'carlos.ruiz@urosario.edu.co', materia: 'Cálculo Diferencial', tipo: 'Historial académico', fecha: '25 Sep 2026', estado: 'pendiente' },
+    { id: 2, monitor: 'Ana María López', email: 'ana.lopez@urosario.edu.co', materia: 'Álgebra Lineal', tipo: 'Certificación', fecha: '24 Sep 2026', estado: 'pendiente' },
+    { id: 3, monitor: 'Diego Herrera', email: 'diego.herrera@urosario.edu.co', materia: 'Programación I', tipo: 'Historial académico', fecha: '23 Sep 2026', estado: 'pendiente' }
+  ];
+
+  const materias = [
+    { id: 1, codigo: 'CALC-101', nombre: 'Cálculo Diferencial', facultad: 'Matemáticas', creditos: 4, activa: true },
+    { id: 2, codigo: 'ALGB-102', nombre: 'Álgebra Lineal', facultad: 'Matemáticas', creditos: 3, activa: true },
+    { id: 3, codigo: 'PROG-101', nombre: 'Programación I', facultad: 'Ingeniería', creditos: 4, activa: true },
+    { id: 4, codigo: 'MICR-201', nombre: 'Microeconomía', facultad: 'Economía', creditos: 3, activa: false }
+  ];
+
+  const usuarios = [
+    { id: 1, nombre: 'Sofía Martínez', email: 'sofia.martinez@urosario.edu.co', rol: 'Estudiante', carrera: 'Ingeniería de Sistemas', fecha: '26 Sep 2026' },
+    { id: 2, nombre: 'Juan Pérez', email: 'juan.perez@urosario.edu.co', rol: 'Estudiante', carrera: 'Economía', fecha: '25 Sep 2026' },
+    { id: 3, nombre: 'Laura Gutiérrez', email: 'laura.gutierrez@urosario.edu.co', rol: 'Monitor', carrera: 'Economía', fecha: '24 Sep 2026' },
+    { id: 4, nombre: 'Andrés Morales', email: 'andres.morales@urosario.edu.co', rol: 'Monitor', carrera: 'Ingeniería de Sistemas', fecha: '23 Sep 2026' }
+  ];
+
+  const monitorias = [
+    { id: 101, estudiante: 'Sofía Martínez', monitor: 'Carlos Ruiz', materia: 'Cálculo Diferencial', fecha: '26 Sep 2026, 10:00 AM', estado: 'Confirmada', calif: null },
+    { id: 102, estudiante: 'Juan Pérez', monitor: 'Ana María López', materia: 'Álgebra Lineal', fecha: '25 Sep 2026, 2:00 PM', estado: 'Realizada', calif: 5 },
+    { id: 103, estudiante: 'María Gómez', monitor: 'Diego Herrera', materia: 'Programación I', fecha: '24 Sep 2026, 4:00 PM', estado: 'Realizada', calif: 4 },
+    { id: 104, estudiante: 'Pedro Sánchez', monitor: 'Laura Gutiérrez', materia: 'Microeconomía', fecha: '23 Sep 2026, 11:00 AM', estado: 'Cancelada', calif: null }
+  ];
+
+  const actividad = [
+    { texto: 'Carlos Ruiz cargó nuevo soporte académico', tiempo: 'Hace 2 horas' },
+    { texto: 'Nueva materia creada: Ecuaciones Diferenciales', tiempo: 'Hace 5 horas' },
+    { texto: '5 monitorías realizadas hoy', tiempo: 'Hace 8 horas' },
+    { texto: 'Respaldo automático completado', tiempo: 'Hoy 2:00 AM' }
+  ];
+
+  const notificaciones = [
+    { tipo: 'sol', titulo: 'Nuevo soporte pendiente', texto: 'Carlos Ruiz cargó historial académico para verificación', tiempo: 'Hace 2 horas' },
+    { tipo: 'aviso', titulo: 'Materia desactivada', texto: 'Microeconomía fue desactivada del catálogo', tiempo: 'Hace 5 horas' },
+    { tipo: 'rec', titulo: 'Reporte generado', texto: 'Reporte de monitorías de septiembre disponible', tiempo: 'Hace 1 día' }
+  ];
+
+  let soporteActual = null;
+
+  const $ = s => document.querySelector(s);
+
+  function mostrarAviso(txt) {
+    const a = $('#aviso');
+    a.textContent = txt;
+    a.classList.add('ver');
+    setTimeout(() => a.classList.remove('ver'), 3000);
+  }
+
+  // Notificaciones
+  function pintarNotificaciones() {
+    $('#notif-lista').innerHTML = notificaciones.map(n => `
+      <div class="notif-item">
+        <div class="icono ${n.tipo}">${n.tipo === 'sol' ? '📩' : n.tipo === 'rec' ? '✅' : '🔔'}</div>
+        <div class="txt">
+          <b>${n.titulo}</b>
+          <p>${n.texto}</p>
+        </div>
+        <time>${n.tiempo}</time>
+      </div>
+    `).join('');
+    $('#notif-count').textContent = notificaciones.length;
+  }
+
+  function toggleNotificaciones() {
+    const panel = $('#notif-panel');
+    const visible = panel.classList.contains('ver');
+    panel.classList.toggle('ver', !visible);
+    panel.setAttribute('aria-hidden', visible ? 'true' : 'false');
+  }
+
+  // Soportes (RQF006)
+  function pintarSoportes() {
+    const lista = $('#lista-soportes');
+    const pendientes = soportes.filter(s => s.estado === 'pendiente');
+    lista.innerHTML = pendientes.map(s => `
+      <div class="soporte-item" data-id="${s.id}">
+        <div class="icono">📄</div>
+        <div class="info">
+          <b>${s.monitor}</b>
+          <span>${s.tipo} • ${s.materia}</span>
+        </div>
+        <span class="estado pend">Pendiente</span>
+      </div>
+    `).join('');
+    $('#conteo-soportes').textContent = `${pendientes.length} pendiente${pendientes.length !== 1 ? 's' : ''}`;
+
+    lista.querySelectorAll('.soporte-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const id = parseInt(item.dataset.id);
+        abrirDetalleSoporte(id);
+      });
+    });
+  }
+
+  function abrirDetalleSoporte(id) {
+    const s = soportes.find(x => x.id === id);
+    if (!s) return;
+    soporteActual = s;
+
+    $('#soporte-detalle').innerHTML = `
+      <div style="display:grid; gap:14px;">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div class="av c2" style="--s:56px; font-size:22px;">${s.monitor.split(' ').map(n=>n[0]).join('')}</div>
+          <div>
+            <b style="font-size:18px; display:block;">${s.monitor}</b>
+            <span style="color:var(--texto-suave);">${s.email}</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; background:var(--fondo); padding:16px; border-radius:16px;">
+          <div><b style="font-size:13px; color:var(--texto-suave);">Tipo de soporte</b><div style="font-weight:700;">${s.tipo}</div></div>
+          <div><b style="font-size:13px; color:var(--texto-suave);">Materia</b><div style="font-weight:700;">${s.materia}</div></div>
+          <div><b style="font-size:13px; color:var(--texto-suave);">Fecha de carga</b><div style="font-weight:700;">${s.fecha}</div></div>
+          <div><b style="font-size:13px; color:var(--texto-suave);">Estado</b><div style="font-weight:700;" class="pend">Pendiente</div></div>
+        </div>
+        <div style="background:var(--lavanda); border:1px solid var(--linea); border-radius:16px; padding:16px; text-align:center;">
+          <p style="font-size:14px; color:var(--texto-suave); margin-bottom:10px;">Documento adjunto</p>
+          <b style="font-size:16px; color:var(--acento);">historico_academico.pdf</b>
+          <p style="font-size:12px; color:var(--texto-suave); margin-top:6px;">2.4 MB • Cargado el ${s.fecha}</p>
+        </div>
+      </div>
+    `;
+
+    $('#modal-soporte').classList.add('ver');
+    $('#modal-soporte').setAttribute('aria-hidden', 'false');
+  }
+
+  function cerrarDetalleSoporte() {
+    $('#modal-soporte').classList.remove('ver');
+    $('#modal-soporte').setAttribute('aria-hidden', 'true');
+    soporteActual = null;
+  }
+
+  function aprobarSoporte() {
+    if (!soporteActual) return;
+    soporteActual.estado = 'aprobado';
+    mostrarAviso(`Soporte de ${soporteActual.monitor} aprobado ✅`);
+    cerrarDetalleSoporte();
+    pintarSoportes();
+    // Aquí se enviaría notificación al monitor (RQF038)
+  }
+
+  function rechazarSoporte() {
+    if (!soporteActual) return;
+    const motivo = prompt('Indica un motivo para el rechazo (opcional):');
+    soporteActual.estado = 'rechazado';
+    mostrarAviso(`Soporte de ${soporteActual.monitor} rechazado`);
+    cerrarDetalleSoporte();
+    pintarSoportes();
+    // Aquí se enviaría notificación al monitor (RQF038)
+  }
+
+  // Materias (RQF013)
+  function pintarMaterias() {
+    const tbody = $('#tabla-materias');
+    tbody.innerHTML = materias.map(m => `
+      <tr data-id="${m.id}">
+        <td><b>${m.codigo}</b></td>
+        <td>${m.nombre}</td>
+        <td>${m.facultad}</td>
+        <td>${m.creditos}</td>
+        <td><span class="estado ${m.activa ? 'ok' : 'urgente'}">${m.activa ? 'Activa' : 'Inactiva'}</span></td>
+        <td>
+          <div class="acciones-tabla">
+            <button type="button" class="btn-xs sec" data-editar="${m.id}">Editar</button>
+            <button type="button" class="btn-xs ${m.activa ? 'danger' : 'success'}" data-toggle="${m.id}">${m.activa ? 'Desactivar' : 'Activar'}</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+    $('#conteo-materias').textContent = `${materias.length} materia${materias.length !== 1 ? 's' : ''}`;
+  }
+
+  // Usuarios
+  function pintarUsuarios() {
+    const lista = $('#lista-usuarios');
+    lista.innerHTML = usuarios.map(u => `
+      <div class="usuario-item">
+        <div class="avatar ${u.rol === 'Monitor' ? 'c2' : 'c1'}">${u.nombre.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
+        <div class="info">
+          <b>${u.nombre}</b>
+          <span>${u.rol} • ${u.carrera}</span>
+        </div>
+        <span class="estado info-badge">${u.fecha}</span>
+      </div>
+    `).join('');
+  }
+
+  // Monitorías (RQF029, RQF036)
+  function pintarMonitorias() {
+    const tbody = $('#tabla-monitorias');
+    tbody.innerHTML = monitorias.map(m => `
+      <tr>
+        <td>${m.estudiante}</td>
+        <td>${m.monitor}</td>
+        <td>${m.materia}</td>
+        <td>${m.fecha}</td>
+        <td><span class="estado ${m.estado === 'Confirmada' ? 'ok' : m.estado === 'Realizada' ? 'ok' : 'urgente'}">${m.estado}</span></td>
+        <td>${m.calif ? `<span class="tag">⭐ ${m.calif}</span>` : '-'}</td>
+      </tr>
+    `).join('');
+  }
+
+  // Actividad
+  function pintarActividad() {
+    $('#lista-actividad').innerHTML = actividad.map(a => `
+      <div style="font-size:14px; padding:10px 0; border-bottom:1px solid var(--linea);">
+        <p style="margin-bottom:4px;">${a.texto}</p>
+        <time style="font-size:12px; color:var(--texto-suave);">${a.tiempo}</time>
+      </div>
+    `).slice(0, 4).join('');
+  }
+
+  // Modal de materia
+  function abrirNuevaMateria() {
+    $('#form-materia').reset();
+    $('#modal-materia').classList.add('ver');
+    $('#modal-materia').setAttribute('aria-hidden', 'false');
+  }
+
+  function cerrarNuevaMateria() {
+    $('#modal-materia').classList.remove('ver');
+    $('#modal-materia').setAttribute('aria-hidden', 'true');
+  }
+
+  // Modal de edición
+  function abrirEditarMateria(id) {
+    const m = materias.find(x => x.id === id);
+    if (!m) return;
+    $('#edit-mat-id').value = m.id;
+    $('#edit-nombre').value = m.nombre;
+    $('#edit-codigo').value = m.codigo;
+    $('#edit-facultad').value = m.facultad.toLowerCase();
+    $('#edit-creditos').value = m.creditos;
+    $('#modal-editar-materia').classList.add('ver');
+    $('#modal-editar-materia').setAttribute('aria-hidden', 'false');
+  }
+
+  function cerrarEditarMateria() {
+    $('#modal-editar-materia').classList.remove('ver');
+    $('#modal-editar-materia').setAttribute('aria-hidden', 'true');
+  }
+
+  // Modal de configuración
+  function abrirConfig() {
+    $('#modal-config').classList.add('ver');
+    $('#modal-config').setAttribute('aria-hidden', 'false');
+  }
+
+  function cerrarConfig() {
+    $('#modal-config').classList.remove('ver');
+    $('#modal-config').setAttribute('aria-hidden', 'true');
+  }
+
+  function guardarConfig() {
+    mostrarAviso('Configuración guardada ✅');
+    cerrarConfig();
+  }
+
+  function cerrarSesion() {
+    if (confirm('¿Seguro que quieres cerrar sesión?')) {
+      mostrarAviso('Sesión cerrada. Volviendo al inicio...');
+      setTimeout(() => { location.reload(); }, 1500);
+    }
+  }
+
+  function crearRespaldo() {
+    mostrarAviso('Creando respaldo...');
+    setTimeout(() => {
+      mostrarAviso('Respaldo creado exitosamente ✅');
+    }, 2000);
+  }
+
+  // Event listeners
+  document.addEventListener('click', e => {
+    if (e.target.id === 'btn-notif' || e.target.id === 'cerrar-notif') { toggleNotificaciones(); }
+    if (e.target.id === 'btn-nueva-materia') { abrirNuevaMateria(); }
+    if (e.target.id === 'cerrar-materia' || e.target.id === 'cancelar-materia') { cerrarNuevaMateria(); }
+    if (e.target.id === 'nav-config' || e.target.id === 'cerrar-config' || e.target.id === 'btn-yo') { abrirConfig(); }
+    if (e.target.id === 'guardar-config') { guardarConfig(); }
+    if (e.target.id === 'btn-cerrar-sesion') { cerrarSesion(); }
+    if (e.target.id === 'btn-respaldo') { crearRespaldo(); }
+    if (e.target.id === 'aprobar-soporte') { aprobarSoporte(); }
+    if (e.target.id === 'rechazar-soporte') { rechazarSoporte(); }
+    if (e.target.id === 'cerrar-soporte') { cerrarDetalleSoporte(); }
+
+    const editarBtn = e.target.closest('[data-editar]');
+    if (editarBtn) { abrirEditarMateria(parseInt(editarBtn.dataset.editar)); }
+
+    const cancelarEdit = e.target.closest('#cancelar-editar-materia');
+    if (cancelarEdit) { cerrarEditarMateria(); }
+
+    const cerrarEdit = e.target.closest('#cerrar-editar-materia');
+    if (cerrarEdit) { cerrarEditarMateria(); }
+
+    const toggleBtn = e.target.closest('[data-toggle]');
+    if (toggleBtn) {
+      const id = parseInt(toggleBtn.dataset.toggle);
+      const m = materias.find(x => x.id === id);
+      if (m) {
+        m.activa = !m.activa;
+        mostrarAviso(`Materia ${m.activa ? 'activada' : 'desactivada'}`);
+        pintarMaterias();
+      }
+    }
+
+    // Accesos rápidos
+    if (e.target.id === 'btn-ir-soportes') { $('#soportes').scrollIntoView({ behavior: 'smooth' }); }
+    if (e.target.id === 'btn-ir-materias') { $('#materias').scrollIntoView({ behavior: 'smooth' }); }
+    if (e.target.id === 'btn-ir-usuarios') { $('#usuarios').scrollIntoView({ behavior: 'smooth' }); }
+    if (e.target.id === 'btn-ir-monitorias') { $('#monitorias').scrollIntoView({ behavior: 'smooth' }); }
+  });
+
+  $('#form-materia').addEventListener('submit', e => {
+    e.preventDefault();
+    const facultades = { ingenieria: 'Ingeniería', economia: 'Economía', matematicas: 'Matemáticas', derecho: 'Derecho' };
+    materias.unshift({
+      id: materias.length + 1,
+      codigo: $('#mat-codigo').value,
+      nombre: $('#mat-nombre').value,
+      facultad: facultades[$('#mat-facultad').value],
+      creditos: parseInt($('#mat-creditos').value),
+      activa: true
+    });
+    mostrarAviso('Materia creada ✅');
+    cerrarNuevaMateria();
+    pintarMaterias();
+  });
+
+  $('#form-editar-materia').addEventListener('submit', e => {
+    e.preventDefault();
+    const id = parseInt($('#edit-mat-id').value);
+    const m = materias.find(x => x.id === id);
+    if (!m) return;
+    const facultades = { ingenieria: 'Ingeniería', economia: 'Economía', matematicas: 'Matemáticas', derecho: 'Derecho' };
+    m.nombre = $('#edit-nombre').value;
+    m.codigo = $('#edit-codigo').value;
+    m.facultad = facultades[$('#edit-facultad').value];
+    m.creditos = parseInt($('#edit-creditos').value);
+    mostrarAviso('Materia actualizada ✅');
+    cerrarEditarMateria();
+    pintarMaterias();
+  });
+
+  // Inicializar
+  pintarNotificaciones();
+  pintarSoportes();
+  pintarMaterias();
+  pintarUsuarios();
+  pintarMonitorias();
+  pintarActividad();
+</script>
+</body>
+</html>

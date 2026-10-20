@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>URStudy | Monitorías entre estudiantes del Rosario</title>
+<meta name="description" content="Encuentra monitores de tu universidad, reserva en minutos y llega preparado a tu próximo parcial.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primario: #1D2154;
+    --acento: #6564D5;
+    --purpura: #A078E8;
+    --lavanda: #EEE9FF;
+    --fondo: #F7F6FF;
+    --exito: #22C55E;
+    --advertencia: #EAB308;
+    --error: #EF4444;
+    --info: #3B82F6;
+    --texto-suave: #5D6088;
+    --linea: #E1DCF7;
+    --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --cuerpo: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+  body { font-family: var(--cuerpo); background: var(--fondo); color: var(--primario); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 0; background: none; }
+  :focus-visible { outline: 3px solid var(--purpura); outline-offset: 3px; border-radius: 8px; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  h1, h2, h3 { font-family: var(--display); letter-spacing: -.025em; line-height: 1.05; }
+  h2 { font-size: clamp(30px, 4vw, 46px); font-weight: 800; }
+
+  /* Botones */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 14px 26px; border-radius: 16px; font-weight: 700; font-size: 16px; text-decoration: none;
+    transition: background .15s, transform .1s, border-color .15s;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn-primario { background: var(--acento); color: #fff; }
+  .btn-primario:hover { background: #5453C4; }
+  .btn-claro { background: #fff; color: var(--primario); }
+  .btn-claro:hover { background: var(--lavanda); }
+  .btn-borde { border: 1.5px solid var(--linea); color: var(--primario); background: #fff; }
+  .btn-borde:hover { border-color: var(--acento); }
+  .btn-sm { padding: 10px 18px; font-size: 15px; border-radius: 12px; }
+
+  /* Barra superior */
+  .topbar { position: sticky; top: 0; z-index: 30; background: rgba(247,246,255,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--linea); }
+  .topbar .wrap { display: flex; align-items: center; gap: 28px; height: 68px; }
+  .logo { display: flex; flex-direction: column; line-height: 1.05; text-decoration: none; margin-right: auto; }
+  .logo b { font-family: var(--display); font-weight: 800; font-size: 24px; letter-spacing: -.02em; }
+  .logo small { font-size: 11px; color: var(--texto-suave); }
+  .enlaces { display: flex; gap: 4px; }
+  .enlaces a { text-decoration: none; font-weight: 600; font-size: 15px; color: var(--texto-suave); padding: 8px 14px; border-radius: 999px; transition: background .15s, color .15s; }
+  .enlaces a:hover { background: var(--lavanda); color: var(--primario); }
+  .acciones { display: flex; gap: 10px; }
+
+  /* Hero */
+  .hero { padding: 72px 0 96px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
+  .hero h1 { font-size: clamp(40px, 6vw, 72px); font-weight: 800; }
+  .hero h1 span { display: block; color: var(--acento); }
+  .hero p.sub { margin-top: 22px; font-size: 19px; color: var(--texto-suave); max-width: 46ch; }
+  .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .hero .nota { margin-top: 18px; font-size: 14px; color: var(--texto-suave); }
+
+  /* Demo animada */
+  .demo { position: relative; }
+  .demo::before { content: ""; position: absolute; inset: 28px -18px -18px 28px; background: var(--lavanda); border-radius: 36px; z-index: 0; }
+  .panel { position: relative; z-index: 1; background: var(--primario); color: #fff; border-radius: 32px; padding: 28px; min-height: 470px; }
+  .panel .saludo { font-size: 14px; color: #CFCBF5; margin-bottom: 6px; }
+  .panel h3 { font-size: 26px; font-weight: 800; margin-bottom: 18px; }
+  .caja { background: #fff; color: var(--primario); border-radius: 18px; padding: 14px 18px; display: flex; align-items: center; gap: 10px; min-height: 56px; font-size: 16px; box-shadow: 0 8px 0 -2px rgba(160,120,232,.45); }
+  .caja svg { flex: none; color: var(--acento); }
+  .caja .escrito { flex: 1; min-width: 0; }
+  .cursor { display: inline-block; width: 2px; height: 1.1em; background: var(--acento); vertical-align: -2px; margin-left: 1px; animation: parpadeo 1s steps(1) infinite; }
+  @keyframes parpadeo { 50% { opacity: 0; } }
+  .resultados { margin-top: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .r { background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.16); border-radius: 20px; padding: 14px; opacity: 0; transform: translateY(14px); transition: opacity .45s, transform .45s; }
+  .r.ver { opacity: 1; transform: none; }
+  .r .fila { display: flex; align-items: center; gap: 12px; }
+  .av { --s: 44px; width: var(--s); height: var(--s); border-radius: 50%; flex: none; display: grid; place-items: center; color: #fff; font-family: var(--display); font-weight: 700; font-size: calc(var(--s) * .38); position: relative; }
+  .c1 { background: var(--acento); } .c2 { background: var(--purpura); } .c3 { background: var(--info); }
+  .r .quien { flex: 1; line-height: 1.25; }
+  .r .quien b { display: block; font-size: 15px; }
+  .r .quien span { font-size: 13px; color: #CFCBF5; }
+  .en-linea { font-size: 12px; font-weight: 700; color: #0E2A18; background: var(--exito); padding: 3px 10px; border-radius: 999px; }
+  .r .tags { display: flex; gap: 6px; margin: 12px 0 10px; flex-wrap: wrap; }
+  .r .tags i { font-style: normal; font-size: 12px; font-weight: 600; background: var(--purpura); color: #fff; padding: 3px 10px; border-radius: 8px; }
+  .r .horas { display: flex; gap: 6px; flex-wrap: wrap; }
+  .r .horas span { font-size: 13px; font-weight: 600; border: 1px solid rgba(255,255,255,.3); border-radius: 10px; padding: 5px 10px; }
+  .r .horas span.sel { background: #fff; color: var(--primario); border-color: #fff; }
+  .repetir { position: absolute; right: 22px; bottom: 16px; font-size: 13px; color: #CFCBF5; text-decoration: underline; text-underline-offset: 3px; }
+  .repetir:hover { color: #fff; }
+
+  /* Propuesta de valor */
+  .valor { padding: 24px 0 104px; }
+  .valor .wrap { display: grid; grid-template-columns: 1fr 1.25fr; gap: 64px; align-items: start; }
+  .valor h2 { position: sticky; top: 100px; max-width: 12em; }
+  .valor h2 + p { margin-top: 16px; }
+  .beneficios { display: flex; flex-direction: column; }
+  .beneficio { display: grid; grid-template-columns: 56px 1fr; gap: 20px; padding: 28px 0; border-top: 1px solid var(--linea); }
+  .beneficio:last-child { border-bottom: 1px solid var(--linea); }
+  .ico { width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; }
+  .ico.l { background: var(--lavanda); color: var(--acento); }
+  .ico.v { background: rgba(34,197,94,.15); color: #12803A; }
+  .ico.a { background: rgba(59,130,246,.14); color: #1D5CC7; }
+  .ico.p { background: rgba(234,179,8,.2); color: #8A6A00; }
+  .ico.s { background: rgba(160,120,232,.15); color: var(--purpura); }
+  .beneficio h3 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .beneficio p { color: var(--texto-suave); max-width: 52ch; }
+
+  /* Cómo funciona */
+  .pasos-sec { background: #fff; border-block: 1px solid var(--linea); padding: 96px 0; }
+  .pasos-sec header { max-width: 640px; margin-bottom: 52px; }
+  .pasos-sec header p { margin-top: 14px; color: var(--texto-suave); font-size: 18px; }
+  .pasos { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; counter-reset: paso; position: relative; }
+  .paso { position: relative; padding: 0 32px 0 0; counter-increment: paso; }
+  .paso::before {
+    content: counter(paso); display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+    background: var(--primario); color: #fff; font-family: var(--display); font-weight: 800; font-size: 20px; margin-bottom: 20px; position: relative; z-index: 1;
+  }
+  .paso:not(:last-child)::after { content: ""; position: absolute; top: 21px; left: 44px; right: 12px; border-top: 2px dashed var(--purpura); }
+  .paso h3 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .paso p { color: var(--texto-suave); max-width: 32ch; }
+
+  /* Materias */
+  .materias { padding: 104px 0; }
+  .materias .cab { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 36px; }
+  .materias .cab p { color: var(--texto-suave); max-width: 40ch; }
+  .nube { display: flex; flex-wrap: wrap; gap: 10px; }
+  .nube a { text-decoration: none; font-weight: 600; font-size: 17px; padding: 12px 22px; border-radius: 999px; background: #fff; border: 1.5px solid var(--linea); transition: background .15s, color .15s, border-color .15s; }
+  .nube a:hover { background: var(--acento); border-color: var(--acento); color: #fff; }
+  .nube a:nth-child(3n+1) { background: var(--lavanda); border-color: var(--lavanda); }
+  .nube a:nth-child(3n+1):hover { background: var(--acento); border-color: var(--acento); }
+
+  /* Ser monitor */
+  .monitor-sec { padding: 0 0 104px; }
+  .banda { background: var(--primario); color: #fff; border-radius: 36px; padding: 64px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; position: relative; overflow: hidden; }
+  .banda::before { content: ""; position: absolute; width: 360px; height: 360px; border-radius: 50%; background: var(--acento); opacity: .5; right: -120px; top: -140px; }
+  .banda > * { position: relative; }
+  .banda h2 { font-size: clamp(30px, 4vw, 44px); }
+  .banda p { margin-top: 16px; color: #CFCBF5; font-size: 18px; max-width: 44ch; }
+  .banda .btn { margin-top: 28px; }
+  .banda ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .banda li { display: flex; gap: 14px; align-items: flex-start; background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.16); padding: 16px 18px; border-radius: 18px; }
+  .banda li svg { flex: none; margin-top: 2px; color: var(--exito); }
+  .banda li b { display: block; }
+  .banda li span { font-size: 14px; color: #CFCBF5; }
+
+  /* Seguridad y privacidad */
+  .seguridad { background: var(--lavanda); padding: 96px 0; }
+  .seguridad .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  .seguridad h2 { max-width: 12em; }
+  .seguridad p { margin-top: 16px; color: var(--texto-suave); font-size: 16px; }
+  .seguridad .lista { display: grid; gap: 16px; margin-top: 24px; }
+  .seguridad .item { display: flex; gap: 14px; align-items: flex-start; background: #fff; border-radius: 18px; padding: 18px; }
+  .seguridad .item svg { flex: none; color: var(--acento); margin-top: 2px; }
+  .seguridad .item b { display: block; font-size: 15px; margin-bottom: 4px; }
+  .seguridad .item span { font-size: 14px; color: var(--texto-suave); }
+
+  /* FAQ */
+  .faq { padding: 0 0 104px; }
+  .faq .wrap { display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px; }
+  .faq h2 { max-width: 9em; }
+  details { border-top: 1px solid var(--linea); padding: 22px 0; }
+  details:last-child { border-bottom: 1px solid var(--linea); }
+  summary { list-style: none; cursor: pointer; font-weight: 700; font-size: 18px; display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font-family: var(--display); font-size: 28px; line-height: 1; color: var(--acento); transition: transform .2s; }
+  details[open] summary::after { transform: rotate(45deg); }
+  details p { margin-top: 12px; color: var(--texto-suave); max-width: 60ch; }
+
+  /* CTA final */
+  .final { padding: 0 0 96px; }
+  .final .caja-final { background: var(--lavanda); border-radius: 36px; padding: 72px 32px; text-align: center; }
+  .final h2 { font-size: clamp(32px, 5vw, 56px); max-width: 14em; margin: 0 auto; }
+  .final p { margin: 16px auto 0; color: var(--texto-suave); font-size: 18px; max-width: 44ch; }
+  .final .ctas { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+
+  footer { border-top: 1px solid var(--linea); padding: 32px 0 44px; font-size: 14px; color: var(--texto-suave); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer nav { display: flex; gap: 20px; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--acento); }
+
+  @media (max-width: 960px) {
+    .hero .wrap, .valor .wrap, .faq .wrap, .banda, .seguridad .wrap { grid-template-columns: 1fr; }
+    .valor h2, .seguridad h2, .faq h2 { position: static; }
+    .enlaces { display: none; }
+    .banda, .seguridad { padding: 44px 28px; }
+    .pasos { grid-template-columns: 1fr; gap: 36px; }
+    .paso { padding: 0 0 0 64px; }
+    .paso::before { position: absolute; left: 0; top: 0; margin: 0; }
+    .paso:not(:last-child)::after { top: 48px; bottom: -32px; left: 21px; right: auto; border-top: 0; border-left: 2px dashed var(--purpura); }
+    .demo::before { inset: 20px -8px -10px 20px; }
+  }
+  @media (max-width: 560px) {
+    .wrap { padding: 0 16px; }
+    .acciones .btn-borde { display: none; }
+    .hero { padding: 40px 0 72px; }
+    .panel { padding: 22px 18px; min-height: 520px; }
+    .beneficio { grid-template-columns: 48px 1fr; gap: 14px; }
+    .ico { width: 48px; height: 48px; }
+    .pasos-sec, .materias, .seguridad { padding: 72px 0; }
+    footer .wrap { flex-direction: column; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    .r { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="URStudy, Universidad del Rosario">
+      <b>URStudy</b>
+      <small>Universidad del Rosario</small>
+    </a>
+    <nav class="enlaces" aria-label="Secciones">
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#materias">Materias</a>
+      <a href="#ser-monitor">Ser monitor</a>
+      <a href="#preguntas">Preguntas</a>
+    </nav>
+    <div class="acciones">
+      <a class="btn btn-borde btn-sm" href="login.html">Iniciar sesión</a>
+      <a class="btn btn-primario btn-sm" href="registro.html">Crear cuenta</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="h-hero">
+    <div class="wrap">
+      <div>
+        <h1 id="h-hero">Un monitor del Rosario, antes de tu parcial. <span>Sin buscar por chats.</span></h1>
+        <p class="sub">URStudy conecta a estudiantes con monitores de su misma universidad. Cuentas qué se te complica, eliges horario y estudias en una sala virtual o en el campus.</p>
+        <div class="ctas">
+          <a class="btn btn-primario" href="index.html">Encontrar un monitor</a>
+          <a class="btn btn-borde" href="#como-funciona">Ver cómo funciona</a>
+        </div>
+        <p class="nota">Entra con tu correo institucional. Solo para estudiantes y monitores de la Universidad del Rosario.</p>
+      </div>
+
+      <div class="demo" aria-label="Ejemplo de búsqueda en URStudy">
+        <div class="panel" id="panel">
+          <p class="saludo">Hola, Sofía 👋</p>
+          <h3>¿Qué se te está complicando hoy?</h3>
+          <div class="caja">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span class="escrito"><span id="tecleo"></span><span class="cursor" aria-hidden="true"></span></span>
+          </div>
+          <div class="resultados" id="resultados">
+            <div class="r">
+              <div class="fila">
+                <span class="av c2" aria-hidden="true">CR</span>
+                <div class="quien"><b>Carlos Ruiz</b><span>Cálculo Diferencial · 4.8 de calificación</span></div>
+                <span class="en-linea">En línea</span>
+              </div>
+              <div class="tags"><i>Integrales por partes</i><i>Derivadas</i></div>
+              <div class="horas"><span class="sel">Hoy 4:00 PM</span><span>Mañana 10:00 AM</span><span>Jue 2:00 PM</span></div>
+            </div>
+            <div class="r">
+              <div class="fila">
+                <span class="av c1" aria-hidden="true">LG</span>
+                <div class="quien"><b>Laura Gutiérrez</b><span>Matemáticas · 4.9 de calificación</span></div>
+              </div>
+              <div class="horas" style="margin-top:10px"><span>Mié 8:00 AM</span><span>Vie 11:00 AM</span></div>
+            </div>
+          </div>
+          <button class="repetir" type="button" id="repetir">Ver otra vez</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROPUESTA -->
+  <section class="valor" aria-labelledby="h-valor">
+    <div class="wrap">
+      <div>
+        <h2 id="h-valor">Estudiar con alguien que ya vio tu materia</h2>
+      </div>
+      <div class="beneficios">
+        <article class="beneficio">
+          <span class="ico l" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 4 2 10l10 6z"/><path d="M6 12.5V17c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/></svg></span>
+          <div>
+            <h3>Monitores de tu misma universidad</h3>
+            <p>Son estudiantes del Rosario que cursaron tu materia con tus mismos profesores. Saben qué se evalúa y cómo se explica en clase.</p>
+          </div>
+        </article>
+        <article class="beneficio">
+          <span class="ico v" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div>
+            <h3>Ayuda hoy, no la próxima semana</h3>
+            <p>Mira quién está en línea ahora, entra a su sala o reserva un horario que encaje con tu agenda.</p>
+          </div>
+        </article>
+        <article class="beneficio">
+          <span class="ico a" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5A2.5 2.5 0 0 1 4.5 6h9A2.5 2.5 0 0 1 16 8.5v7a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 2 15.5z"/><path d="m16 10 6-3v10l-6-3"/></svg></span>
+          <div>
+            <h3>Virtual o presencial</h3>
+            <p>Cada monitor indica cómo atiende. Tú eliges la modalidad que te quede mejor ese día.</p>
+          </div>
+        </article>
+        <article class="beneficio">
+          <span class="ico p" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></span>
+          <div>
+            <h3>Calificaciones reales</h3>
+            <p>Después de cada tutoría calificas al monitor. Así ves su nota, cuántos estudiantes ayudó y en cuánto responde antes de pedir una sesión.</p>
+          </div>
+        </article>
+        <article class="beneficio">
+          <span class="ico s" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
+          <div>
+            <h3>Monitores verificados</h3>
+            <p>Antes de convertirse en monitores, los estudiantes cargan sus soportes académicos (historial de notas o certificaciones) y la plataforma los valida. Solo quienes cumplen los requisitos reciben la acreditación.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÓMO FUNCIONA -->
+  <section class="pasos-sec" id="como-funciona" aria-labelledby="h-pasos">
+    <div class="wrap">
+      <header>
+        <h2 id="h-pasos">De la duda a la tutoría en tres pasos</h2>
+        <p>Sin formularios largos ni esperar a que alguien te responda por mensaje.</p>
+      </header>
+      <ol class="pasos">
+        <li class="paso">
+          <h3>Cuéntanos qué necesitas</h3>
+          <p>Escribe el tema y la fecha de tu parcial. Te mostramos monitores que dominan justo eso.</p>
+        </li>
+        <li class="paso">
+          <h3>Elige monitor y horario</h3>
+          <p>Compara notas, temas y disponibilidad. Reserva con un toque o entra a la sala si está en línea.</p>
+        </li>
+        <li class="paso">
+          <h3>Estudia y califica</h3>
+          <p>Tu tutoría queda en el historial y en tu semana. Al terminar, calificas y ayudas a otros a elegir.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- MATERIAS -->
+  <section class="materias" id="materias" aria-labelledby="h-mat">
+    <div class="wrap">
+      <div class="cab">
+        <h2 id="h-mat">Hay monitores para tu materia</h2>
+        <p>Estas son algunas de las que más se buscan. Inicia sesión para ver todas.</p>
+      </div>
+      <div class="nube">
+        <a href="index.html">Cálculo Diferencial</a>
+        <a href="index.html">Álgebra Lineal</a>
+        <a href="index.html">Programación I</a>
+        <a href="index.html">Microeconomía</a>
+        <a href="index.html">Cálculo Integral</a>
+        <a href="index.html">Estadística</a>
+        <a href="index.html">Física Mecánica</a>
+        <a href="index.html">Macroeconomía</a>
+        <a href="index.html">Contabilidad</a>
+        <a href="index.html">Estructuras de Datos</a>
+        <a href="index.html">Química General</a>
+        <a href="index.html">Ecuaciones Diferenciales</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SER MONITOR -->
+  <section class="monitor-sec" id="ser-monitor" aria-labelledby="h-mon">
+    <div class="wrap">
+      <div class="banda">
+        <div>
+          <h2 id="h-mon">¿Dominas una materia? Conviértete en monitor</h2>
+          <p>Comparte lo que sabes, define tus propios horarios y construye un historial de experiencia dentro de la universidad.</p>
+          <a class="btn btn-claro" href="index.html">Postularme como monitor</a>
+        </div>
+        <ul>
+          <li>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+            <div><b>Tú marcas tu disponibilidad</b><span>Abre solo los horarios que te sirven.</span></div>
+          </li>
+          <li>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+            <div><b>Recibes solicitudes ordenadas</b><span>Aceptas, propones otro horario o rechazas desde un solo lugar.</span></div>
+          </li>
+          <li>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+            <div><b>Tu reputación te acompaña</b><span>Las calificaciones y las horas dictadas quedan en tu perfil.</span></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEGURIDAD Y PRIVACIDAD -->
+  <section class="seguridad" aria-labelledby="h-seguridad">
+    <div class="wrap">
+      <div>
+        <h2 id="h-seguridad">Tu información está protegida</h2>
+        <p>URStudy usa los mismos estándares de seguridad que las plataformas universitarias oficiales.</p>
+        <div class="lista">
+          <div class="item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <div><b>Contraseñas cifradas</b><span>Se guardan con hashing seguro, nunca en texto plano.</span></div>
+          </div>
+          <div class="item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <div><b>Comunicación cifrada</b><span>Toda la información viaja por HTTPS.</span></div>
+          </div>
+          <div class="item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            <div><b>Tus datos personales están ocultos</b><span>Teléfonos, correos personales y documentos no son visibles para otros usuarios.</span></div>
+          </div>
+          <div class="item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <div><b>Notificaciones por correo</b><span>Te avisamos cuando llega una nueva solicitud, cuando es aceptada o rechazada, y recordatorios antes de cada sesión.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel" style="min-height:380px">
+        <p class="saludo">Tu privacidad primero 🔒</p>
+        <h3>¿Qué protegemos?</h3>
+        <div class="resultados" style="margin-top:20px">
+          <div class="r ver">
+            <div class="fila">
+              <span class="av c4" aria-hidden="true" style="--s:40px">📧</span>
+              <div class="quien"><b>Correo institucional</b><span>Solo para verificar que eres del Rosario</span></div>
+            </div>
+          </div>
+          <div class="r ver">
+            <div class="fila">
+              <span class="av c3" aria-hidden="true" style="--s:40px">📱</span>
+              <div class="quien"><b>Teléfono y datos personales</b><span>Ocultos en tu perfil público</span></div>
+            </div>
+          </div>
+          <div class="r ver">
+            <div class="fila">
+              <span class="av c2" aria-hidden="true" style="--s:40px">🎓</span>
+              <div class="quien"><b>Documentos académicos</b><span>Soportes verificados, solo visibles para validación</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="preguntas" aria-labelledby="h-faq">
+    <div class="wrap">
+      <h2 id="h-faq">Preguntas frecuentes</h2>
+      <div>
+        <details>
+          <summary>¿Quién puede usar URStudy?</summary>
+          <p>Cualquier estudiante de la Universidad del Rosario con correo institucional. Con la misma cuenta puedes pedir tutorías y, si cumples los requisitos, postularte como monitor.</p>
+        </details>
+        <details>
+          <summary>¿Cómo sé que un monitor es bueno?</summary>
+          <p>Cada perfil muestra su calificación, cuántos estudiantes ha ayudado, los temas que domina y su tiempo promedio de respuesta.</p>
+        </details>
+        <details>
+          <summary>¿Qué pasa si el monitor no acepta mi solicitud?</summary>
+          <p>Verás el estado en "Solicitudes en proceso": pendiente, en revisión, confirmada o rechazada. Si te rechazan, puedes escoger otro monitor de inmediato.</p>
+        </details>
+        <details>
+          <summary>¿Las tutorías son virtuales o presenciales?</summary>
+          <p>Depende del monitor. Cada horario indica la modalidad antes de que reserves.</p>
+        </details>
+        <details>
+          <summary>¿Puedo cancelar o cambiar una tutoría?</summary>
+          <p>Sí. Desde "Mis monitorías" puedes reprogramar o cancelar avisando con anticipación al monitor. El horario se libera automáticamente para que otros puedan reservarlo.</p>
+        </details>
+        <details>
+          <summary>¿Puedo ser estudiante y monitor a la vez?</summary>
+          <p>Sí. Una misma cuenta puede tener ambos roles y alternar entre las vistas de estudiante y monitor sin cerrar sesión.</p>
+        </details>
+        <details>
+          <summary>¿Cómo me convierto en monitor?</summary>
+          <p>Sube tus soportes académicos (historial de notas o certificaciones) en la sección de perfil de monitor. La plataforma los revisará y te acreditará si cumples los requisitos.</p>
+        </details>
+        <details>
+          <summary>¿Me avisan cuando tengo una nueva solicitud?</summary>
+          <p>Sí. Recibes un correo electrónico y una notificación en la plataforma. También te avisamos cuando tu solicitud es aceptada o rechazada, y te enviamos recordatorios antes de cada sesión.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="final" aria-labelledby="h-final">
+    <div class="wrap">
+      <div class="caja-final">
+        <h2 id="h-final">Tu próximo parcial no tiene por qué ser a ciegas</h2>
+        <p>Crea tu cuenta con el correo del Rosario y encuentra monitor hoy.</p>
+        <div class="ctas">
+          <a class="btn btn-primario" href="registro.html">Crear cuenta</a>
+          <a class="btn btn-borde" href="login.html">Ya tengo cuenta</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>URStudy, Universidad del Rosario</span>
+    <nav aria-label="Pie de página">
+      <a href="#">Términos</a>
+      <a href="#">Privacidad</a>
+      <a href="#">Contacto</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    const texto = 'integrales por partes, parcial el jueves';
+    const salida = document.getElementById('tecleo');
+    const filas = document.querySelectorAll('#resultados .r');
+    const reducir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let timers = [];
+
+    function limpiar() { timers.forEach(clearTimeout); timers = []; }
+    function tarde(fn, ms) { timers.push(setTimeout(fn, ms)); }
+
+    function final() {
+      salida.textContent = texto;
+      filas.forEach(f => f.classList.add('ver'));
+    }
+
+    function correr() {
+      limpiar();
+      salida.textContent = '';
+      filas.forEach(f => f.classList.remove('ver'));
+      if (reducir) { final(); return; }
+      let i = 0;
+      (function escribir() {
+        salida.textContent = texto.slice(0, ++i);
+        if (i < texto.length) tarde(escribir, 42 + Math.random() * 40);
+        else {
+          tarde(() => filas[0].classList.add('ver'), 450);
+          tarde(() => filas[1].classList.add('ver'), 900);
+        }
+      })();
+    }
+
+    document.getElementById('repetir').addEventListener('click', correr);
+    tarde(correr, 500);
+  })();
+</script>
+</body>
+</html>

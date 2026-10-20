@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>URStudy | Panel de Monitor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primario: #1D2154;
+    --acento: #6564D5;
+    --purpura: #A078E8;
+    --lavanda: #EEE9FF;
+    --fondo: #F7F6FF;
+    --exito: #22C55E;
+    --advertencia: #EAB308;
+    --error: #EF4444;
+    --info: #3B82F6;
+
+    --texto: #1D2154;
+    --texto-suave: #5D6088;
+    --linea: #E1DCF7;
+    --superficie: #FFFFFF;
+
+    --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --cuerpo: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--cuerpo);
+    background: var(--fondo);
+    color: var(--texto);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 0; background: none; }
+  :focus-visible { outline: 3px solid var(--purpura); outline-offset: 2px; border-radius: 6px; }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Barra superior ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(247, 246, 255, .92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--linea);
+  }
+  .topbar .wrap { display: flex; align-items: center; gap: 32px; height: 68px; }
+  .logo { display: flex; flex-direction: column; line-height: 1.05; text-decoration: none; color: var(--primario); }
+  .logo b { font-family: var(--display); font-weight: 800; font-size: 24px; letter-spacing: -.02em; }
+  .logo small { font-size: 11px; color: var(--texto-suave); }
+  .nav { display: flex; gap: 4px; margin-right: auto; }
+  .nav a {
+    text-decoration: none; color: var(--texto-suave); font-weight: 600; font-size: 15px;
+    padding: 8px 14px; border-radius: 999px; transition: background .15s, color .15s;
+  }
+  .nav a:hover { background: var(--lavanda); color: var(--primario); }
+  .nav a[aria-current="page"] { background: var(--primario); color: #fff; }
+  .usuario { display: flex; align-items: center; gap: 14px; position: relative; }
+  
+  .campana-wrap { position: relative; }
+  .campana { position: relative; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; }
+  .campana:hover { background: var(--lavanda); }
+  .campana i {
+    position: absolute; top: 3px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px;
+    border-radius: 9px; background: var(--error); color: #fff; font-style: normal; font-size: 11px; font-weight: 700;
+    display: grid; place-items: center;
+  }
+  .notif-panel {
+    position: absolute; right: 0; top: 52px; width: 340px; background: #fff; border: 1px solid var(--linea);
+    border-radius: 18px; box-shadow: 0 12px 40px rgba(29,33,84,.25); z-index: 70; display: none;
+  }
+  .notif-panel.ver { display: block; }
+  .notif-panel header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--linea); }
+  .notif-panel header h4 { font-family: var(--display); font-size: 16px; }
+  .notif-panel .lista { max-height: 360px; overflow-y: auto; }
+  .notif-item { display: flex; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--linea); }
+  .notif-item:last-child { border-bottom: 0; }
+  .notif-item .icono { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+  .notif-item .icono.sol { background: var(--lavanda); color: var(--acento); }
+  .notif-item .icono.rec { background: rgba(34,197,94,.12); color: var(--exito); }
+  .notif-item .icono.aviso { background: rgba(234,179,8,.15); color: var(--advertencia); }
+  .notif-item .txt { flex: 1; }
+  .notif-item .txt b { display: block; font-size: 14px; margin-bottom: 3px; }
+  .notif-item .txt p { font-size: 13px; color: var(--texto-suave); line-height: 1.35; }
+  .notif-item time { font-size: 11px; color: var(--texto-suave); }
+  .notif-panel footer { padding: 12px 18px; border-top: 1px solid var(--linea); text-align: center; }
+  .notif-panel footer a { font-size: 13px; color: var(--acento); font-weight: 600; text-decoration: none; }
+
+  .yo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .yo:hover { background: var(--lavanda); border-radius: 10px; }
+  .yo div { text-align: right; line-height: 1.2; }
+  .yo b { font-size: 14px; display: block; }
+  .yo span { font-size: 12px; color: var(--texto-suave); }
+
+  .av {
+    --s: 44px;
+    width: var(--s); height: var(--s); border-radius: 50%; flex: none;
+    display: grid; place-items: center; color: #fff; font-family: var(--display); font-weight: 700;
+    font-size: calc(var(--s) * .38); letter-spacing: .01em; position: relative;
+  }
+  .c1 { background: var(--acento); }
+  .c2 { background: var(--purpura); }
+  .c3 { background: var(--info); }
+  .c4 { background: var(--primario); box-shadow: inset 0 0 0 2px var(--purpura); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--primario); color: #fff;
+    border-radius: 32px; margin-top: 24px; padding: 48px 48px 36px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before, .hero::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
+  .hero::before { width: 380px; height: 380px; right: -110px; top: -150px; background: var(--acento); opacity: .55; }
+  .hero::after { width: 200px; height: 200px; right: 150px; top: 120px; background: var(--purpura); opacity: .28; }
+  .hero > * { position: relative; z-index: 1; }
+  .saludo { font-size: 16px; color: #CFCBF5; margin-bottom: 10px; }
+  .hero h1 {
+    font-family: var(--display); font-weight: 800; letter-spacing: -.03em;
+    font-size: clamp(34px, 5.2vw, 58px); line-height: 1.03; max-width: 14em;
+  }
+  .hero p { max-width: 580px; color: #CFCBF5; margin-top: 12px; font-size: 16px; }
+
+  .acciones-hero { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+  .btn {
+    background: var(--acento); color: #fff; font-weight: 700; padding: 14px 24px; border-radius: 16px;
+    transition: background .15s, transform .1s;
+  }
+  .btn:hover { background: #5453C4; }
+  .btn:active { transform: scale(.97); }
+  .btn-sec {
+    background: rgba(255,255,255,.12); color: #fff; font-weight: 700; padding: 14px 24px; border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.25);
+  }
+  .btn-sec:hover { background: rgba(255,255,255,.18); }
+
+  /* ---------- Contenido principal ---------- */
+  .main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, 1fr); gap: 40px; margin: 48px auto 96px; align-items: start; }
+
+  .titulo-seccion { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+  .titulo-seccion h2 { font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+  .titulo-seccion p { font-size: 14px; color: var(--texto-suave); }
+
+  /* Tarjetas */
+  .card { background: var(--superficie); border: 1px solid var(--linea); border-radius: 24px; padding: 22px; }
+  .card h3 { font-family: var(--display); font-size: 18px; margin-bottom: 16px; }
+
+  /* Publicaciones */
+  .publi { display: grid; gap: 16px; }
+  .publi-item {
+    background: var(--fondo); border: 1px solid var(--linea); border-radius: 20px; padding: 20px;
+    display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: start;
+  }
+  .publi-item .materia {
+    width: 56px; height: 56px; border-radius: 16px; background: var(--lavanda);
+    display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 20px; color: var(--acento);
+  }
+  .publi-item h4 { font-family: var(--display); font-size: 18px; margin-bottom: 6px; }
+  .publi-item p { font-size: 14px; color: var(--texto-suave); margin-bottom: 10px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 12px; font-weight: 600; background: #fff; border: 1px solid var(--linea); padding: 4px 10px; border-radius: 8px; }
+  .publi-item .acciones { display: flex; flex-direction: column; gap: 8px; }
+  .btn-sm { padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; }
+  .btn-sm.sec { background: var(--lavanda); color: var(--acento); }
+  .btn-sm.danger { background: rgba(239,68,68,.12); color: var(--error); }
+
+  /* Solicitudes */
+  .solicitudes { display: grid; gap: 12px; }
+  .sol-item {
+    display: flex; align-items: center; gap: 14px; background: var(--superficie); border: 1px solid var(--linea);
+    border-radius: 18px; padding: 16px;
+  }
+  .sol-item .avatar { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-family: var(--display); font-weight: 700; }
+  .sol-item .info { flex: 1; }
+  .sol-item .info b { display: block; font-size: 15px; }
+  .sol-item .info span { font-size: 13px; color: var(--texto-suave); }
+  .sol-item .acciones { display: flex; gap: 8px; }
+  .estado { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 11px; border-radius: 999px; }
+  .ok { background: rgba(34,197,94,.16); color: #12803A; }
+  .pend { background: rgba(234,179,8,.2); color: #8A6A00; }
+  .rev { background: rgba(59,130,246,.15); color: #1D5CC7; }
+  .urgente { background: rgba(239,68,68,.14); color: #C42B2B; }
+
+  /* Calendario */
+  .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .cal-header h3 { font-family: var(--display); font-size: 18px; }
+  .cal-nav { display: flex; gap: 6px; }
+  .cal-nav button { width: 32px; height: 32px; border-radius: 10px; background: var(--lavanda); color: var(--acento); font-weight: 700; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .cal-grid .dia { aspect-ratio: 1; display: grid; place-items: center; border-radius: 10px; font-size: 13px; font-weight: 600; background: var(--fondo); }
+  .cal-grid .dia.hoy { background: var(--primario); color: #fff; }
+  .cal-grid .dia.dispo { background: var(--exito); color: #fff; }
+  .cal-grid .dia.bloq { background: var(--error); color: #fff; }
+  .cal-grid .dia-header { font-size: 12px; color: var(--texto-suave); font-weight: 600; text-align: center; }
+
+  /* Horarios */
+  .horarios { display: grid; gap: 10px; margin-top: 16px; }
+  .horario-item { display: flex; justify-content: space-between; align-items: center; background: var(--fondo); border: 1px solid var(--linea); border-radius: 14px; padding: 12px 16px; }
+  .horario-item b { font-size: 14px; }
+  .horario-item span { font-size: 13px; color: var(--texto-suave); }
+  .horario-item .switch {
+    width: 44px; height: 24px; border-radius: 99px; background: var(--linea); position: relative; transition: background .15s;
+  }
+  .horario-item .switch::after {
+    content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%;
+    background: #fff; transition: transform .15s;
+  }
+  .horario-item .switch.on { background: var(--exito); }
+  .horario-item .switch.on::after { transform: translateX(20px); }
+
+  /* Estadísticas */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat { background: var(--lavanda); border-radius: 20px; padding: 18px; text-align: center; }
+  .stat b { display: block; font-family: var(--display); font-size: 28px; color: var(--primario); }
+  .stat span { font-size: 13px; color: var(--texto-suave); }
+
+  /* Perfil */
+  .perfil-resumen { display: grid; gap: 10px; font-size: 14px; }
+  .perfil-resumen p { margin: 0; }
+  .perfil-resumen b { color: var(--primario); }
+
+  /* ---------- Modal ---------- */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(29,33,84,.5); backdrop-filter: blur(4px);
+    display: none; place-items: center; z-index: 60; padding: 24px;
+  }
+  .modal-backdrop.ver { display: grid; }
+  .modal {
+    background: #fff; border-radius: 24px; max-width: 620px; width: 100%;
+    box-shadow: 0 20px 50px rgba(29,33,84,.35); overflow: hidden;
+  }
+  .modal header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--linea); }
+  .modal header h3 { font-family: var(--display); font-size: 20px; }
+  .modal .cuerpo { padding: 24px; display: grid; gap: 16px; max-height: 70vh; overflow-y: auto; }
+  .campo { display: grid; gap: 6px; }
+  .campo label { font-weight: 600; font-size: 14px; color: var(--texto-suave); }
+  .campo input, .campo select, .campo textarea {
+    border: 1.5px solid var(--linea); border-radius: 12px; padding: 12px 14px; font-size: 15px; width: 100%;
+  }
+  .campo textarea { min-height: 90px; resize: vertical; }
+  .campo .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal footer { padding: 16px 24px; border-top: 1px solid var(--linea); display: flex; justify-content: flex-end; gap: 10px; }
+  .btn-sec-modal { background: var(--lavanda); color: var(--acento); font-weight: 700; padding: 12px 20px; border-radius: 12px; }
+  .btn-sec-modal:hover { filter: brightness(.96); }
+
+  /* ---------- Aviso ---------- */
+  .aviso {
+    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 24px); opacity: 0; pointer-events: none;
+    background: var(--primario); color: #fff; padding: 14px 22px; border-radius: 16px; font-weight: 600;
+    box-shadow: 0 14px 30px rgba(29,33,84,.3); transition: opacity .2s, transform .2s; z-index: 50; max-width: calc(100% - 32px);
+  }
+  .aviso.ver { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---------- Barra inferior móvil ---------- */
+  .tabbar { display: none; }
+
+  @media (max-width: 960px) {
+    .main { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
+    .wrap { padding: 0 16px; }
+    .nav, .yo div { display: none; }
+    .topbar .wrap { justify-content: space-between; }
+    .hero { padding: 32px 22px 26px; border-radius: 26px; }
+    .acciones-hero { flex-direction: column; }
+    .btn, .btn-sec { width: 100%; }
+    .publi-item { grid-template-columns: 1fr; }
+    .publi-item .acciones { flex-direction: row; }
+    .stats { grid-template-columns: 1fr; }
+    .tabbar {
+      display: grid; grid-template-columns: repeat(4, 1fr); position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+      background: #fff; border-top: 1px solid var(--linea); padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+    }
+    .tabbar a { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; font-weight: 600; color: var(--texto-suave); text-decoration: none; padding: 4px; }
+    .tabbar a[aria-current="page"] { color: var(--acento); }
+    .main { margin-bottom: 120px; }
+    .aviso { bottom: 84px; }
+    .notif-panel { right: -60px; top: 48px; width: 300px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Modal de nueva publicación (RQF014) -->
+<div class="modal-backdrop" id="modal-publi" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-publi">
+  <div class="modal">
+    <header>
+      <h3 id="titulo-publi">Nueva publicación de monitoría</h3>
+      <button aria-label="Cerrar" id="cerrar-publi">✕</button>
+    </header>
+    <form class="cuerpo" id="form-publi">
+      <div class="campo">
+        <label for="pub-materia">Materia</label>
+        <select id="pub-materia" required>
+          <option value="">Selecciona</option>
+          <option value="calculo">Cálculo Diferencial</option>
+          <option value="algebra">Álgebra Lineal</option>
+          <option value="programacion">Programación I</option>
+          <option value="micro">Microeconomía</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="pub-desc">Descripción</label>
+        <textarea id="pub-desc" placeholder="Ej: Apoyo en derivadas, integrales y preparación de parciales..." required></textarea>
+      </div>
+      <div class="campo">
+        <label for="pub-modalidad">Modalidad</label>
+        <select id="pub-modalidad" required>
+          <option value="">Selecciona</option>
+          <option value="Presencial">Presencial</option>
+          <option value="Virtual">Virtual</option>
+          <option value="Ambas">Ambas</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="pub-tarifa">Tarifa por hora (opcional)</label>
+        <input type="number" id="pub-tarifa" placeholder="Ej: 25000" min="0">
+      </div>
+      <div class="campo">
+        <label for="pub-duracion">Duración de sesión (minutos)</label>
+        <select id="pub-duracion" required>
+          <option value="60">60 minutos</option>
+          <option value="90">90 minutos</option>
+          <option value="120">120 minutos</option>
+        </select>
+      </div>
+    </form>
+    <footer>
+      <button type="button" class="btn-sec-modal" id="cancelar-publi">Cancelar</button>
+      <button type="submit" form="form-publi" class="btn">Publicar</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Modal de edición de publicación (RQF015) -->
+<div class="modal-backdrop" id="modal-editar-publi" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-editar-publi">
+  <div class="modal">
+    <header>
+      <h3 id="titulo-editar-publi">Editar publicación</h3>
+      <button aria-label="Cerrar" id="cerrar-editar-publi">✕</button>
+    </header>
+    <form class="cuerpo" id="form-editar-publi">
+      <input type="hidden" id="edit-pub-id">
+      <div class="campo">
+        <label for="edit-materia">Materia</label>
+        <select id="edit-materia" required>
+          <option value="calculo">Cálculo Diferencial</option>
+          <option value="algebra">Álgebra Lineal</option>
+          <option value="programacion">Programación I</option>
+          <option value="micro">Microeconomía</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="edit-desc">Descripción</label>
+        <textarea id="edit-desc" required></textarea>
+      </div>
+      <div class="campo">
+        <label for="edit-modalidad">Modalidad</label>
+        <select id="edit-modalidad" required>
+          <option value="Presencial">Presencial</option>
+          <option value="Virtual">Virtual</option>
+          <option value="Ambas">Ambas</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="edit-tarifa">Tarifa por hora</label>
+        <input type="number" id="edit-tarifa" min="0">
+      </div>
+      <div class="campo">
+        <label for="edit-duracion">Duración de sesión</label>
+        <select id="edit-duracion" required>
+          <option value="60">60 minutos</option>
+          <option value="90">90 minutos</option>
+          <option value="120">120 minutos</option>
+        </select>
+      </div>
+    </form>
+    <footer>
+      <button type="button" class="btn-sec-modal" id="cancelar-editar-publi">Cancelar</button>
+      <button type="submit" form="form-editar-publi" class="btn">Guardar cambios</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Modal de perfil de monitor (RQF010) -->
+<div class="modal-backdrop" id="modal-perfil" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-perfil">
+  <div class="modal">
+    <header>
+      <h3 id="titulo-perfil">Tu perfil de monitor</h3>
+      <button aria-label="Cerrar" id="cerrar-perfil">✕</button>
+    </header>
+    <form class="cuerpo" id="form-perfil">
+      <div class="campo">
+        <label for="pf-bio">Biografía</label>
+        <textarea id="pf-bio" placeholder="Cuéntales sobre tu experiencia y estilo de enseñanza..." required></textarea>
+      </div>
+      <div class="campo">
+        <label for="pf-experiencia">Experiencia</label>
+        <input type="text" id="pf-experiencia" placeholder="Ej: Monitor de Cálculo 2024-2025, Tutor en academia..." required>
+      </div>
+      <div class="campo">
+        <label for="pf-enfoque">Enfoque de enseñanza</label>
+        <input type="text" id="pf-enfoque" placeholder="Ej: Práctico, con ejercicios paso a paso..." required>
+      </div>
+      <div class="campo">
+        <label for="pf-materias">Materias ofrecidas (separadas por coma)</label>
+        <input type="text" id="pf-materias" placeholder="Ej: Cálculo, Álgebra, Programación" required>
+      </div>
+      <div class="campo">
+        <label for="pf-tarifa">Tarifa por hora</label>
+        <input type="number" id="pf-tarifa" placeholder="Ej: 30000" required>
+      </div>
+      <div class="campo">
+        <label for="pf-modalidad">Modalidades</label>
+        <select id="pf-modalidad" required>
+          <option value="">Selecciona</option>
+          <option value="Presencial">Presencial</option>
+          <option value="Virtual">Virtual</option>
+          <option value="Ambas">Ambas</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="pf-dispo">Disponibilidad general</label>
+        <input type="text" id="pf-dispo" placeholder="Ej: Mañanas y noches, Lun-Mié-Vie">
+      </div>
+    </form>
+    <footer>
+      <button type="button" class="btn-sec-modal" id="cancelar-perfil">Cancelar</button>
+      <button type="submit" form="form-perfil" class="btn">Guardar cambios</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Modal de solicitud (detalle y respuesta) (RQF029, RQF030, RQF031) -->
+<div class="modal-backdrop" id="modal-solicitud" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-solicitud">
+  <div class="modal">
+    <header>
+      <h3 id="titulo-solicitud">Detalle de solicitud</h3>
+      <button aria-label="Cerrar" id="cerrar-solicitud">✕</button>
+    </header>
+    <div class="cuerpo" id="solicitud-detalle">
+      <!-- Se llena dinámicamente -->
+    </div>
+    <footer id="solicitud-acciones">
+      <button type="button" class="btn-sec-modal" id="rechazar-sol">Rechazar</button>
+      <button type="button" class="btn" id="aceptar-sol">Aceptar</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Modal de Configuración -->
+<div class="modal-backdrop" id="modal-config" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-config">
+  <div class="modal">
+    <header>
+      <h3 id="titulo-config">Configuración</h3>
+      <button aria-label="Cerrar" id="cerrar-config">✕</button>
+    </header>
+    <div class="cuerpo">
+      <div class="campo">
+        <label>Preferencias de notificaciones (RQF038)</label>
+        <div style="display:grid; gap:10px;">
+          <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
+            <input type="checkbox" id="notif-email" checked style="width:18px; height:18px;">
+            Notificaciones por correo electrónico
+          </label>
+          <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
+            <input type="checkbox" id="notif-push" checked style="width:18px; height:18px;">
+            Notificaciones push en la plataforma
+          </label>
+          <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
+            <input type="checkbox" id="notif-recordatorios" checked style="width:18px; height:18px;">
+            Recordatorios de monitorías
+          </label>
+        </div>
+      </div>
+      <div class="campo">
+        <label>Privacidad (RQF012)</label>
+        <p style="font-size:14px; color:var(--texto-suave); margin:6px 0 10px;">
+          Tu información personal (correo, teléfono, documento) está oculta en perfiles públicos.
+        </p>
+        <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
+          <input type="checkbox" id="perfil-publico" checked style="width:18px; height:18px;">
+          Mi perfil es visible para otros usuarios
+        </label>
+      </div>
+      <div class="campo">
+        <label>Cambio de rol (RQF008)</label>
+        <p style="font-size:14px; color:var(--texto-suave); margin:6px 0 10px;">
+          Tu cuenta tiene rol de <b>Monitor</b>. Si también eres estudiante, puedes alternar vistas.
+        </p>
+        <button type="button" class="btn-sec-modal" id="btn-cambiar-rol">Cambiar a vista de Estudiante</button>
+      </div>
+      <div class="campo">
+        <label>Soportes académicos (RQF006)</label>
+        <p style="font-size:14px; color:var(--texto-suave); margin:6px 0 10px;">
+          Estado de tu acreditación: <b class="ok">Aprobado</b>
+        </p>
+        <button type="button" class="btn-sec-modal" id="btn-cargar-soporte">Cargar nuevo soporte</button>
+      </div>
+    </div>
+    <footer>
+      <button type="button" class="btn-sec-modal" id="btn-cerrar-sesion">Cerrar sesión</button>
+      <button type="button" class="btn" id="guardar-config">Guardar</button>
+    </footer>
+  </div>
+</div>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="URStudy, Universidad del Rosario">
+      <b>URStudy</b>
+      <small>Universidad del Rosario</small>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#" aria-current="page">Inicio</a>
+      <a href="#publicaciones">Publicaciones</a>
+      <a href="#solicitudes">Solicitudes</a>
+      <a href="#calendario">Calendario</a>
+      <a href="#historial">Historial</a>
+      <a href="#config" id="nav-config">Configuración</a>
+    </nav>
+    <div class="usuario">
+      <div class="campana-wrap">
+        <button class="campana" aria-label="Notificaciones" id="btn-notif">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <i id="notif-count">2</i>
+        </button>
+        <div class="notif-panel" id="notif-panel" aria-hidden="true">
+          <header>
+            <h4>Notificaciones</h4>
+            <button id="cerrar-notif" aria-label="Cerrar">✕</button>
+          </header>
+          <div class="lista" id="notif-lista"></div>
+          <footer><a href="#" id="ver-todas">Ver todas</a></footer>
+        </div>
+      </div>
+      <div class="yo" id="btn-yo">
+        <div><b id="usuario-nombre">Carlos Ruiz</b><span id="usuario-rol">Monitor</span></div>
+        <span class="av c2" style="--s:42px" aria-hidden="true" id="avatar-usuario">CR</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="titulo-hero">
+    <p class="saludo">Hola, <span id="saludo-nombre">Carlos</span> 👋</p>
+    <h1 id="titulo-hero">Panel de Monitor</h1>
+    <p>Gestiona tus publicaciones, revisa solicitudes y organiza tu disponibilidad en un solo lugar.</p>
+
+    <div class="acciones-hero">
+      <button type="button" class="btn" id="btn-nueva-publi">+ Nueva publicación</button>
+      <button type="button" class="btn-sec" id="btn-editar-perfil-monitor">Editar perfil</button>
+      <button type="button" class="btn-sec" id="btn-gestionar-dispo">Gestionar disponibilidad</button>
+    </div>
+  </section>
+
+  <div class="main">
+
+    <!-- Columna principal -->
+    <div style="display:grid; gap:40px;">
+
+      <!-- Estadísticas -->
+      <section>
+        <div class="stats">
+          <div class="stat">
+            <b id="stat-solicitudes">5</b>
+            <span>Solicitudes pendientes</span>
+          </div>
+          <div class="stat">
+            <b id="stat-confirmadas">12</b>
+            <span>Monitorías confirmadas</span>
+          </div>
+          <div class="stat">
+            <b id="stat-realizadas">48</b>
+            <span>Monitorías realizadas</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Publicaciones (RQF014, RQF015) -->
+      <section id="publicaciones" class="card" aria-labelledby="t-publi">
+        <div class="titulo-seccion">
+          <h2 id="t-publi">Tus publicaciones</h2>
+          <p id="conteo-publi"></p>
+        </div>
+        <div class="publi" id="lista-publi"></div>
+      </section>
+
+      <!-- Solicitudes (RQF029, RQF030, RQF031, RQF032) -->
+      <section id="solicitudes" class="card" aria-labelledby="t-sol">
+        <div class="titulo-seccion">
+          <h2 id="t-sol">Solicitudes recibidas</h2>
+          <p id="conteo-sol"></p>
+        </div>
+        <div class="solicitudes" id="lista-sol"></div>
+      </section>
+
+      <!-- Calendario (RQF016, RQF017, RQF018) -->
+      <section id="calendario" class="card" aria-labelledby="t-cal">
+        <div class="titulo-seccion">
+          <h2 id="t-cal">Calendario de disponibilidad</h2>
+          <p>Haz clic en un día para marcar/disponibilidad o bloqueo</p>
+        </div>
+        <div class="cal-header">
+          <h3 id="cal-mes-año"></h3>
+          <div class="cal-nav">
+            <button type="button" id="cal-prev">‹</button>
+            <button type="button" id="cal-next">›</button>
+          </div>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+
+        <div class="horarios" id="lista-horarios">
+          <!-- Horarios se llenan con JS -->
+        </div>
+      </section>
+
+      <!-- Historial (RQF036) -->
+      <section id="historial" class="card" aria-labelledby="t-hist">
+        <div class="titulo-seccion">
+          <h2 id="t-hist">Historial de monitorías</h2>
+        </div>
+        <div class="solicitudes" id="lista-historial"></div>
+      </section>
+
+    </div>
+
+    <!-- Columna lateral -->
+    <aside class="lateral" style="display:grid; gap:32px; position:sticky; top:92px; align-items:start;">
+
+      <!-- Perfil resumen -->
+      <section class="card" aria-labelledby="t-perfil">
+        <div class="titulo-seccion"><h2 id="t-perfil" style="font-size:18px">Tu perfil de monitor</h2></div>
+        <div class="perfil-resumen" id="perfil-resumen">
+          <p><b>Biografía:</b> Monitor de Cálculo con 2 años de experiencia. Enseñanza práctica y paciente.</p>
+          <p><b>Experiencia:</b> Monitor de Cálculo 2024-2025, Tutor en academia</p>
+          <p><b>Enfoque:</b> Práctico, con ejercicios paso a paso</p>
+          <p><b>Materias:</b> Cálculo, Álgebra, Programación</p>
+          <p><b>Tarifa:</b> $30.000/hora</p>
+          <p><b>Modalidad:</b> Virtual</p>
+          <p><b>Disponibilidad:</b> Mañanas y noches, Lun-Mié-Vie</p>
+        </div>
+        <button class="btn" type="button" id="btn-editar-perfil-lateral" style="margin-top:14px">Editar perfil</button>
+      </section>
+
+      <!-- Próximas sesiones -->
+      <section class="card" aria-labelledby="t-prox">
+        <div class="titulo-seccion"><h2 id="t-prox" style="font-size:18px">Próximas sesiones</h2></div>
+        <div class="solicitudes" id="lista-proximas">
+          <!-- Se llena con JS -->
+        </div>
+      </section>
+
+    </aside>
+  </div>
+</div>
+
+<nav class="tabbar" aria-label="Navegación móvil">
+  <a href="#" aria-current="page"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</a>
+  <a href="#publicaciones"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M1 12h6m6 0h6"/></svg>Publicaciones</a>
+  <a href="#solicitudes"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Solicitudes</a>
+  <a href="#calendario"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>Calendario</a>
+</nav>
+
+<div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+<script>
+  // Datos simulados
+  const publicaciones = [
+    { id: 1, materia: 'Cálculo Diferencial', desc: 'Apoyo en derivadas, integrales y preparación de parciales. Clases prácticas con ejercicios.', modalidad: 'Virtual', tarifa: 30000, duracion: 90, activa: true },
+    { id: 2, materia: 'Álgebra Lineal', desc: 'Matrices, determinantes, vectores y espacios vectoriales. Enfoque en comprensión conceptual.', modalidad: 'Ambas', tarifa: 28000, duracion: 60, activa: true }
+  ];
+
+  const solicitudes = [
+    { id: 101, estudiante: 'Sofía Martínez', avatar: 'SM', color: 'c1', materia: 'Cálculo Diferencial', pubId: 1, fecha: 'Mié 17 Sep, 10:00 AM', modalidad: 'Virtual', tema: 'Integrales por partes y aplicaciones', objetivo: 'Preparar parcial del viernes', ubicacion: '', obs: 'Tengo dudas con el método de sustitución', estado: 'pendiente' },
+    { id: 102, estudiante: 'Juan Pérez', avatar: 'JP', color: 'c3', materia: 'Álgebra Lineal', pubId: 2, fecha: 'Jue 18 Sep, 2:00 PM', modalidad: 'Presencial', tema: 'Determinantes y valores propios', objetivo: 'Resolver taller 4', ubicacion: 'Biblioteca, piso 3', obs: '', estado: 'pendiente' },
+    { id: 103, estudiante: 'Ana Gómez', avatar: 'AG', color: 'c2', materia: 'Cálculo Diferencial', pubId: 1, fecha: 'Vie 19 Sep, 4:00 PM', modalidad: 'Virtual', tema: 'Derivadas de funciones trigonométricas', objetivo: 'Repasar antes del quiz', ubicacion: '', obs: 'Prefiero por Meet', estado: 'aceptada' }
+  ];
+
+  const historial = [
+    { id: 201, estudiante: 'María López', materia: 'Cálculo Diferencial', fecha: '10 Sep 2026, 4:00 PM', estado: 'Realizada', calif: 5 },
+    { id: 202, estudiante: 'Pedro Sánchez', materia: 'Programación I', fecha: '03 Sep 2026, 5:00 PM', estado: 'Cancelada', calif: null },
+    { id: 203, estudiante: 'Laura Díaz', materia: 'Álgebra Lineal', fecha: '28 Ago 2026, 1:00 PM', estado: 'Realizada', calif: 4 }
+  ];
+
+  const notificaciones = [
+    { tipo: 'sol', titulo: 'Nueva solicitud', texto: 'Sofía Martínez solicitó monitoría de Cálculo Diferencial', tiempo: 'Hace 10 min' },
+    { tipo: 'aviso', titulo: 'Recordatorio', texto: 'Monitoría con Juan Pérez mañana 2:00 PM', tiempo: 'Hace 1 hora' }
+  ];
+
+  const perfilMonitor = {
+    bio: 'Monitor de Cálculo con 2 años de experiencia. Enseñanza práctica y paciente.',
+    experiencia: 'Monitor de Cálculo 2024-2025, Tutor en academia',
+    enfoque: 'Práctico, con ejercicios paso a paso',
+    materias: 'Cálculo, Álgebra, Programación',
+    tarifa: '30000',
+    modalidad: 'Virtual',
+    dispo: 'Mañanas y noches, Lun-Mié-Vie'
+  };
+
+  const $ = s => document.querySelector(s);
+  let solicitudActual = null;
+
+  // Utilidades
+  function mostrarAviso(txt) {
+    const a = $('#aviso');
+    a.textContent = txt;
+    a.classList.add('ver');
+    setTimeout(() => a.classList.remove('ver'), 3000);
+  }
+
+  // Notificaciones
+  function pintarNotificaciones() {
+    $('#notif-lista').innerHTML = notificaciones.map(n => `
+      <div class="notif-item">
+        <div class="icono ${n.tipo}">${n.tipo === 'sol' ? '📩' : '🔔'}</div>
+        <div class="txt">
+          <b>${n.titulo}</b>
+          <p>${n.texto}</p>
+        </div>
+        <time>${n.tiempo}</time>
+      </div>
+    `).join('');
+    $('#notif-count').textContent = notificaciones.length;
+  }
+
+  function toggleNotificaciones() {
+    const panel = $('#notif-panel');
+    const visible = panel.classList.contains('ver');
+    panel.classList.toggle('ver', !visible);
+    panel.setAttribute('aria-hidden', visible ? 'true' : 'false');
+  }
+
+  // Publicaciones (RQF014, RQF015)
+  function pintarPublicaciones() {
+    const lista = $('#lista-publi');
+    lista.innerHTML = publicaciones.map(p => `
+      <div class="publi-item" data-id="${p.id}">
+        <div class="materia">${p.materia.charAt(0)}</div>
+        <div>
+          <h4>${p.materia}</h4>
+          <p>${p.desc}</p>
+          <div class="tags">
+            <span class="tag">${p.modalidad}</span>
+            <span class="tag">$${p.tarifa.toLocaleString()}/hora</span>
+            <span class="tag">${p.duracion} min</span>
+            <span class="tag ${p.activa ? 'ok' : 'urgente'}">${p.activa ? 'Activa' : 'Inactiva'}</span>
+          </div>
+        </div>
+        <div class="acciones">
+          <button type="button" class="btn-sm sec" data-editar="${p.id}">Editar</button>
+          <button type="button" class="btn-sm danger" data-eliminar="${p.id}">Eliminar</button>
+        </div>
+      </div>
+    `).join('');
+    $('#conteo-publi').textContent = `${publicaciones.length} publicación${publicaciones.length !== 1 ? 'es' : ''}`;
+  }
+
+  // Solicitudes (RQF029, RQF030, RQF031, RQF032)
+  function pintarSolicitudes() {
+    const lista = $('#lista-sol');
+    const pendientes = solicitudes.filter(s => s.estado === 'pendiente');
+    lista.innerHTML = pendientes.map(s => `
+      <div class="sol-item" data-id="${s.id}">
+        <div class="avatar ${s.color}">${s.avatar}</div>
+        <div class="info">
+          <b>${s.estudiante} • ${s.materia}</b>
+          <span>${s.fecha} • ${s.modalidad}</span>
+        </div>
+        <span class="estado pend">Pendiente</span>
+      </div>
+    `).join('');
+    $('#conteo-sol').textContent = `${pendientes.length} pendiente${pendientes.length !== 1 ? 's' : ''}`;
+
+    // Click en solicitud para ver detalle
+    lista.querySelectorAll('.sol-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const id = parseInt(item.dataset.id);
+        abrirDetalleSolicitud(id);
+      });
+    });
+  }
+
+  function abrirDetalleSolicitud(id) {
+    const s = solicitudes.find(x => x.id === id);
+    if (!s) return;
+    solicitudActual = s;
+
+    $('#solicitud-detalle').innerHTML = `
+      <div style="display:grid; gap:14px;">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div class="avatar ${s.color}" style="width:56px; height:56px; font-size:20px;">${s.avatar}</div>
+          <div>
+            <b style="font-size:18px; display:block;">${s.estudiante}</b>
+            <span style="color:var(--texto-suave);">${s.materia}</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; background:var(--fondo); padding:16px; border-radius:16px;">
+          <div><b style="font-size:13px; color:var(--texto-suave);">Fecha y hora</b><div style="font-weight:700;">${s.fecha}</div></div>
+          <div><b style="font-size:13px; color:var(--texto-suave);">Modalidad</b><div style="font-weight:700;">${s.modalidad}</div></div>
+          <div><b style="font-size:13px; color:var(--texto-suave);">Tema</b><div style="font-weight:700;">${s.tema}</div></div>
+          <div><b style="font-size:13px; color:var(--texto-suave);">Objetivo</b><div style="font-weight:700;">${s.objetivo}</div></div>
+          ${s.ubicacion ? `<div><b style="font-size:13px; color:var(--texto-suave);">Ubicación</b><div style="font-weight:700;">${s.ubicacion}</div></div>` : ''}
+          ${s.obs ? `<div style="grid-column:1/-1;"><b style="font-size:13px; color:var(--texto-suave);">Observaciones</b><div style="font-weight:700;">${s.obs}</div></div>` : ''}
+        </div>
+      </div>
+    `;
+
+    $('#modal-solicitud').classList.add('ver');
+    $('#modal-solicitud').setAttribute('aria-hidden', 'false');
+  }
+
+  function cerrarDetalleSolicitud() {
+    $('#modal-solicitud').classList.remove('ver');
+    $('#modal-solicitud').setAttribute('aria-hidden', 'true');
+    solicitudActual = null;
+  }
+
+  function aceptarSolicitud() {
+    if (!solicitudActual) return;
+    solicitudActual.estado = 'aceptada';
+    mostrarAviso(`Solicitud de ${solicitudActual.estudiante} aceptada ✅`);
+    cerrarDetalleSolicitud();
+    pintarSolicitudes();
+    pintarProximas();
+    // Aquí se enviaría notificación al estudiante (RQF038)
+  }
+
+  function rechazarSolicitud() {
+    if (!solicitudActual) return;
+    const motivo = prompt('Indica un motivo para el rechazo (opcional):');
+    solicitudActual.estado = 'rechazada';
+    mostrarAviso(`Solicitud de ${solicitudActual.estudiante} rechazada`);
+    cerrarDetalleSolicitud();
+    pintarSolicitudes();
+    // Aquí se enviaría notificación al estudiante (RQF038)
+  }
+
+  // Próximas sesiones
+  function pintarProximas() {
+    const aceptadas = solicitudes.filter(s => s.estado === 'aceptada');
+    $('#lista-proximas').innerHTML = aceptadas.map(s => `
+      <div class="sol-item">
+        <div class="avatar ${s.color}">${s.avatar}</div>
+        <div class="info">
+          <b>${s.estudiante}</b>
+          <span>${s.materia} • ${s.fecha}</span>
+        </div>
+        <span class="estado ok">Confirmada</span>
+      </div>
+    `).join('');
+  }
+
+  // Historial (RQF036)
+  function pintarHistorial() {
+    $('#lista-historial').innerHTML = historial.map(h => `
+      <div class="sol-item">
+        <div class="info">
+          <b>${h.estudiante} • ${h.materia}</b>
+          <span>${h.fecha}</span>
+        </div>
+        <span class="estado ${h.estado === 'Realizada' ? 'ok' : 'urgente'}">${h.estado}</span>
+        ${h.calif ? `<span class="tag">⭐ ${h.calif}</span>` : ''}
+      </div>
+    `).join('');
+  }
+
+  // Calendario (RQF016, RQF017, RQF018)
+  const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  let fechaActual = new Date();
+
+  function pintarCalendario() {
+    const year = fechaActual.getFullYear();
+    const month = fechaActual.getMonth();
+    $('#cal-mes-año').textContent = new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(fechaActual);
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+
+    const grid = $('#cal-grid');
+    grid.innerHTML = diasSemana.map(d => `<div class="dia-header">${d}</div>`).join('');
+
+    for (let i = 0; i < firstDay; i++) {
+      grid.innerHTML += `<div></div>`;
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+      const isToday = date.toDateString() === today.toDateString();
+      const isDispo = day % 3 === 0; // Simulado
+      const isBloq = day % 7 === 0; // Simulado
+
+      let clase = 'dia';
+      if (isToday) clase += ' hoy';
+      else if (isBloq) clase += ' bloq';
+      else if (isDispo) clase += ' dispo';
+
+      grid.innerHTML += `<div class="${clase}" data-dia="${day}">${day}</div>`;
+    }
+
+    // Click en día para alternar disponibilidad/bloqueo
+    grid.querySelectorAll('.dia').forEach(d => {
+      d.addEventListener('click', () => {
+        const dia = d.dataset.dia;
+        if (d.classList.contains('dispo')) {
+          d.classList.remove('dispo');
+          d.classList.add('bloq');
+          mostrarAviso(`Día ${dia} bloqueado`);
+        } else if (d.classList.contains('bloq')) {
+          d.classList.remove('bloq');
+          mostrarAviso(`Día ${dia} liberado`);
+        } else {
+          d.classList.add('dispo');
+          mostrarAviso(`Día ${dia} marcado como disponible`);
+        }
+      });
+    });
+  }
+
+  // Horarios
+  function pintarHorarios() {
+    const horarios = [
+      { id: 1, dia: 'Lunes', hora: '8:00 AM - 10:00 AM', activo: true },
+      { id: 2, dia: 'Miércoles', hora: '2:00 PM - 4:00 PM', activo: true },
+      { id: 3, dia: 'Viernes', hora: '10:00 AM - 12:00 PM', activo: false }
+    ];
+
+    $('#lista-horarios').innerHTML = horarios.map(h => `
+      <div class="horario-item">
+        <div>
+          <b>${h.dia}</b>
+          <span>${h.hora}</span>
+        </div>
+        <div class="switch ${h.activo ? 'on' : ''}" data-id="${h.id}" role="switch" aria-checked="${h.activo}" tabindex="0"></div>
+      </div>
+    `).join('');
+
+    // Toggle switch
+    $('#lista-horarios').querySelectorAll('.switch').forEach(sw => {
+      sw.addEventListener('click', () => {
+        sw.classList.toggle('on');
+        const on = sw.classList.contains('on');
+        sw.setAttribute('aria-checked', on);
+        mostrarAviso(`Horario ${on ? 'activado' : 'desactivado'}`);
+      });
+    });
+  }
+
+  // Modal de publicación
+  function abrirNuevaPubli() {
+    $('#form-publi').reset();
+    $('#modal-publi').classList.add('ver');
+    $('#modal-publi').setAttribute('aria-hidden', 'false');
+  }
+
+  function cerrarNuevaPubli() {
+    $('#modal-publi').classList.remove('ver');
+    $('#modal-publi').setAttribute('aria-hidden', 'true');
+  }
+
+  // Modal de edición
+  function abrirEditarPubli(id) {
+    const pub = publicaciones.find(p => p.id === id);
+    if (!pub) return;
+    $('#edit-pub-id').value = pub.id;
+    $('#edit-materia').value = pub.materia.toLowerCase().includes('cálculo') ? 'calculo' : pub.materia.toLowerCase().includes('álgebra') ? 'algebra' : 'programacion';
+    $('#edit-desc').value = pub.desc;
+    $('#edit-modalidad').value = pub.modalidad;
+    $('#edit-tarifa').value = pub.tarifa;
+    $('#edit-duracion').value = pub.duracion;
+    $('#modal-editar-publi').classList.add('ver');
+    $('#modal-editar-publi').setAttribute('aria-hidden', 'false');
+  }
+
+  function cerrarEditarPubli() {
+    $('#modal-editar-publi').classList.remove('ver');
+    $('#modal-editar-publi').setAttribute('aria-hidden', 'true');
+  }
+
+  // Modal de perfil
+  function abrirPerfil() {
+    $('#pf-bio').value = perfilMonitor.bio;
+    $('#pf-experiencia').value = perfilMonitor.experiencia;
+    $('#pf-enfoque').value = perfilMonitor.enfoque;
+    $('#pf-materias').value = perfilMonitor.materias;
+    $('#pf-tarifa').value = perfilMonitor.tarifa;
+    $('#pf-modalidad').value = perfilMonitor.modalidad;
+    $('#pf-dispo').value = perfilMonitor.dispo;
+    $('#modal-perfil').classList.add('ver');
+    $('#modal-perfil').setAttribute('aria-hidden', 'false');
+  }
+
+  function cerrarPerfil() {
+    $('#modal-perfil').classList.remove('ver');
+    $('#modal-perfil').setAttribute('aria-hidden', 'true');
+  }
+
+  function guardarPerfil() {
+    perfilMonitor.bio = $('#pf-bio').value;
+    perfilMonitor.experiencia = $('#pf-experiencia').value;
+    perfilMonitor.enfoque = $('#pf-enfoque').value;
+    perfilMonitor.materias = $('#pf-materias').value;
+    perfilMonitor.tarifa = $('#pf-tarifa').value;
+    perfilMonitor.modalidad = $('#pf-modalidad').value;
+    perfilMonitor.dispo = $('#pf-dispo').value;
+
+    $('#perfil-resumen').innerHTML = `
+      <p><b>Biografía:</b> ${perfilMonitor.bio}</p>
+      <p><b>Experiencia:</b> ${perfilMonitor.experiencia}</p>
+      <p><b>Enfoque:</b> ${perfilMonitor.enfoque}</p>
+      <p><b>Materias:</b> ${perfilMonitor.materias}</p>
+      <p><b>Tarifa:</b> $${parseInt(perfilMonitor.tarifa).toLocaleString()}/hora</p>
+      <p><b>Modalidad:</b> ${perfilMonitor.modalidad}</p>
+      <p><b>Disponibilidad:</b> ${perfilMonitor.dispo}</p>
+    `;
+    mostrarAviso('Perfil actualizado ✅');
+    cerrarPerfil();
+  }
+
+  // Modal de configuración
+  function abrirConfig() {
+    $('#modal-config').classList.add('ver');
+    $('#modal-config').setAttribute('aria-hidden', 'false');
+  }
+
+  function cerrarConfig() {
+    $('#modal-config').classList.remove('ver');
+    $('#modal-config').setAttribute('aria-hidden', 'true');
+  }
+
+  function guardarConfig() {
+    mostrarAviso('Configuración guardada ✅');
+    cerrarConfig();
+  }
+
+  function cerrarSesion() {
+    if (confirm('¿Seguro que quieres cerrar sesión?')) {
+      mostrarAviso('Sesión cerrada. Volviendo al inicio...');
+      setTimeout(() => { location.reload(); }, 1500);
+    }
+  }
+
+  // Event listeners
+  document.addEventListener('click', e => {
+    if (e.target.id === 'btn-notif' || e.target.id === 'cerrar-notif') { toggleNotificaciones(); }
+    if (e.target.id === 'btn-nueva-publi') { abrirNuevaPubli(); }
+    if (e.target.id === 'cerrar-publi' || e.target.id === 'cancelar-publi') { cerrarNuevaPubli(); }
+    if (e.target.id === 'btn-editar-perfil-monitor' || e.target.id === 'btn-editar-perfil-lateral') { abrirPerfil(); }
+    if (e.target.id === 'cerrar-perfil' || e.target.id === 'cancelar-perfil') { cerrarPerfil(); }
+    if (e.target.id === 'nav-config' || e.target.id === 'cerrar-config' || e.target.id === 'btn-yo') { abrirConfig(); }
+    if (e.target.id === 'guardar-config') { guardarConfig(); }
+    if (e.target.id === 'btn-cerrar-sesion') { cerrarSesion(); }
+    if (e.target.id === 'aceptar-sol') { aceptarSolicitud(); }
+    if (e.target.id === 'rechazar-sol') { rechazarSolicitud(); }
+    if (e.target.id === 'cerrar-solicitud') { cerrarDetalleSolicitud(); }
+
+    const editarBtn = e.target.closest('[data-editar]');
+    if (editarBtn) { abrirEditarPubli(parseInt(editarBtn.dataset.editar)); }
+
+    const cancelarEdit = e.target.closest('#cancelar-editar-publi');
+    if (cancelarEdit) { cerrarEditarPubli(); }
+
+    const cerrarEdit = e.target.closest('#cerrar-editar-publi');
+    if (cerrarEdit) { cerrarEditarPubli(); }
+  });
+
+  $('#form-publi').addEventListener('submit', e => {
+    e.preventDefault();
+    const materia = $('#pub-materia').options[$('#pub-materia').selectedIndex].text;
+    const desc = $('#pub-desc').value;
+    const modalidad = $('#pub-modalidad').value;
+    const tarifa = parseInt($('#pub-tarifa').value) || 0;
+    const duracion = parseInt($('#pub-duracion').value);
+
+    publicaciones.unshift({
+      id: publicaciones.length + 1,
+      materia, desc, modalidad, tarifa, duracion, activa: true
+    });
+
+    mostrarAviso('Publicación creada ✅');
+    cerrarNuevaPubli();
+    pintarPublicaciones();
+  });
+
+  $('#form-editar-publi').addEventListener('submit', e => {
+    e.preventDefault();
+    const id = parseInt($('#edit-pub-id').value);
+    const pub = publicaciones.find(p => p.id === id);
+    if (!pub) return;
+
+    pub.materia = $('#edit-materia').options[$('#edit-materia').selectedIndex].text;
+    pub.desc = $('#edit-desc').value;
+    pub.modalidad = $('#edit-modalidad').value;
+    pub.tarifa = parseInt($('#edit-tarifa').value) || 0;
+    pub.duracion = parseInt($('#edit-duracion').value);
+
+    mostrarAviso('Publicación actualizada ✅');
+    cerrarEditarPubli();
+    pintarPublicaciones();
+  });
+
+  $('#form-perfil').addEventListener('submit', e => {
+    e.preventDefault();
+    guardarPerfil();
+  });
+
+  // Calendario nav
+  $('#cal-prev').addEventListener('click', () => {
+    fechaActual.setMonth(fechaActual.getMonth() - 1);
+    pintarCalendario();
+  });
+
+  $('#cal-next').addEventListener('click', () => {
+    fechaActual.setMonth(fechaActual.getMonth() + 1);
+    pintarCalendario();
+  });
+
+  // Inicializar
+  pintarNotificaciones();
+  pintarPublicaciones();
+  pintarSolicitudes();
+  pintarProximas();
+  pintarHistorial();
+  pintarCalendario();
+  pintarHorarios();
+</script>
+</body>
+</html>

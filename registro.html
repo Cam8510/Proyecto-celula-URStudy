@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crear cuenta | URStudy</title>
+<meta name="description" content="Crea tu cuenta en URStudy con tu correo institucional de la Universidad del Rosario.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primario: #1D2154;
+    --acento: #6564D5;
+    --purpura: #A078E8;
+    --lavanda: #EEE9FF;
+    --fondo: #F7F6FF;
+    --exito: #22C55E;
+    --advertencia: #EAB308;
+    --error: #EF4444;
+    --info: #3B82F6;
+    --texto: #1D2154;
+    --texto-suave: #5D6088;
+    --linea: #E1DCF7;
+    --superficie: #FFFFFF;
+    --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --cuerpo: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--cuerpo); background: var(--fondo); color: var(--texto); line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 0; background: none; }
+  :focus-visible { outline: 3px solid var(--purpura); outline-offset: 3px; border-radius: 8px; }
+
+  /* Header */
+  .topbar { background: rgba(247,246,255,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--linea); }
+  .topbar .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 28px; height: 68px; }
+  .logo { display: flex; flex-direction: column; line-height: 1.05; text-decoration: none; }
+  .logo b { font-family: var(--display); font-weight: 800; font-size: 24px; letter-spacing: -.02em; color: var(--primario); }
+  .logo small { font-size: 11px; color: var(--texto-suave); }
+
+  /* Contenedor principal */
+  .main-wrap { display: grid; place-items: center; padding: 48px 24px; }
+  .card {
+    background: var(--superficie); border: 1px solid var(--linea); border-radius: 24px;
+    padding: 40px; max-width: 520px; width: 100%; box-shadow: 0 12px 40px rgba(29,33,84,.08);
+  }
+  .card header { text-align: center; margin-bottom: 32px; }
+  .card header h1 { font-family: var(--display); font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .card header p { color: var(--texto-suave); font-size: 15px; }
+
+  /* Formulario */
+  .campo { margin-bottom: 20px; }
+  .campo label { display: block; font-weight: 600; font-size: 14px; color: var(--texto-suave); margin-bottom: 8px; }
+  .campo input, .campo select {
+    width: 100%; padding: 14px 16px; border: 1.5px solid var(--linea); border-radius: 12px;
+    font-size: 15px; transition: border-color .15s, box-shadow .15s;
+  }
+  .campo input:focus, .campo select:focus { border-color: var(--acento); box-shadow: 0 0 0 3px rgba(101,100,213,.15); outline: 0; }
+  .campo input::placeholder { color: #A8ABCA; }
+  .campo .ayuda { font-size: 13px; color: var(--texto-suave); margin-top: 6px; }
+  .campo .error { font-size: 13px; color: var(--error); margin-top: 6px; display: none; }
+  .campo.error input, .campo.error select { border-color: var(--error); }
+  .campo.error .error { display: block; }
+
+  /* Selector de rol */
+  .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .rol-option {
+    border: 2px solid var(--linea); border-radius: 14px; padding: 16px; cursor: pointer;
+    transition: border-color .15s, background .15s; text-align: center;
+  }
+  .rol-option:hover { border-color: var(--acento); background: var(--lavanda); }
+  .rol-option[aria-checked="true"] { border-color: var(--acento); background: var(--lavanda); }
+  .rol-option input { display: none; }
+  .rol-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+  .rol-option b { display: block; font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .rol-option span { font-size: 13px; color: var(--texto-suave); }
+
+  /* Checkbox */
+  .checkbox { display: flex; gap: 10px; align-items: flex-start; }
+  .checkbox input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--acento); }
+  .checkbox label { font-size: 14px; color: var(--texto-suave); line-height: 1.4; }
+  .checkbox a { color: var(--acento); font-weight: 600; text-decoration: underline; }
+
+  /* Botón */
+  .btn-primario {
+    width: 100%; background: var(--acento); color: #fff; font-weight: 700; font-size: 16px;
+    padding: 16px; border-radius: 14px; margin-top: 8px; transition: background .15s, transform .1s;
+  }
+  .btn-primario:hover { background: #5453C4; }
+  .btn-primario:active { transform: scale(.98); }
+  .btn-primario:disabled { background: var(--lavanda); color: #9A9CC0; cursor: not-allowed; }
+
+  /* Divider */
+  .divider { display: flex; align-items: center; gap: 12px; margin: 24px 0; color: var(--texto-suave); font-size: 14px; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--linea); }
+
+  /* Footer del card */
+  .card-footer { text-align: center; margin-top: 24px; font-size: 14px; color: var(--texto-suave); }
+  .card-footer a { color: var(--acento); font-weight: 600; }
+
+  /* Footer página */
+  footer { border-top: 1px solid var(--linea); padding: 24px; text-align: center; font-size: 14px; color: var(--texto-suave); }
+
+  /* Mensaje de éxito */
+  .success-box {
+    display: none; background: rgba(34,197,94,.1); border: 1.5px solid var(--exito);
+    border-radius: 14px; padding: 16px; text-align: center; margin-bottom: 24px;
+  }
+  .success-box.ver { display: block; }
+  .success-box b { display: block; color: #12803A; font-weight: 700; margin-bottom: 6px; }
+  .success-box p { font-size: 14px; color: #155F2E; }
+
+  @media (max-width: 560px) {
+    .card { padding: 28px 20px; }
+    .roles { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="logo" href="inicio.html" aria-label="URStudy, Universidad del Rosario">
+      <b>URStudy</b>
+      <small>Universidad del Rosario</small>
+    </a>
+  </div>
+</header>
+
+<main class="main-wrap">
+  <div class="card">
+    <header>
+      <h1>Crea tu cuenta</h1>
+      <p>Usa tu correo institucional de la Universidad del Rosario</p>
+    </header>
+
+    <div class="success-box" id="success-box">
+      <b>✅ Cuenta creada exitosamente</b>
+      <p>Te enviamos un correo de verificación a <span id="email-confirmado"></span>. Revísalo y luego inicia sesión.</p>
+    </div>
+
+    <form id="form-registro" novalidate>
+      <!-- Nombre -->
+      <div class="campo" id="campo-nombre">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ej: Sofía Martínez" required autocomplete="name">
+        <div class="error">Por favor ingresa tu nombre completo</div>
+      </div>
+
+      <!-- Correo institucional -->
+      <div class="campo" id="campo-email">
+        <label for="email">Correo institucional</label>
+        <input type="email" id="email" name="email" placeholder="ejemplo@urosario.edu.co" required autocomplete="email">
+        <div class="ayuda">Debe terminar en <b>@urosario.edu.co</b></div>
+        <div class="error">Ingresa un correo institucional válido (@urosario.edu.co)</div>
+      </div>
+
+      <!-- Confirmar correo -->
+      <div class="campo" id="campo-email-conf">
+        <label for="email-conf">Confirmar correo</label>
+        <input type="email" id="email-conf" name="email-conf" placeholder="ejemplo@urosario.edu.co" required autocomplete="email">
+        <div class="error">Los correos no coinciden</div>
+      </div>
+
+      <!-- Selector de rol -->
+      <div class="campo">
+        <label>¿Qué rol quieres tener?</label>
+        <div class="roles" role="radiogroup" aria-label="Selección de rol">
+          <label class="rol-option" tabindex="0" role="radio" aria-checked="true" data-rol="estudiante">
+            <span class="rol-icon">🎓</span>
+            <b>Estudiante</b>
+            <span>Buscar monitores y reservar tutorías</span>
+            <input type="radio" name="rol" value="estudiante" checked>
+          </label>
+          <label class="rol-option" tabindex="0" role="radio" aria-checked="false" data-rol="monitor">
+            <span class="rol-icon">👨‍🏫</span>
+            <b>Monitor</b>
+            <span>Ofrecer tutorías y ganar experiencia</span>
+            <input type="radio" name="rol" value="monitor">
+          </label>
+        </div>
+        <div class="ayuda">Puedes cambiar o tener ambos roles después en Configuración</div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="campo" id="campo-pass">
+        <label for="pass">Contraseña</label>
+        <input type="password" id="pass" name="pass" placeholder="Mínimo 8 caracteres" required minlength="8" autocomplete="new-password">
+        <div class="ayuda">Usa al menos 8 caracteres, incluye mayúsculas y números</div>
+        <div class="error">La contraseña debe tener al menos 8 caracteres</div>
+      </div>
+
+      <!-- Confirmar contraseña -->
+      <div class="campo" id="campo-pass-conf">
+        <label for="pass-conf">Confirmar contraseña</label>
+        <input type="password" id="pass-conf" name="pass-conf" placeholder="Repite tu contraseña" required minlength="8" autocomplete="new-password">
+        <div class="error">Las contraseñas no coinciden</div>
+      </div>
+
+      <!-- Términos -->
+      <div class="campo checkbox">
+        <input type="checkbox" id="terminos" name="terminos" required>
+        <label for="terminos">Acepto los <a href="#">Términos y condiciones</a> y la <a href="#">Política de privacidad</a></label>
+      </div>
+
+      <button type="submit" class="btn-primario" id="btn-registrar">Crear cuenta</button>
+    </form>
+
+    <div class="card-footer">
+      ¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span>URStudy, Universidad del Rosario © 2026</span>
+</footer>
+
+<script>
+  const $ = s => document.querySelector(s);
+  const form = $('#form-registro');
+  const emailInput = $('#email');
+  const emailConfInput = $('#email-conf');
+  const passInput = $('#pass');
+  const passConfInput = $('#pass-conf');
+  const terminosInput = $('#terminos');
+  const btnRegistrar = $('#btn-registrar');
+
+  // Selector de rol
+  document.querySelectorAll('.rol-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.rol-option').forEach(o => o.setAttribute('aria-checked', 'false'));
+      opt.setAttribute('aria-checked', 'true');
+      opt.querySelector('input').checked = true;
+    });
+    opt.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        opt.click();
+      }
+    });
+  });
+
+  // Validación en tiempo real
+  emailInput.addEventListener('blur', validarEmail);
+  emailConfInput.addEventListener('blur', validarEmailConf);
+  passInput.addEventListener('blur', validarPass);
+  passConfInput.addEventListener('blur', validarPassConf);
+
+  function validarEmail() {
+    const campo = $('#campo-email');
+    const email = emailInput.value.trim();
+    const valido = email.endsWith('@urosario.edu.co') && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    campo.classList.toggle('error', !valido && email.length > 0);
+    return valido;
+  }
+
+  function validarEmailConf() {
+    const campo = $('#campo-email-conf');
+    const coincide = emailInput.value.trim() === emailConfInput.value.trim();
+    campo.classList.toggle('error', !coincide && emailConfInput.value.length > 0);
+    return coincide;
+  }
+
+  function validarPass() {
+    const campo = $('#campo-pass');
+    const pass = passInput.value;
+    const valido = pass.length >= 8;
+    campo.classList.toggle('error', !valido && pass.length > 0);
+    return valido;
+  }
+
+  function validarPassConf() {
+    const campo = $('#campo-pass-conf');
+    const coincide = passInput.value === passConfInput.value;
+    campo.classList.toggle('error', !coincide && passConfInput.value.length > 0);
+    return coincide;
+  }
+
+  // Submit
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    
+    const nombreValido = $('#nombre').value.trim().length >= 3;
+    const emailValido = validarEmail();
+    const emailConfValido = validarEmailConf();
+    const passValido = validarPass();
+    const passConfValido = validarPassConf();
+    const terminosValido = terminosInput.checked;
+
+    if (!nombreValido) {
+      $('#campo-nombre').classList.add('error');
+    }
+    if (!emailValido) {
+      $('#campo-email').classList.add('error');
+    }
+    if (!emailConfValido) {
+      $('#campo-email-conf').classList.add('error');
+    }
+    if (!passValido) {
+      $('#campo-pass').classList.add('error');
+    }
+    if (!passConfValido) {
+      $('#campo-pass-conf').classList.add('error');
+    }
+    if (!terminosValido) {
+      alert('Debes aceptar los términos y condiciones');
+      return;
+    }
+
+    if (nombreValido && emailValido && emailConfValido && passValido && passConfValido && terminosValido) {
+      // Simular envío
+      btnRegistrar.disabled = true;
+      btnRegistrar.textContent = 'Creando cuenta...';
+      
+      setTimeout(() => {
+        $('#success-box').classList.add('ver');
+        $('#email-confirmado').textContent = emailInput.value;
+        form.style.display = 'none';
+        
+        // Redirigir después de 3 segundos
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 3000);
+      }, 1500);
+    } else {
+      alert('Por favor corrige los errores en el formulario');
+    }
+  });
+
+  // Limpiar errores al escribir
+  form.querySelectorAll('input').forEach(input => {
+    input.addEventListener('input', () => {
+      input.closest('.campo')?.classList.remove('error');
+    });
+  });
+</script>
+</body>
+</html>
