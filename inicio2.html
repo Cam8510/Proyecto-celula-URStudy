@@ -1,492 +1,1198 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>URStudy | Monitorías entre estudiantes del Rosario</title>
-<meta name="description" content="Dile al asistente qué tema necesitas y reserva un monitor de tu universidad en segundos.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --primario: #1D2154;
-    --acento: #6564D5;
-    --purpura: #A078E8;
-    --lavanda: #EEE9FF;
-    --fondo: #F7F6FF;
-    --exito: #22C55E;
-    --advertencia: #EAB308;
-    --error: #EF4444;
-    --info: #3B82F6;
-    --texto-suave: #5D6088;
-    --linea: #E1DCF7;
-    --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
-    --cuerpo: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; scroll-padding-top: 88px; }
-  body { font-family: var(--cuerpo); background: var(--fondo); color: var(--primario); line-height: 1.55; -webkit-font-smoothing: antialiased; }
-  a { color: inherit; }
-  button, input { font: inherit; color: inherit; }
-  button { cursor: pointer; border: 0; background: none; }
-  :focus-visible { outline: 3px solid var(--purpura); outline-offset: 3px; border-radius: 8px; }
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
-  h1, h2, h3 { font-family: var(--display); letter-spacing: -.025em; line-height: 1.05; }
-  h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>URStudy | Monitorías entre estudiantes del Rosario</title>
+  <meta name="description"
+    content="Dile al asistente qué tema necesitas y reserva un monitor de tu universidad en segundos.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primario: #1D2154;
+      --acento: #6564D5;
+      --purpura: #A078E8;
+      --lavanda: #EEE9FF;
+      --fondo: #F7F6FF;
+      --exito: #22C55E;
+      --advertencia: #EAB308;
+      --error: #EF4444;
+      --info: #3B82F6;
+      --texto-suave: #5D6088;
+      --linea: #E1DCF7;
+      --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+      --cuerpo: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
 
-  /* Botones */
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 14px 26px; border-radius: 16px; font-weight: 700; font-size: 16px; text-decoration: none;
-    transition: background .15s, transform .1s, border-color .15s;
-  }
-  .btn:active { transform: scale(.97); }
-  .btn-primario { background: var(--acento); color: #fff; }
-  .btn-primario:hover { background: #5453C4; }
-  .btn-claro { background: #fff; color: var(--primario); }
-  .btn-claro:hover { background: var(--lavanda); }
-  .btn-borde { border: 1.5px solid var(--linea); color: var(--primario); background: #fff; }
-  .btn-borde:hover { border-color: var(--acento); }
-  .btn-sm { padding: 10px 18px; font-size: 15px; border-radius: 12px; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  /* Barra superior */
-  .topbar { position: sticky; top: 0; z-index: 30; background: rgba(247,246,255,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--linea); }
-  .topbar .wrap { display: flex; align-items: center; gap: 28px; height: 68px; }
-  .logo { display: flex; flex-direction: column; line-height: 1.05; text-decoration: none; margin-right: auto; }
-  .logo b { font-family: var(--display); font-weight: 800; font-size: 24px; letter-spacing: -.02em; }
-  .logo small { font-size: 11px; color: var(--texto-suave); }
-  .enlaces { display: flex; gap: 4px; }
-  .enlaces a { text-decoration: none; font-weight: 600; font-size: 15px; color: var(--texto-suave); padding: 8px 14px; border-radius: 999px; transition: background .15s, color .15s; }
-  .enlaces a:hover { background: var(--lavanda); color: var(--primario); }
-  .acciones { display: flex; gap: 10px; }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 88px;
+    }
 
-  /* Hero */
-  .hero { padding: 44px 0 64px; }
-  .hero .wrap { display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: center; }
-  .hero h1 { font-size: clamp(40px, 5.6vw, 68px); font-weight: 800; }
-  .hero h1 span { display: block; color: var(--acento); }
-  .hero p.sub { margin-top: 20px; font-size: 19px; color: var(--texto-suave); max-width: 40ch; }
-  .puntos { list-style: none; margin-top: 28px; display: flex; flex-direction: column; gap: 12px; }
-  .puntos li { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 16px; }
-  .puntos .ico { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; flex: none; }
-  .ico.l { background: var(--lavanda); color: var(--acento); }
-  .ico.v { background: rgba(34,197,94,.15); color: #12803A; }
-  .ico.p { background: rgba(234,179,8,.2); color: #8A6A00; }
-  .hero .nota { margin-top: 22px; font-size: 14px; color: var(--texto-suave); }
+    body {
+      font-family: var(--cuerpo);
+      background: var(--fondo);
+      color: var(--primario);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
 
-  /* Asistente */
-  .demo { position: relative; }
-  .demo::before { content: ""; position: absolute; inset: 28px -18px -18px 28px; background: var(--lavanda); border-radius: 36px; z-index: 0; }
-  .panel { position: relative; z-index: 1; background: var(--primario); color: #fff; border-radius: 32px; padding: 22px 22px 20px; height: 580px; display: flex; flex-direction: column; }
-  .asist-cab { display: flex; align-items: center; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,.14); }
-  .asist-cab .av { --s: 42px; }
-  .asist-cab b { display: block; font-family: var(--display); font-size: 18px; line-height: 1.1; }
-  .asist-cab span { font-size: 13px; color: #CFCBF5; display: flex; align-items: center; gap: 6px; }
-  .asist-cab span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--exito); }
-  .av { --s: 44px; width: var(--s); height: var(--s); border-radius: 50%; flex: none; display: grid; place-items: center; color: #fff; font-family: var(--display); font-weight: 700; font-size: calc(var(--s) * .38); }
-  .c1 { background: var(--acento); } .c2 { background: var(--purpura); } .c3 { background: var(--info); }
+    a {
+      color: inherit;
+    }
 
-  .chat { flex: 1; overflow-y: auto; padding: 18px 2px 8px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.25) transparent; }
-  .msg { max-width: 88%; padding: 12px 16px; border-radius: 20px; font-size: 15.5px; line-height: 1.45; animation: entra .3s ease; }
-  .msg.ia { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); border-bottom-left-radius: 6px; align-self: flex-start; }
-  .msg.yo { background: #fff; color: var(--primario); border-bottom-right-radius: 6px; align-self: flex-end; font-weight: 500; }
-  @keyframes entra { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-  .escribiendo { display: inline-flex; gap: 4px; padding: 16px 18px; }
-  .escribiendo i { width: 7px; height: 7px; border-radius: 50%; background: #CFCBF5; animation: salto 1s infinite; }
-  .escribiendo i:nth-child(2) { animation-delay: .15s; } .escribiendo i:nth-child(3) { animation-delay: .3s; }
-  @keyframes salto { 0%, 60%, 100% { transform: none; opacity: .5; } 30% { transform: translateY(-5px); opacity: 1; } }
+    button,
+    input {
+      font: inherit;
+      color: inherit;
+    }
 
-  .sugeridos { display: flex; flex-wrap: wrap; gap: 8px; align-self: flex-start; animation: entra .3s ease; }
-  .sugeridos button { font-size: 14px; font-weight: 600; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; padding: 7px 14px; transition: background .15s, color .15s; }
-  .sugeridos button:hover { background: #fff; color: var(--primario); }
+    button {
+      cursor: pointer;
+      border: 0;
+      background: none;
+    }
 
-  .tarjeta { align-self: stretch; background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.16); border-radius: 20px; padding: 14px; animation: entra .35s ease; }
-  .tarjeta .fila { display: flex; align-items: center; gap: 12px; }
-  .tarjeta .quien { flex: 1; line-height: 1.25; min-width: 0; }
-  .tarjeta .quien b { display: block; font-size: 15px; }
-  .tarjeta .quien span { font-size: 13px; color: #CFCBF5; }
-  .en-linea { font-size: 12px; font-weight: 700; color: #0E2A18; background: var(--exito); padding: 3px 10px; border-radius: 999px; }
-  .tarjeta .tags { display: flex; gap: 6px; margin: 12px 0 10px; flex-wrap: wrap; }
-  .tarjeta .tags i { font-style: normal; font-size: 12px; font-weight: 600; background: var(--purpura); color: #fff; padding: 3px 10px; border-radius: 8px; }
-  .horas { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
-  .tags + .horas { margin-top: 0; }
-  .horas button { font-size: 13px; font-weight: 600; border: 1px solid rgba(255,255,255,.3); border-radius: 10px; padding: 6px 11px; transition: background .15s, color .15s, border-color .15s; }
-  .horas button:hover:not(:disabled) { background: #fff; color: var(--primario); border-color: #fff; }
-  .horas button:disabled { opacity: .45; cursor: default; }
-  .horas button.sel { background: #fff; color: var(--primario); border-color: #fff; opacity: 1; }
+    :focus-visible {
+      outline: 3px solid var(--purpura);
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
 
-  .login-card { align-self: stretch; background: #fff; color: var(--primario); border-radius: 20px; padding: 16px; animation: entra .35s ease; }
-  .login-card p { font-size: 14.5px; color: var(--texto-suave); margin-bottom: 12px; }
-  .login-card p b { color: var(--primario); }
-  .login-card .btns { display: flex; gap: 8px; flex-wrap: wrap; }
-  .login-card .btn { padding: 11px 18px; font-size: 15px; border-radius: 12px; flex: 1 1 140px; }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
 
-  .entrada { margin-top: 10px; display: flex; gap: 8px; background: #fff; color: var(--primario); border-radius: 18px; padding: 6px 6px 6px 18px; box-shadow: 0 8px 0 -2px rgba(160,120,232,.45); }
-  .entrada input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 16px; }
-  .entrada input::placeholder { color: #8E91B3; }
-  .entrada button { background: var(--acento); color: #fff; width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; flex: none; transition: background .15s; }
-  .entrada button:hover { background: #5453C4; }
-  .entrada:focus-within { outline: 3px solid var(--purpura); outline-offset: 2px; }
-  .entrada input:focus-visible { outline: none; }
+    h1,
+    h2,
+    h3 {
+      font-family: var(--display);
+      letter-spacing: -.025em;
+      line-height: 1.05;
+    }
 
-  /* Franja de beneficios */
-  .franja { padding: 8px 0 72px; }
-  .franja .wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .franja article { background: #fff; border: 1px solid var(--linea); border-radius: 24px; padding: 24px; }
-  .franja .ico { width: 48px; height: 48px; border-radius: 16px; display: grid; place-items: center; margin-bottom: 14px; }
-  .franja h3 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-  .franja p { color: var(--texto-suave); font-size: 15px; }
+    h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+    }
 
-  /* Ser monitor */
-  .monitor-sec { padding: 0 0 80px; }
-  .banda { background: var(--primario); color: #fff; border-radius: 36px; padding: 44px 56px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; position: relative; overflow: hidden; }
-  .banda::before { content: ""; position: absolute; width: 320px; height: 320px; border-radius: 50%; background: var(--acento); opacity: .5; right: -100px; top: -140px; }
-  .banda > * { position: relative; }
-  .banda h2 { font-size: clamp(26px, 3.4vw, 36px); max-width: 16em; }
-  .banda p { margin-top: 10px; color: #CFCBF5; font-size: 17px; max-width: 44ch; }
+    /* Botones */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 26px;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      transition: background .15s, transform .1s, border-color .15s;
+    }
 
-  footer { border-top: 1px solid var(--linea); padding: 28px 0 40px; font-size: 14px; color: var(--texto-suave); }
-  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  footer nav { display: flex; gap: 20px; }
-  footer a { text-decoration: none; }
-  footer a:hover { color: var(--acento); }
+    .btn:active {
+      transform: scale(.97);
+    }
 
-  @media (max-width: 960px) {
-    .hero .wrap { grid-template-columns: 1fr; gap: 40px; }
-    .enlaces { display: none; }
-    .franja .wrap { grid-template-columns: 1fr; }
-    .banda { padding: 36px 28px; }
-    .demo::before { inset: 20px -8px -10px 20px; }
-  }
-  @media (max-width: 560px) {
-    .wrap { padding: 0 16px; }
-    .acciones .btn-borde { display: none; }
-    .hero { padding: 28px 0 56px; }
-    .hero p.sub { font-size: 17px; }
-    .panel { padding: 18px 14px 14px; height: 560px; }
-    footer .wrap { flex-direction: column; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-  }
-</style>
+    .btn-primario {
+      background: var(--acento);
+      color: #fff;
+    }
+
+    .btn-primario:hover {
+      background: #5453C4;
+    }
+
+    .btn-claro {
+      background: #fff;
+      color: var(--primario);
+    }
+
+    .btn-claro:hover {
+      background: var(--lavanda);
+    }
+
+    .btn-borde {
+      border: 1.5px solid var(--linea);
+      color: var(--primario);
+      background: #fff;
+    }
+
+    .btn-borde:hover {
+      border-color: var(--acento);
+    }
+
+    .btn-sm {
+      padding: 10px 18px;
+      font-size: 15px;
+      border-radius: 12px;
+    }
+
+    /* Barra superior */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(247, 246, 255, .92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--linea);
+    }
+
+    .topbar .wrap {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      height: 68px;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.05;
+      text-decoration: none;
+      margin-right: auto;
+    }
+
+    .logo b {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 24px;
+      letter-spacing: -.02em;
+    }
+
+    .logo small {
+      font-size: 11px;
+      color: var(--texto-suave);
+    }
+
+    .enlaces {
+      display: flex;
+      gap: 4px;
+    }
+
+    .enlaces a {
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--texto-suave);
+      padding: 8px 14px;
+      border-radius: 999px;
+      transition: background .15s, color .15s;
+    }
+
+    .enlaces a:hover {
+      background: var(--lavanda);
+      color: var(--primario);
+    }
+
+    .acciones {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 44px 0 64px;
+    }
+
+    .hero .wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 5.6vw, 68px);
+      font-weight: 800;
+    }
+
+    .hero h1 span {
+      display: block;
+      color: var(--acento);
+    }
+
+    .hero p.sub {
+      margin-top: 20px;
+      font-size: 19px;
+      color: var(--texto-suave);
+      max-width: 40ch;
+    }
+
+    .puntos {
+      list-style: none;
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .puntos li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .puntos .ico {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      flex: none;
+    }
+
+    .ico.l {
+      background: var(--lavanda);
+      color: var(--acento);
+    }
+
+    .ico.v {
+      background: rgba(34, 197, 94, .15);
+      color: #12803A;
+    }
+
+    .ico.p {
+      background: rgba(234, 179, 8, .2);
+      color: #8A6A00;
+    }
+
+    .hero .nota {
+      margin-top: 22px;
+      font-size: 14px;
+      color: var(--texto-suave);
+    }
+
+    /* Asistente */
+    .demo {
+      position: relative;
+    }
+
+    .demo::before {
+      content: "";
+      position: absolute;
+      inset: 28px -18px -18px 28px;
+      background: var(--lavanda);
+      border-radius: 36px;
+      z-index: 0;
+    }
+
+    .panel {
+      position: relative;
+      z-index: 1;
+      background: var(--primario);
+      color: #fff;
+      border-radius: 32px;
+      padding: 22px 22px 20px;
+      height: 580px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .asist-cab {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, .14);
+    }
+
+    .asist-cab .av {
+      --s: 42px;
+    }
+
+    .asist-cab b {
+      display: block;
+      font-family: var(--display);
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .asist-cab span {
+      font-size: 13px;
+      color: #CFCBF5;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .asist-cab span::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--exito);
+    }
+
+    .av {
+      --s: 44px;
+      width: var(--s);
+      height: var(--s);
+      border-radius: 50%;
+      flex: none;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: calc(var(--s) * .38);
+    }
+
+    .c1 {
+      background: var(--acento);
+    }
+
+    .c2 {
+      background: var(--purpura);
+    }
+
+    .c3 {
+      background: var(--info);
+    }
+
+    .chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 2px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, .25) transparent;
+    }
+
+    .msg {
+      max-width: 88%;
+      padding: 12px 16px;
+      border-radius: 20px;
+      font-size: 15.5px;
+      line-height: 1.45;
+      animation: entra .3s ease;
+    }
+
+    .msg.ia {
+      background: rgba(255, 255, 255, .1);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-bottom-left-radius: 6px;
+      align-self: flex-start;
+    }
+
+    .msg.yo {
+      background: #fff;
+      color: var(--primario);
+      border-bottom-right-radius: 6px;
+      align-self: flex-end;
+      font-weight: 500;
+    }
+
+    @keyframes entra {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .escribiendo {
+      display: inline-flex;
+      gap: 4px;
+      padding: 16px 18px;
+    }
+
+    .escribiendo i {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #CFCBF5;
+      animation: salto 1s infinite;
+    }
+
+    .escribiendo i:nth-child(2) {
+      animation-delay: .15s;
+    }
+
+    .escribiendo i:nth-child(3) {
+      animation-delay: .3s;
+    }
+
+    @keyframes salto {
+
+      0%,
+      60%,
+      100% {
+        transform: none;
+        opacity: .5;
+      }
+
+      30% {
+        transform: translateY(-5px);
+        opacity: 1;
+      }
+    }
+
+    .sugeridos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-self: flex-start;
+      animation: entra .3s ease;
+    }
+
+    .sugeridos button {
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, .3);
+      border-radius: 999px;
+      padding: 7px 14px;
+      transition: background .15s, color .15s;
+    }
+
+    .sugeridos button:hover {
+      background: #fff;
+      color: var(--primario);
+    }
+
+    .tarjeta {
+      align-self: stretch;
+      background: rgba(255, 255, 255, .09);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 20px;
+      padding: 14px;
+      animation: entra .35s ease;
+    }
+
+    .tarjeta .fila {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tarjeta .quien {
+      flex: 1;
+      line-height: 1.25;
+      min-width: 0;
+    }
+
+    .tarjeta .quien b {
+      display: block;
+      font-size: 15px;
+    }
+
+    .tarjeta .quien span {
+      font-size: 13px;
+      color: #CFCBF5;
+    }
+
+    .en-linea {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0E2A18;
+      background: var(--exito);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .tarjeta .tags {
+      display: flex;
+      gap: 6px;
+      margin: 12px 0 10px;
+      flex-wrap: wrap;
+    }
+
+    .tarjeta .tags i {
+      font-style: normal;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--purpura);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 8px;
+    }
+
+    .horas {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .tags+.horas {
+      margin-top: 0;
+    }
+
+    .horas button {
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, .3);
+      border-radius: 10px;
+      padding: 6px 11px;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+
+    .horas button:hover:not(:disabled) {
+      background: #fff;
+      color: var(--primario);
+      border-color: #fff;
+    }
+
+    .horas button:disabled {
+      opacity: .45;
+      cursor: default;
+    }
+
+    .horas button.sel {
+      background: #fff;
+      color: var(--primario);
+      border-color: #fff;
+      opacity: 1;
+    }
+
+    .login-card {
+      align-self: stretch;
+      background: #fff;
+      color: var(--primario);
+      border-radius: 20px;
+      padding: 16px;
+      animation: entra .35s ease;
+    }
+
+    .login-card p {
+      font-size: 14.5px;
+      color: var(--texto-suave);
+      margin-bottom: 12px;
+    }
+
+    .login-card p b {
+      color: var(--primario);
+    }
+
+    .login-card .btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .login-card .btn {
+      padding: 11px 18px;
+      font-size: 15px;
+      border-radius: 12px;
+      flex: 1 1 140px;
+    }
+
+    .entrada {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      background: #fff;
+      color: var(--primario);
+      border-radius: 18px;
+      padding: 6px 6px 6px 18px;
+      box-shadow: 0 8px 0 -2px rgba(160, 120, 232, .45);
+    }
+
+    .entrada input {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      font-size: 16px;
+    }
+
+    .entrada input::placeholder {
+      color: #8E91B3;
+    }
+
+    .entrada button {
+      background: var(--acento);
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      flex: none;
+      transition: background .15s;
+    }
+
+    .entrada button:hover {
+      background: #5453C4;
+    }
+
+    .entrada:focus-within {
+      outline: 3px solid var(--purpura);
+      outline-offset: 2px;
+    }
+
+    .entrada input:focus-visible {
+      outline: none;
+    }
+
+    /* Franja de beneficios */
+    .franja {
+      padding: 8px 0 72px;
+    }
+
+    .franja .wrap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .franja article {
+      background: #fff;
+      border: 1px solid var(--linea);
+      border-radius: 24px;
+      padding: 24px;
+    }
+
+    .franja .ico {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 14px;
+    }
+
+    .franja h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .franja p {
+      color: var(--texto-suave);
+      font-size: 15px;
+    }
+
+    /* Ser monitor */
+    .monitor-sec {
+      padding: 0 0 80px;
+    }
+
+    .banda {
+      background: var(--primario);
+      color: #fff;
+      border-radius: 36px;
+      padding: 44px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .banda::before {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: var(--acento);
+      opacity: .5;
+      right: -100px;
+      top: -140px;
+    }
+
+    .banda>* {
+      position: relative;
+    }
+
+    .banda h2 {
+      font-size: clamp(26px, 3.4vw, 36px);
+      max-width: 16em;
+    }
+
+    .banda p {
+      margin-top: 10px;
+      color: #CFCBF5;
+      font-size: 17px;
+      max-width: 44ch;
+    }
+
+    footer {
+      border-top: 1px solid var(--linea);
+      padding: 28px 0 40px;
+      font-size: 14px;
+      color: var(--texto-suave);
+    }
+
+    footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    footer nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    footer a {
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--acento);
+    }
+
+    @media (max-width: 960px) {
+      .hero .wrap {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .enlaces {
+        display: none;
+      }
+
+      .franja .wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .banda {
+        padding: 36px 28px;
+      }
+
+      .demo::before {
+        inset: 20px -8px -10px 20px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .wrap {
+        padding: 0 16px;
+      }
+
+      .acciones .btn-borde {
+        display: none;
+      }
+
+      .hero {
+        padding: 28px 0 56px;
+      }
+
+      .hero p.sub {
+        font-size: 17px;
+      }
+
+      .panel {
+        padding: 18px 14px 14px;
+        height: 560px;
+      }
+
+      footer .wrap {
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<header class="topbar">
-  <div class="wrap">
-    <a class="logo" href="#" aria-label="URStudy, Universidad del Rosario">
-      <b>URStudy</b>
-      <small>Universidad del Rosario</small>
-    </a>
-    <nav class="enlaces" aria-label="Secciones">
-      <a href="#como-funciona">Por qué URStudy</a>
-      <a href="#ser-monitor">Ser monitor</a>
-    </nav>
-    <div class="acciones">
-      <a class="btn btn-borde btn-sm" href="login.html">Iniciar sesión</a>
-      <a class="btn btn-primario btn-sm" href="registro.html">Crear cuenta</a>
-    </div>
-  </div>
-</header>
-
-<main>
-
-  <!-- HERO + ASISTENTE -->
-  <section class="hero" aria-labelledby="h-hero">
+  <header class="topbar">
     <div class="wrap">
-      <div>
-        <h1 id="h-hero">Un monitor del Rosario, antes de tu parcial. <span>Dile qué tema necesitas.</span></h1>
-        <p class="sub">Nuestro asistente busca monitores de tu universidad y te muestra horarios disponibles.</p>
-        <ul class="puntos">
-          <li><span class="ico l" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>Monitores verificados</li>
-          <li><span class="ico p" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></span>Calificaciones reales</li>
-          <li><span class="ico v" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>Virtual o presencial, hoy mismo</li>
-        </ul>
-        <p class="nota">Entra con tu correo institucional del Rosario.</p>
-      </div>
-
-      <div class="demo">
-        <div class="panel" role="region" aria-label="Asistente de URStudy">
-          <div class="asist-cab">
-            <span class="av c2" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.2L19 9l-5.2 1.8L12 16l-1.8-5.2L5 9l5.2-1.8z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg>
-            </span>
-            <div><b>Asistente URStudy</b><span>Te responde al instante</span></div>
-          </div>
-          <div class="chat" id="chat" aria-live="polite"></div>
-          <form class="entrada" id="form" autocomplete="off">
-            <input type="text" id="texto" placeholder="Ej: integrales por partes" aria-label="Escribe el tema que necesitas" maxlength="120">
-            <button type="submit" aria-label="Enviar">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-            </button>
-          </form>
-        </div>
+      <a class="logo" href="#" aria-label="URStudy, Universidad del Rosario">
+        <b>URStudy</b>
+        <small>Universidad del Rosario</small>
+      </a>
+      <nav class="enlaces" aria-label="Secciones">
+        <a href="#como-funciona">Por qué URStudy</a>
+        <a href="#ser-monitor">Ser monitor</a>
+      </nav>
+      <div class="acciones">
+        <a class="btn btn-borde btn-sm" href="login.html">Iniciar sesión</a>
+        <a class="btn btn-primario btn-sm" href="registro.html">Crear cuenta</a>
       </div>
     </div>
-  </section>
+  </header>
 
-  <!-- BENEFICIOS -->
-  <section class="franja" id="como-funciona" aria-label="Por qué URStudy">
-    <div class="wrap">
-      <article>
-        <span class="ico l" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 4 2 10l10 6z"/><path d="M6 12.5V17c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/></svg></span>
-        <h3>Tu misma universidad</h3>
-        <p>Monitores que cursaron tu materia con tus profesores.</p>
-      </article>
-      <article>
-        <span class="ico p" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></span>
-        <h3>Elige con confianza</h3>
-        <p>Ves nota, temas y horarios antes de reservar.</p>
-      </article>
-      <article>
-        <span class="ico v" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-        <h3>Datos protegidos</h3>
-        <p>Tu información personal no es visible para otros usuarios.</p>
-      </article>
-    </div>
-  </section>
+  <main>
 
-  <!-- SER MONITOR -->
-  <section class="monitor-sec" id="ser-monitor" aria-labelledby="h-mon">
-    <div class="wrap">
-      <div class="banda">
+    <!-- HERO + ASISTENTE -->
+    <section class="hero" aria-labelledby="h-hero">
+      <div class="wrap">
         <div>
-          <h2 id="h-mon">¿Dominas una materia? Conviértete en monitor</h2>
-          <p>Define tus horarios y construye tu historial dentro de la universidad.</p>
+          <h1 id="h-hero">Un monitor del Rosario, antes de tu parcial. <span>Dile qué tema necesitas.</span></h1>
+          <p class="sub">Nuestro asistente busca monitores de tu universidad y te muestra horarios disponibles.</p>
+          <ul class="puntos">
+            <li><span class="ico l" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg></span>Monitores verificados</li>
+            <li><span class="ico p" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z" />
+                </svg></span>Calificaciones reales</li>
+            <li><span class="ico v" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 2" />
+                </svg></span>Virtual o presencial, hoy mismo</li>
+          </ul>
+          <p class="nota">Entra con tu correo institucional del Rosario.</p>
         </div>
-        <a class="btn btn-claro" href="registro.html?rol=monitor">Postularme como monitor</a>
+
+        <div class="demo">
+          <div class="panel" role="region" aria-label="Asistente de URStudy">
+            <div class="asist-cab">
+              <span class="av c2" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l1.8 5.2L19 9l-5.2 1.8L12 16l-1.8-5.2L5 9l5.2-1.8z" />
+                  <path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
+                </svg>
+              </span>
+              <div><b>Asistente URStudy</b><span>Te responde al instante</span></div>
+            </div>
+            <div class="chat" id="chat" aria-live="polite"></div>
+            <form class="entrada" id="form" autocomplete="off">
+              <input type="text" id="texto" placeholder="Ej: integrales por partes"
+                aria-label="Escribe el tema que necesitas" maxlength="120">
+              <button type="submit" aria-label="Enviar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m13 6 6 6-6 6" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
+    </section>
+
+    <!-- BENEFICIOS -->
+    <section class="franja" id="como-funciona" aria-label="Por qué URStudy">
+      <div class="wrap">
+        <article>
+          <span class="ico l" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10 12 4 2 10l10 6z" />
+              <path d="M6 12.5V17c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5" />
+            </svg></span>
+          <h3>Tu misma universidad</h3>
+          <p>Monitores que cursaron tu materia con tus profesores.</p>
+        </article>
+        <article>
+          <span class="ico p" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z" />
+            </svg></span>
+          <h3>Elige con confianza</h3>
+          <p>Ves nota, temas y horarios antes de reservar.</p>
+        </article>
+        <article>
+          <span class="ico v" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg></span>
+          <h3>Datos protegidos</h3>
+          <p>Tu información personal no es visible para otros usuarios.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SER MONITOR -->
+    <section class="monitor-sec" id="ser-monitor" aria-labelledby="h-mon">
+      <div class="wrap">
+        <div class="banda">
+          <div>
+            <h2 id="h-mon">¿Dominas una materia? Conviértete en monitor</h2>
+            <p>Define tus horarios y construye tu historial dentro de la universidad.</p>
+          </div>
+          <a class="btn btn-claro" href="registro.html?rol=monitor">Postularme como monitor</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>URStudy, Universidad del Rosario</span>
+      <nav aria-label="Pie de página">
+        <a href="#">Términos</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Contacto</a>
+      </nav>
     </div>
-  </section>
-</main>
+  </footer>
 
-<footer>
-  <div class="wrap">
-    <span>URStudy, Universidad del Rosario</span>
-    <nav aria-label="Pie de página">
-      <a href="#">Términos</a>
-      <a href="#">Privacidad</a>
-      <a href="#">Contacto</a>
-    </nav>
-  </div>
-</footer>
+  <script>
+    (function () {
+      /* ---------- Datos simulados ---------- */
+      const MATERIAS = [
+        {
+          nombre: 'Cálculo Integral', claves: ['integral', 'integrar', 'primitiva', 'antiderivada', 'calculo 2', 'calculo integral'],
+          temas: [{ t: 'Integrales por partes', k: ['partes'] }, { t: 'Sustitución', k: ['sustitucion'] }, { t: 'Áreas y volúmenes', k: ['area', 'volumen'] }],
+          monitores: [
+            { n: 'Carlos Ruiz', i: 'CR', c: 'c2', nota: '4.8', mod: 'Virtual', on: true, horas: ['Hoy 4:00 PM', 'Mañana 10:00 AM', 'Jue 2:00 PM'] },
+            { n: 'Laura Gutiérrez', i: 'LG', c: 'c1', nota: '4.9', mod: 'Presencial', on: false, horas: ['Mié 8:00 AM', 'Vie 11:00 AM'] }]
+        },
+        {
+          nombre: 'Cálculo Diferencial', claves: ['derivada', 'derivar', 'limite', 'calculo', 'regla de la cadena', 'continuidad'],
+          temas: [{ t: 'Derivadas', k: ['derivada', 'derivar'] }, { t: 'Límites', k: ['limite'] }, { t: 'Regla de la cadena', k: ['cadena'] }],
+          monitores: [
+            { n: 'Andrés Mora', i: 'AM', c: 'c3', nota: '4.7', mod: 'Virtual', on: true, horas: ['Hoy 5:30 PM', 'Mañana 9:00 AM'] },
+            { n: 'Laura Gutiérrez', i: 'LG', c: 'c1', nota: '4.9', mod: 'Presencial', on: false, horas: ['Mié 8:00 AM', 'Vie 11:00 AM'] }]
+        },
+        {
+          nombre: 'Álgebra Lineal', claves: ['algebra', 'matriz', 'matrices', 'vector', 'determinante', 'autovalor', 'espacio vectorial'],
+          temas: [{ t: 'Matrices', k: ['matriz', 'matrices'] }, { t: 'Determinantes', k: ['determinante'] }, { t: 'Espacios vectoriales', k: ['espacio', 'vector'] }],
+          monitores: [
+            { n: 'Valentina Cruz', i: 'VC', c: 'c2', nota: '4.9', mod: 'Virtual', on: true, horas: ['Hoy 6:00 PM', 'Jue 10:00 AM'] },
+            { n: 'Daniel Peña', i: 'DP', c: 'c3', nota: '4.6', mod: 'Presencial', on: false, horas: ['Mañana 2:00 PM', 'Vie 3:00 PM'] }]
+        },
+        {
+          nombre: 'Programación I', claves: ['programacion', 'python', 'java', 'codigo', 'bucle', 'ciclo', 'funcion', 'algoritmo'],
+          temas: [{ t: 'Ciclos', k: ['bucle', 'ciclo', 'for', 'while'] }, { t: 'Funciones', k: ['funcion'] }, { t: 'Listas', k: ['lista', 'arreglo'] }],
+          monitores: [
+            { n: 'Juan Pablo Ríos', i: 'JR', c: 'c1', nota: '4.8', mod: 'Virtual', on: true, horas: ['Hoy 3:00 PM', 'Mañana 11:00 AM'] },
+            { n: 'Camila Torres', i: 'CT', c: 'c2', nota: '4.7', mod: 'Virtual', on: false, horas: ['Mié 4:00 PM', 'Vie 9:00 AM'] }]
+        },
+        {
+          nombre: 'Estructuras de Datos', claves: ['estructura', 'arbol', 'grafo', 'pila', 'cola', 'lista enlazada', 'recursion'],
+          temas: [{ t: 'Árboles', k: ['arbol'] }, { t: 'Grafos', k: ['grafo'] }, { t: 'Recursión', k: ['recursion'] }],
+          monitores: [
+            { n: 'Camila Torres', i: 'CT', c: 'c2', nota: '4.7', mod: 'Virtual', on: true, horas: ['Hoy 7:00 PM', 'Jue 3:00 PM'] },
+            { n: 'Juan Pablo Ríos', i: 'JR', c: 'c1', nota: '4.8', mod: 'Presencial', on: false, horas: ['Vie 10:00 AM', 'Sáb 9:00 AM'] }]
+        },
+        {
+          nombre: 'Microeconomía', claves: ['micro', 'oferta', 'demanda', 'elasticidad', 'equilibrio', 'utilidad'],
+          temas: [{ t: 'Oferta y demanda', k: ['oferta', 'demanda'] }, { t: 'Elasticidad', k: ['elasticidad'] }, { t: 'Equilibrio', k: ['equilibrio'] }],
+          monitores: [
+            { n: 'Mariana Ospina', i: 'MO', c: 'c3', nota: '4.9', mod: 'Presencial', on: false, horas: ['Mañana 1:00 PM', 'Jue 9:00 AM'] },
+            { n: 'Sebastián Vega', i: 'SV', c: 'c1', nota: '4.6', mod: 'Virtual', on: true, horas: ['Hoy 5:00 PM', 'Vie 2:00 PM'] }]
+        },
+        {
+          nombre: 'Macroeconomía', claves: ['macro', 'inflacion', 'pib', 'politica monetaria', 'politica fiscal'],
+          temas: [{ t: 'PIB', k: ['pib'] }, { t: 'Inflación', k: ['inflacion'] }, { t: 'Política monetaria', k: ['monetaria'] }],
+          monitores: [
+            { n: 'Sebastián Vega', i: 'SV', c: 'c1', nota: '4.6', mod: 'Virtual', on: true, horas: ['Hoy 6:30 PM', 'Mié 3:00 PM'] },
+            { n: 'Mariana Ospina', i: 'MO', c: 'c3', nota: '4.9', mod: 'Virtual', on: false, horas: ['Jue 11:00 AM', 'Vie 4:00 PM'] }]
+        },
+        {
+          nombre: 'Estadística', claves: ['estadistica', 'probabilidad', 'media', 'varianza', 'hipotesis', 'regresion', 'distribucion'],
+          temas: [{ t: 'Probabilidad', k: ['probabilidad'] }, { t: 'Pruebas de hipótesis', k: ['hipotesis'] }, { t: 'Regresión', k: ['regresion'] }],
+          monitores: [
+            { n: 'Daniela Pardo', i: 'DP', c: 'c2', nota: '4.8', mod: 'Virtual', on: true, horas: ['Hoy 4:30 PM', 'Mañana 3:00 PM'] },
+            { n: 'Nicolás Rey', i: 'NR', c: 'c3', nota: '4.7', mod: 'Presencial', on: false, horas: ['Mié 10:00 AM', 'Vie 1:00 PM'] }]
+        },
+        {
+          nombre: 'Física Mecánica', claves: ['fisica', 'cinematica', 'newton', 'fuerza', 'energia', 'movimiento', 'torque'],
+          temas: [{ t: 'Cinemática', k: ['cinematica', 'movimiento'] }, { t: 'Leyes de Newton', k: ['newton', 'fuerza'] }, { t: 'Energía', k: ['energia'] }],
+          monitores: [
+            { n: 'Felipe Salazar', i: 'FS', c: 'c1', nota: '4.8', mod: 'Presencial', on: false, horas: ['Mañana 8:00 AM', 'Jue 4:00 PM'] },
+            { n: 'Andrés Mora', i: 'AM', c: 'c3', nota: '4.7', mod: 'Virtual', on: true, horas: ['Hoy 8:00 PM', 'Vie 12:00 PM'] }]
+        },
+        {
+          nombre: 'Contabilidad', claves: ['contabilidad', 'balance', 'asiento', 'debito', 'credito', 'estado de resultados'],
+          temas: [{ t: 'Balance general', k: ['balance'] }, { t: 'Asientos contables', k: ['asiento', 'debito', 'credito'] }, { t: 'Estado de resultados', k: ['resultados'] }],
+          monitores: [
+            { n: 'Paula Medina', i: 'PM', c: 'c2', nota: '4.9', mod: 'Virtual', on: true, horas: ['Hoy 5:00 PM', 'Mié 9:00 AM'] },
+            { n: 'Esteban Gil', i: 'EG', c: 'c3', nota: '4.6', mod: 'Presencial', on: false, horas: ['Jue 1:00 PM', 'Vie 10:00 AM'] }]
+        },
+        {
+          nombre: 'Química General', claves: ['quimica', 'estequiometria', 'mol', 'enlace', 'reaccion', 'tabla periodica'],
+          temas: [{ t: 'Estequiometría', k: ['estequiometria', 'mol'] }, { t: 'Enlaces', k: ['enlace'] }, { t: 'Reacciones', k: ['reaccion'] }],
+          monitores: [
+            { n: 'Isabella Lara', i: 'IL', c: 'c1', nota: '4.8', mod: 'Virtual', on: true, horas: ['Hoy 4:00 PM', 'Jue 5:00 PM'] },
+            { n: 'Felipe Salazar', i: 'FS', c: 'c1', nota: '4.8', mod: 'Presencial', on: false, horas: ['Mañana 10:00 AM', 'Vie 3:00 PM'] }]
+        },
+        {
+          nombre: 'Ecuaciones Diferenciales', claves: ['ecuacion', 'ecuaciones', 'edo', 'laplace', 'diferenciales'],
+          temas: [{ t: 'EDO de primer orden', k: ['primer orden'] }, { t: 'Transformada de Laplace', k: ['laplace'] }, { t: 'Sistemas de EDO', k: ['sistema'] }],
+          monitores: [
+            { n: 'Carlos Ruiz', i: 'CR', c: 'c2', nota: '4.8', mod: 'Virtual', on: true, horas: ['Hoy 7:00 PM', 'Mié 2:00 PM'] },
+            { n: 'Valentina Cruz', i: 'VC', c: 'c2', nota: '4.9', mod: 'Presencial', on: false, horas: ['Jue 8:00 AM', 'Vie 9:00 AM'] }]
+        }
+      ];
+      const SUGERIDOS = ['Cálculo Integral', 'Álgebra Lineal', 'Programación I', 'Microeconomía', 'Estadística'];
 
-<script>
-(function () {
-  /* ---------- Datos simulados ---------- */
-  const MATERIAS = [
-    { nombre: 'Cálculo Integral', claves: ['integral', 'integrar', 'primitiva', 'antiderivada', 'calculo 2', 'calculo integral'],
-      temas: [{ t: 'Integrales por partes', k: ['partes'] }, { t: 'Sustitución', k: ['sustitucion'] }, { t: 'Áreas y volúmenes', k: ['area', 'volumen'] }],
-      monitores: [
-        { n: 'Carlos Ruiz', i: 'CR', c: 'c2', nota: '4.8', mod: 'Virtual', on: true, horas: ['Hoy 4:00 PM', 'Mañana 10:00 AM', 'Jue 2:00 PM'] },
-        { n: 'Laura Gutiérrez', i: 'LG', c: 'c1', nota: '4.9', mod: 'Presencial', on: false, horas: ['Mié 8:00 AM', 'Vie 11:00 AM'] } ] },
-    { nombre: 'Cálculo Diferencial', claves: ['derivada', 'derivar', 'limite', 'calculo', 'regla de la cadena', 'continuidad'],
-      temas: [{ t: 'Derivadas', k: ['derivada', 'derivar'] }, { t: 'Límites', k: ['limite'] }, { t: 'Regla de la cadena', k: ['cadena'] }],
-      monitores: [
-        { n: 'Andrés Mora', i: 'AM', c: 'c3', nota: '4.7', mod: 'Virtual', on: true, horas: ['Hoy 5:30 PM', 'Mañana 9:00 AM'] },
-        { n: 'Laura Gutiérrez', i: 'LG', c: 'c1', nota: '4.9', mod: 'Presencial', on: false, horas: ['Mié 8:00 AM', 'Vie 11:00 AM'] } ] },
-    { nombre: 'Álgebra Lineal', claves: ['algebra', 'matriz', 'matrices', 'vector', 'determinante', 'autovalor', 'espacio vectorial'],
-      temas: [{ t: 'Matrices', k: ['matriz', 'matrices'] }, { t: 'Determinantes', k: ['determinante'] }, { t: 'Espacios vectoriales', k: ['espacio', 'vector'] }],
-      monitores: [
-        { n: 'Valentina Cruz', i: 'VC', c: 'c2', nota: '4.9', mod: 'Virtual', on: true, horas: ['Hoy 6:00 PM', 'Jue 10:00 AM'] },
-        { n: 'Daniel Peña', i: 'DP', c: 'c3', nota: '4.6', mod: 'Presencial', on: false, horas: ['Mañana 2:00 PM', 'Vie 3:00 PM'] } ] },
-    { nombre: 'Programación I', claves: ['programacion', 'python', 'java', 'codigo', 'bucle', 'ciclo', 'funcion', 'algoritmo'],
-      temas: [{ t: 'Ciclos', k: ['bucle', 'ciclo', 'for', 'while'] }, { t: 'Funciones', k: ['funcion'] }, { t: 'Listas', k: ['lista', 'arreglo'] }],
-      monitores: [
-        { n: 'Juan Pablo Ríos', i: 'JR', c: 'c1', nota: '4.8', mod: 'Virtual', on: true, horas: ['Hoy 3:00 PM', 'Mañana 11:00 AM'] },
-        { n: 'Camila Torres', i: 'CT', c: 'c2', nota: '4.7', mod: 'Virtual', on: false, horas: ['Mié 4:00 PM', 'Vie 9:00 AM'] } ] },
-    { nombre: 'Estructuras de Datos', claves: ['estructura', 'arbol', 'grafo', 'pila', 'cola', 'lista enlazada', 'recursion'],
-      temas: [{ t: 'Árboles', k: ['arbol'] }, { t: 'Grafos', k: ['grafo'] }, { t: 'Recursión', k: ['recursion'] }],
-      monitores: [
-        { n: 'Camila Torres', i: 'CT', c: 'c2', nota: '4.7', mod: 'Virtual', on: true, horas: ['Hoy 7:00 PM', 'Jue 3:00 PM'] },
-        { n: 'Juan Pablo Ríos', i: 'JR', c: 'c1', nota: '4.8', mod: 'Presencial', on: false, horas: ['Vie 10:00 AM', 'Sáb 9:00 AM'] } ] },
-    { nombre: 'Microeconomía', claves: ['micro', 'oferta', 'demanda', 'elasticidad', 'equilibrio', 'utilidad'],
-      temas: [{ t: 'Oferta y demanda', k: ['oferta', 'demanda'] }, { t: 'Elasticidad', k: ['elasticidad'] }, { t: 'Equilibrio', k: ['equilibrio'] }],
-      monitores: [
-        { n: 'Mariana Ospina', i: 'MO', c: 'c3', nota: '4.9', mod: 'Presencial', on: false, horas: ['Mañana 1:00 PM', 'Jue 9:00 AM'] },
-        { n: 'Sebastián Vega', i: 'SV', c: 'c1', nota: '4.6', mod: 'Virtual', on: true, horas: ['Hoy 5:00 PM', 'Vie 2:00 PM'] } ] },
-    { nombre: 'Macroeconomía', claves: ['macro', 'inflacion', 'pib', 'politica monetaria', 'politica fiscal'],
-      temas: [{ t: 'PIB', k: ['pib'] }, { t: 'Inflación', k: ['inflacion'] }, { t: 'Política monetaria', k: ['monetaria'] }],
-      monitores: [
-        { n: 'Sebastián Vega', i: 'SV', c: 'c1', nota: '4.6', mod: 'Virtual', on: true, horas: ['Hoy 6:30 PM', 'Mié 3:00 PM'] },
-        { n: 'Mariana Ospina', i: 'MO', c: 'c3', nota: '4.9', mod: 'Virtual', on: false, horas: ['Jue 11:00 AM', 'Vie 4:00 PM'] } ] },
-    { nombre: 'Estadística', claves: ['estadistica', 'probabilidad', 'media', 'varianza', 'hipotesis', 'regresion', 'distribucion'],
-      temas: [{ t: 'Probabilidad', k: ['probabilidad'] }, { t: 'Pruebas de hipótesis', k: ['hipotesis'] }, { t: 'Regresión', k: ['regresion'] }],
-      monitores: [
-        { n: 'Daniela Pardo', i: 'DP', c: 'c2', nota: '4.8', mod: 'Virtual', on: true, horas: ['Hoy 4:30 PM', 'Mañana 3:00 PM'] },
-        { n: 'Nicolás Rey', i: 'NR', c: 'c3', nota: '4.7', mod: 'Presencial', on: false, horas: ['Mié 10:00 AM', 'Vie 1:00 PM'] } ] },
-    { nombre: 'Física Mecánica', claves: ['fisica', 'cinematica', 'newton', 'fuerza', 'energia', 'movimiento', 'torque'],
-      temas: [{ t: 'Cinemática', k: ['cinematica', 'movimiento'] }, { t: 'Leyes de Newton', k: ['newton', 'fuerza'] }, { t: 'Energía', k: ['energia'] }],
-      monitores: [
-        { n: 'Felipe Salazar', i: 'FS', c: 'c1', nota: '4.8', mod: 'Presencial', on: false, horas: ['Mañana 8:00 AM', 'Jue 4:00 PM'] },
-        { n: 'Andrés Mora', i: 'AM', c: 'c3', nota: '4.7', mod: 'Virtual', on: true, horas: ['Hoy 8:00 PM', 'Vie 12:00 PM'] } ] },
-    { nombre: 'Contabilidad', claves: ['contabilidad', 'balance', 'asiento', 'debito', 'credito', 'estado de resultados'],
-      temas: [{ t: 'Balance general', k: ['balance'] }, { t: 'Asientos contables', k: ['asiento', 'debito', 'credito'] }, { t: 'Estado de resultados', k: ['resultados'] }],
-      monitores: [
-        { n: 'Paula Medina', i: 'PM', c: 'c2', nota: '4.9', mod: 'Virtual', on: true, horas: ['Hoy 5:00 PM', 'Mié 9:00 AM'] },
-        { n: 'Esteban Gil', i: 'EG', c: 'c3', nota: '4.6', mod: 'Presencial', on: false, horas: ['Jue 1:00 PM', 'Vie 10:00 AM'] } ] },
-    { nombre: 'Química General', claves: ['quimica', 'estequiometria', 'mol', 'enlace', 'reaccion', 'tabla periodica'],
-      temas: [{ t: 'Estequiometría', k: ['estequiometria', 'mol'] }, { t: 'Enlaces', k: ['enlace'] }, { t: 'Reacciones', k: ['reaccion'] }],
-      monitores: [
-        { n: 'Isabella Lara', i: 'IL', c: 'c1', nota: '4.8', mod: 'Virtual', on: true, horas: ['Hoy 4:00 PM', 'Jue 5:00 PM'] },
-        { n: 'Felipe Salazar', i: 'FS', c: 'c1', nota: '4.8', mod: 'Presencial', on: false, horas: ['Mañana 10:00 AM', 'Vie 3:00 PM'] } ] },
-    { nombre: 'Ecuaciones Diferenciales', claves: ['ecuacion', 'ecuaciones', 'edo', 'laplace', 'diferenciales'],
-      temas: [{ t: 'EDO de primer orden', k: ['primer orden'] }, { t: 'Transformada de Laplace', k: ['laplace'] }, { t: 'Sistemas de EDO', k: ['sistema'] }],
-      monitores: [
-        { n: 'Carlos Ruiz', i: 'CR', c: 'c2', nota: '4.8', mod: 'Virtual', on: true, horas: ['Hoy 7:00 PM', 'Mié 2:00 PM'] },
-        { n: 'Valentina Cruz', i: 'VC', c: 'c2', nota: '4.9', mod: 'Presencial', on: false, horas: ['Jue 8:00 AM', 'Vie 9:00 AM'] } ] }
-  ];
-  const SUGERIDOS = ['Cálculo Integral', 'Álgebra Lineal', 'Programación I', 'Microeconomía', 'Estadística'];
+      /* ---------- Utilidades ---------- */
+      const chat = document.getElementById('chat');
+      const form = document.getElementById('form');
+      const input = document.getElementById('texto');
+      const reducir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let ocupado = false;
+      let reservaElegida = false;
 
-  /* ---------- Utilidades ---------- */
-  const chat = document.getElementById('chat');
-  const form = document.getElementById('form');
-  const input = document.getElementById('texto');
-  const reducir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let ocupado = false;
-  let reservaElegida = false;
+      const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+      const pausa = ms => new Promise(r => setTimeout(r, reducir ? 0 : ms));
+      const bajar = () => { chat.scrollTop = chat.scrollHeight; };
 
-  const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-  const pausa = ms => new Promise(r => setTimeout(r, reducir ? 0 : ms));
-  const bajar = () => { chat.scrollTop = chat.scrollHeight; };
+      function burbuja(clase, texto) {
+        const d = document.createElement('div');
+        d.className = 'msg ' + clase;
+        d.textContent = texto;
+        chat.appendChild(d);
+        bajar();
+        return d;
+      }
 
-  function burbuja(clase, texto) {
-    const d = document.createElement('div');
-    d.className = 'msg ' + clase;
-    d.textContent = texto;
-    chat.appendChild(d);
-    bajar();
-    return d;
-  }
+      async function ia(texto, espera) {
+        const t = document.createElement('div');
+        t.className = 'msg ia escribiendo';
+        t.innerHTML = '<i></i><i></i><i></i>';
+        chat.appendChild(t); bajar();
+        await pausa(espera || 800);
+        t.remove();
+        return burbuja('ia', texto);
+      }
 
-  async function ia(texto, espera) {
-    const t = document.createElement('div');
-    t.className = 'msg ia escribiendo';
-    t.innerHTML = '<i></i><i></i><i></i>';
-    chat.appendChild(t); bajar();
-    await pausa(espera || 800);
-    t.remove();
-    return burbuja('ia', texto);
-  }
+      function sugeridos() {
+        const w = document.createElement('div');
+        w.className = 'sugeridos';
+        SUGERIDOS.forEach(s => {
+          const b = document.createElement('button');
+          b.type = 'button'; b.textContent = s;
+          b.addEventListener('click', () => enviar(s));
+          w.appendChild(b);
+        });
+        chat.appendChild(w); bajar();
+      }
 
-  function sugeridos() {
-    const w = document.createElement('div');
-    w.className = 'sugeridos';
-    SUGERIDOS.forEach(s => {
-      const b = document.createElement('button');
-      b.type = 'button'; b.textContent = s;
-      b.addEventListener('click', () => enviar(s));
-      w.appendChild(b);
-    });
-    chat.appendChild(w); bajar();
-  }
+      /* ---------- Reconocimiento ---------- */
+      function reconocer(texto) {
+        const q = norm(texto);
+        const materia = MATERIAS.find(m => m.claves.some(c => q.includes(c)) || q.includes(norm(m.nombre)));
+        if (!materia) return null;
+        const tema = materia.temas.find(t => t.k.some(k => q.includes(k)));
+        return { materia, tema: tema ? tema.t : null };
+      }
 
-  /* ---------- Reconocimiento ---------- */
-  function reconocer(texto) {
-    const q = norm(texto);
-    const materia = MATERIAS.find(m => m.claves.some(c => q.includes(c)) || q.includes(norm(m.nombre)));
-    if (!materia) return null;
-    const tema = materia.temas.find(t => t.k.some(k => q.includes(k)));
-    return { materia, tema: tema ? tema.t : null };
-  }
+      /* ---------- Tarjetas de monitores ---------- */
+      function tarjetaMonitor(m, materia, tema) {
+        const d = document.createElement('div');
+        d.className = 'tarjeta';
+        const tags = (tema ? [tema] : materia.temas.slice(0, 2).map(t => t.t)).concat(m.mod);
+        d.innerHTML =
+          '<div class="fila">' +
+          '<span class="av ' + m.c + '" aria-hidden="true">' + m.i + '</span>' +
+          '<div class="quien"><b>' + m.n + '</b><span>' + materia.nombre + ' · ' + m.nota + ' de calificación</span></div>' +
+          (m.on ? '<span class="en-linea">En línea</span>' : '') +
+          '</div>' +
+          '<div class="tags">' + tags.map(t => '<i>' + t + '</i>').join('') + '</div>' +
+          '<div class="horas"></div>';
+        const cont = d.querySelector('.horas');
+        m.horas.forEach(h => {
+          const b = document.createElement('button');
+          b.type = 'button'; b.textContent = h;
+          b.addEventListener('click', () => elegir(m, materia, tema, h, b));
+          cont.appendChild(b);
+        });
+        return d;
+      }
 
-  /* ---------- Tarjetas de monitores ---------- */
-  function tarjetaMonitor(m, materia, tema) {
-    const d = document.createElement('div');
-    d.className = 'tarjeta';
-    const tags = (tema ? [tema] : materia.temas.slice(0, 2).map(t => t.t)).concat(m.mod);
-    d.innerHTML =
-      '<div class="fila">' +
-        '<span class="av ' + m.c + '" aria-hidden="true">' + m.i + '</span>' +
-        '<div class="quien"><b>' + m.n + '</b><span>' + materia.nombre + ' · ' + m.nota + ' de calificación</span></div>' +
-        (m.on ? '<span class="en-linea">En línea</span>' : '') +
-      '</div>' +
-      '<div class="tags">' + tags.map(t => '<i>' + t + '</i>').join('') + '</div>' +
-      '<div class="horas"></div>';
-    const cont = d.querySelector('.horas');
-    m.horas.forEach(h => {
-      const b = document.createElement('button');
-      b.type = 'button'; b.textContent = h;
-      b.addEventListener('click', () => elegir(m, materia, tema, h, b));
-      cont.appendChild(b);
-    });
-    return d;
-  }
+      async function ofrecer(r) {
+        const { materia, tema } = r;
+        await ia(tema
+          ? 'Entendido: ' + tema + ' en ' + materia.nombre + '. Estoy buscando monitores disponibles…'
+          : 'Entendido: ' + materia.nombre + '. Estoy buscando monitores disponibles…', 700);
+        await pausa(700);
+        await ia('Encontré ' + materia.monitores.length + ' monitores para ti. Toca un horario para reservar:', 500);
+        for (const m of materia.monitores) {
+          chat.appendChild(tarjetaMonitor(m, materia, tema));
+          bajar();
+          await pausa(350);
+        }
+      }
 
-  async function ofrecer(r) {
-    const { materia, tema } = r;
-    await ia(tema
-      ? 'Entendido: ' + tema + ' en ' + materia.nombre + '. Estoy buscando monitores disponibles…'
-      : 'Entendido: ' + materia.nombre + '. Estoy buscando monitores disponibles…', 700);
-    await pausa(700);
-    await ia('Encontré ' + materia.monitores.length + ' monitores para ti. Toca un horario para reservar:', 500);
-    for (const m of materia.monitores) {
-      chat.appendChild(tarjetaMonitor(m, materia, tema));
-      bajar();
-      await pausa(350);
-    }
-  }
+      /* ---------- Elegir horario → login ---------- */
+      async function elegir(m, materia, tema, hora, boton) {
+        if (reservaElegida || ocupado) return;
+        reservaElegida = true; ocupado = true;
+        chat.querySelectorAll('.horas button').forEach(b => { b.disabled = true; });
+        boton.classList.add('sel');
+        burbuja('yo', 'Quiero ' + hora + ' con ' + m.n);
 
-  /* ---------- Elegir horario → login ---------- */
-  async function elegir(m, materia, tema, hora, boton) {
-    if (reservaElegida || ocupado) return;
-    reservaElegida = true; ocupado = true;
-    chat.querySelectorAll('.horas button').forEach(b => { b.disabled = true; });
-    boton.classList.add('sel');
-    burbuja('yo', 'Quiero ' + hora + ' con ' + m.n);
+        const reserva = { monitor: m.n, materia: materia.nombre, tema: tema || '', hora: hora, modalidad: m.mod };
+        try { sessionStorage.setItem('urstudy_reserva', JSON.stringify(reserva)); } catch (e) { /* sin almacenamiento */ }
 
-    const reserva = { monitor: m.n, materia: materia.nombre, tema: tema || '', hora: hora, modalidad: m.mod };
-    try { sessionStorage.setItem('urstudy_reserva', JSON.stringify(reserva)); } catch (e) { /* sin almacenamiento */ }
+        await ia('Buena elección. Inicia sesión con tu correo del Rosario para confirmar tu reserva.', 700);
+        const c = document.createElement('div');
+        c.className = 'login-card';
+        c.innerHTML =
+          '<p><b>' + m.n + '</b> · ' + hora + ' · ' + m.mod + '<br>Guardamos tu elección mientras entras.</p>' +
+          '<div class="btns">' +
+          '<a class="btn btn-primario" href="login.html?reserva=1">Iniciar sesión</a>' +
+          '<a class="btn btn-borde" href="registro.html?reserva=1">Crear cuenta</a>' +
+          '</div>';
+        chat.appendChild(c); bajar();
+        c.querySelector('a').focus({ preventScroll: true });
+        input.disabled = true;
+        input.placeholder = 'Inicia sesión para continuar';
+        ocupado = false;
+      }
 
-    await ia('Buena elección. Inicia sesión con tu correo del Rosario para confirmar tu reserva.', 700);
-    const c = document.createElement('div');
-    c.className = 'login-card';
-    c.innerHTML =
-      '<p><b>' + m.n + '</b> · ' + hora + ' · ' + m.mod + '<br>Guardamos tu elección mientras entras.</p>' +
-      '<div class="btns">' +
-        '<a class="btn btn-primario" href="login.html?reserva=1">Iniciar sesión</a>' +
-        '<a class="btn btn-borde" href="registro.html?reserva=1">Crear cuenta</a>' +
-      '</div>';
-    chat.appendChild(c); bajar();
-    c.querySelector('a').focus({ preventScroll: true });
-    input.disabled = true;
-    input.placeholder = 'Inicia sesión para continuar';
-    ocupado = false;
-  }
+      /* ---------- Flujo principal ---------- */
+      async function enviar(texto) {
+        texto = texto.trim();
+        if (!texto || ocupado || reservaElegida) return;
+        ocupado = true;
+        chat.querySelectorAll('.sugeridos').forEach(s => s.remove());
+        burbuja('yo', texto);
+        input.value = '';
+        await pausa(300);
 
-  /* ---------- Flujo principal ---------- */
-  async function enviar(texto) {
-    texto = texto.trim();
-    if (!texto || ocupado || reservaElegida) return;
-    ocupado = true;
-    chat.querySelectorAll('.sugeridos').forEach(s => s.remove());
-    burbuja('yo', texto);
-    input.value = '';
-    await pausa(300);
+        const r = reconocer(texto);
+        if (r) {
+          await ofrecer(r);
+        } else {
+          await ia('No reconocí ese tema. Escríbelo de otra forma o elige una materia:', 700);
+          sugeridos();
+        }
+        ocupado = false;
+        if (!reservaElegida) input.focus({ preventScroll: true });
+      }
 
-    const r = reconocer(texto);
-    if (r) {
-      await ofrecer(r);
-    } else {
-      await ia('No reconocí ese tema. Escríbelo de otra forma o elige una materia:', 700);
-      sugeridos();
-    }
-    ocupado = false;
-    if (!reservaElegida) input.focus({ preventScroll: true });
-  }
+      form.addEventListener('submit', e => { e.preventDefault(); enviar(input.value); });
 
-  form.addEventListener('submit', e => { e.preventDefault(); enviar(input.value); });
-
-  /* ---------- Inicio ---------- */
-  (async function iniciar() {
-    ocupado = true;
-    await ia('Hola 👋 Soy el asistente de URStudy. ¿Qué tema necesitas repasar?', 600);
-    sugeridos();
-    ocupado = false;
-  })();
-})();
-</script>
+      /* ---------- Inicio ---------- */
+      (async function iniciar() {
+        ocupado = true;
+        await ia('Hola 👋 Soy el asistente de URStudy. ¿Qué tema necesitas repasar?', 600);
+        sugeridos();
+        ocupado = false;
+      })();
+    })();
+  </script>
 </body>
+
 </html>
