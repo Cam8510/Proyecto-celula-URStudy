@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Saberio | Panel de Administrador</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/administracion.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saberio | Panel de Administrador</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/administracion.css">
 </head>
 <body>
 
@@ -16,7 +16,7 @@
   <div class="modal">
     <header>
       <h3 id="titulo-materia">Nueva materia</h3>
-      <button aria-label="Cerrar" id="cerrar-materia">✕</button>
+      <button type="button" aria-label="Cerrar" id="cerrar-materia">✕</button>
     </header>
     <form class="cuerpo" id="form-materia">
       <div class="campo">
@@ -54,7 +54,7 @@
   <div class="modal">
     <header>
       <h3 id="titulo-editar-materia">Editar materia</h3>
-      <button aria-label="Cerrar" id="cerrar-editar-materia">✕</button>
+      <button type="button" aria-label="Cerrar" id="cerrar-editar-materia">✕</button>
     </header>
     <form class="cuerpo" id="form-editar-materia">
       <input type="hidden" id="edit-mat-id">
@@ -92,11 +92,9 @@
   <div class="modal">
     <header>
       <h3 id="titulo-soporte">Verificar soporte académico</h3>
-      <button aria-label="Cerrar" id="cerrar-soporte">✕</button>
+      <button type="button" aria-label="Cerrar" id="cerrar-soporte">✕</button>
     </header>
-    <div class="cuerpo" id="soporte-detalle">
-      <!-- Se llena dinámicamente -->
-    </div>
+    <div class="cuerpo" id="soporte-detalle"></div>
     <footer>
       <button type="button" class="btn-sec-modal" id="rechazar-soporte">Rechazar</button>
       <button type="button" class="btn" id="aprobar-soporte">Aprobar</button>
@@ -109,7 +107,7 @@
   <div class="modal">
     <header>
       <h3 id="titulo-config">Configuración</h3>
-      <button aria-label="Cerrar" id="cerrar-config">✕</button>
+      <button type="button" aria-label="Cerrar" id="cerrar-config">✕</button>
     </header>
     <div class="cuerpo">
       <div class="campo">
@@ -149,8 +147,8 @@
 <header class="topbar">
   <div class="wrap">
     <a class="logo" href="#" aria-label="Saberio">
-        <img src="imagenes/Loguito.png" alt="Saberio">
-      </a>
+      <img src="imagenes/Loguito.png" alt="Saberio">
+    </a>
     <nav class="nav" aria-label="Principal">
       <a href="#" aria-current="page">Inicio</a>
       <a href="#soportes">Soportes</a>
@@ -161,14 +159,14 @@
     </nav>
     <div class="usuario">
       <div class="campana-wrap">
-        <button class="campana" aria-label="Notificaciones" id="btn-notif">
+        <button type="button" class="campana" aria-label="Notificaciones" id="btn-notif">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
           <i id="notif-count">3</i>
         </button>
         <div class="notif-panel" id="notif-panel" aria-hidden="true">
           <header>
             <h4>Notificaciones</h4>
-            <button id="cerrar-notif" aria-label="Cerrar">✕</button>
+            <button type="button" id="cerrar-notif" aria-label="Cerrar">✕</button>
           </header>
           <div class="lista" id="notif-lista"></div>
           <footer><a href="#" id="ver-todas">Ver todas</a></footer>
@@ -189,7 +187,6 @@
     <p class="saludo">Hola, Admin 👋</p>
     <h1 id="titulo-hero">Panel de Administración</h1>
     <p>Gestiona materias, verifica soportes académicos de monitores, supervisa usuarios y monitorías de la plataforma.</p>
-
     <div class="acciones-hero">
       <button type="button" class="btn" id="btn-nueva-materia">+ Nueva materia</button>
       <button type="button" class="btn-sec" id="btn-ver-reportes">Ver reportes</button>
@@ -201,25 +198,12 @@
     <!-- Columna principal -->
     <div style="display:grid; gap:40px;">
 
-      <!-- Estadísticas -->
       <section>
         <div class="stats">
-          <div class="stat">
-            <b id="stat-usuarios">1,248</b>
-            <span>Usuarios totales</span>
-          </div>
-          <div class="stat">
-            <b id="stat-monitores">86</b>
-            <span>Monitores activos</span>
-          </div>
-          <div class="stat">
-            <b id="stat-materias">42</b>
-            <span>Materias en catálogo</span>
-          </div>
-          <div class="stat">
-            <b id="stat-monitorias">328</b>
-            <span>Monitorías este mes</span>
-          </div>
+          <div class="stat"><b id="stat-usuarios">1,248</b><span>Usuarios totales</span></div>
+          <div class="stat"><b id="stat-monitores">86</b><span>Monitores activos</span></div>
+          <div class="stat"><b id="stat-materias">42</b><span>Materias en catálogo</span></div>
+          <div class="stat"><b id="stat-monitorias">328</b><span>Monitorías este mes</span></div>
         </div>
       </section>
 
@@ -241,14 +225,7 @@
         <div class="tabla-wrap">
           <table>
             <thead>
-              <tr>
-                <th>Código</th>
-                <th>Materia</th>
-                <th>Facultad</th>
-                <th>Créditos</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
+              <tr><th>Código</th><th>Materia</th><th>Facultad</th><th>Créditos</th><th>Estado</th><th>Acciones</th></tr>
             </thead>
             <tbody id="tabla-materias"></tbody>
           </table>
@@ -257,28 +234,17 @@
 
       <!-- Usuarios -->
       <section id="usuarios" class="card" aria-labelledby="t-usuarios">
-        <div class="titulo-seccion">
-          <h2 id="t-usuarios">Usuarios recientes</h2>
-        </div>
+        <div class="titulo-seccion"><h2 id="t-usuarios">Usuarios recientes</h2></div>
         <div class="usuarios-lista" id="lista-usuarios"></div>
       </section>
 
       <!-- Monitorías (RQF029, RQF036) -->
       <section id="monitorias" class="card" aria-labelledby="t-monitorias">
-        <div class="titulo-seccion">
-          <h2 id="t-monitorias">Monitorías recientes</h2>
-        </div>
+        <div class="titulo-seccion"><h2 id="t-monitorias">Monitorías recientes</h2></div>
         <div class="tabla-wrap">
           <table>
             <thead>
-              <tr>
-                <th>Estudiante</th>
-                <th>Monitor</th>
-                <th>Materia</th>
-                <th>Fecha</th>
-                <th>Estado</th>
-                <th>Calif.</th>
-              </tr>
+              <tr><th>Estudiante</th><th>Monitor</th><th>Materia</th><th>Fecha</th><th>Estado</th><th>Calif.</th></tr>
             </thead>
             <tbody id="tabla-monitorias"></tbody>
           </table>
@@ -290,32 +256,17 @@
     <!-- Columna lateral -->
     <aside class="lateral" style="display:grid; gap:32px; position:sticky; top:92px; align-items:start;">
 
-      <!-- Accesos rápidos -->
-      <section class="card" aria-labelledby="t-accesos">
-        <div class="titulo-seccion"><h2 id="t-accesos" style="font-size:18px">Accesos rápidos</h2></div>
-        <div style="display:grid; gap:10px;">
-          <button type="button" class="btn-sec" style="text-align:left;" id="btn-ir-soportes">Ver soportes pendientes</button>
-          <button type="button" class="btn-sec" style="text-align:left;" id="btn-ir-materias">Gestionar materias</button>
-          <button type="button" class="btn-sec" style="text-align:left;" id="btn-ir-usuarios">Ver usuarios</button>
-          <button type="button" class="btn-sec" style="text-align:left;" id="btn-ir-monitorias">Reporte de monitorías</button>
-        </div>
-      </section>
-
-      <!-- Actividad reciente -->
       <section class="card" aria-labelledby="t-actividad">
         <div class="titulo-seccion"><h2 id="t-actividad" style="font-size:18px">Actividad reciente</h2></div>
-        <div class="solicitudes" id="lista-actividad">
-          <!-- Se llena con JS -->
-        </div>
+        <div class="solicitudes" id="lista-actividad"></div>
       </section>
 
-      <!-- Estado del sistema -->
       <section class="card" aria-labelledby="t-sistema">
         <div class="titulo-seccion"><h2 id="t-sistema" style="font-size:18px">Estado del sistema</h2></div>
         <div style="display:grid; gap:12px; font-size:14px;">
           <div style="display:flex; justify-content:space-between;"><span>Usuarios en línea</span><b class="ok">24</b></div>
           <div style="display:flex; justify-content:space-between;"><span>Solicitudes pendientes</span><b class="pend">5</b></div>
-          <div style="display:flex; justify-content:space-between;"><span>Soportes por verificar</span><b class="rev">3</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Soportes por verificar</span><b class="rev" id="sis-soportes">3</b></div>
           <div style="display:flex; justify-content:space-between;"><span>Último respaldo</span><b>Hoy 2:00 AM</b></div>
         </div>
       </section>
@@ -334,360 +285,378 @@
 <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
 <script>
-  // Datos simulados
-  const soportes = [
-    { id: 1, monitor: 'Carlos Ruiz', email: 'carlos.ruiz@urosario.edu.co', materia: 'Cálculo Diferencial', tipo: 'Historial académico', fecha: '25 Sep 2026', estado: 'pendiente' },
-    { id: 2, monitor: 'Ana María López', email: 'ana.lopez@urosario.edu.co', materia: 'Álgebra Lineal', tipo: 'Certificación', fecha: '24 Sep 2026', estado: 'pendiente' },
-    { id: 3, monitor: 'Diego Herrera', email: 'diego.herrera@urosario.edu.co', materia: 'Programación I', tipo: 'Historial académico', fecha: '23 Sep 2026', estado: 'pendiente' }
-  ];
+// Datos simulados
+const soportes = [
+  { id: 1, monitor: 'Carlos Ruiz', email: 'carlos.ruiz@urosario.edu.co', materia: 'Cálculo Diferencial', tipo: 'Historial académico', fecha: '25 Sep 2026', estado: 'pendiente' },
+  { id: 2, monitor: 'Ana María López', email: 'ana.lopez@urosario.edu.co', materia: 'Álgebra Lineal', tipo: 'Certificación', fecha: '24 Sep 2026', estado: 'pendiente' },
+  { id: 3, monitor: 'Diego Herrera', email: 'diego.herrera@urosario.edu.co', materia: 'Programación I', tipo: 'Historial académico', fecha: '23 Sep 2026', estado: 'pendiente' }
+];
 
-  const materias = [
-    { id: 1, codigo: 'CALC-101', nombre: 'Cálculo Diferencial', facultad: 'Matemáticas', creditos: 4, activa: true },
-    { id: 2, codigo: 'ALGB-102', nombre: 'Álgebra Lineal', facultad: 'Matemáticas', creditos: 3, activa: true },
-    { id: 3, codigo: 'PROG-101', nombre: 'Programación I', facultad: 'Ingeniería', creditos: 4, activa: true },
-    { id: 4, codigo: 'MICR-201', nombre: 'Microeconomía', facultad: 'Economía', creditos: 3, activa: false }
-  ];
+const materias = [
+  { id: 1, codigo: 'CALC-101', nombre: 'Cálculo Diferencial', facultad: 'Matemáticas', creditos: 4, activa: true },
+  { id: 2, codigo: 'ALGB-102', nombre: 'Álgebra Lineal', facultad: 'Matemáticas', creditos: 3, activa: true },
+  { id: 3, codigo: 'PROG-101', nombre: 'Programación I', facultad: 'Ingeniería', creditos: 4, activa: true },
+  { id: 4, codigo: 'MICR-201', nombre: 'Microeconomía', facultad: 'Economía', creditos: 3, activa: false }
+];
 
-  const usuarios = [
-    { id: 1, nombre: 'Sofía Martínez', email: 'sofia.martinez@urosario.edu.co', rol: 'Estudiante', carrera: 'Ingeniería de Sistemas', fecha: '26 Sep 2026' },
-    { id: 2, nombre: 'Juan Pérez', email: 'juan.perez@urosario.edu.co', rol: 'Estudiante', carrera: 'Economía', fecha: '25 Sep 2026' },
-    { id: 3, nombre: 'Laura Gutiérrez', email: 'laura.gutierrez@urosario.edu.co', rol: 'Monitor', carrera: 'Economía', fecha: '24 Sep 2026' },
-    { id: 4, nombre: 'Andrés Morales', email: 'andres.morales@urosario.edu.co', rol: 'Monitor', carrera: 'Ingeniería de Sistemas', fecha: '23 Sep 2026' }
-  ];
+const usuarios = [
+  { id: 1, nombre: 'Sofía Martínez', email: 'sofia.martinez@urosario.edu.co', rol: 'Estudiante', carrera: 'Ingeniería de Sistemas', fecha: '26 Sep 2026' },
+  { id: 2, nombre: 'Juan Pérez', email: 'juan.perez@urosario.edu.co', rol: 'Estudiante', carrera: 'Economía', fecha: '25 Sep 2026' },
+  { id: 3, nombre: 'Laura Gutiérrez', email: 'laura.gutierrez@urosario.edu.co', rol: 'Monitor', carrera: 'Economía', fecha: '24 Sep 2026' },
+  { id: 4, nombre: 'Andrés Morales', email: 'andres.morales@urosario.edu.co', rol: 'Monitor', carrera: 'Ingeniería de Sistemas', fecha: '23 Sep 2026' }
+];
 
-  const monitorias = [
-    { id: 101, estudiante: 'Sofía Martínez', monitor: 'Carlos Ruiz', materia: 'Cálculo Diferencial', fecha: '26 Sep 2026, 10:00 AM', estado: 'Confirmada', calif: null },
-    { id: 102, estudiante: 'Juan Pérez', monitor: 'Ana María López', materia: 'Álgebra Lineal', fecha: '25 Sep 2026, 2:00 PM', estado: 'Realizada', calif: 5 },
-    { id: 103, estudiante: 'María Gómez', monitor: 'Diego Herrera', materia: 'Programación I', fecha: '24 Sep 2026, 4:00 PM', estado: 'Realizada', calif: 4 },
-    { id: 104, estudiante: 'Pedro Sánchez', monitor: 'Laura Gutiérrez', materia: 'Microeconomía', fecha: '23 Sep 2026, 11:00 AM', estado: 'Cancelada', calif: null }
-  ];
+const monitorias = [
+  { id: 101, estudiante: 'Sofía Martínez', monitor: 'Carlos Ruiz', materia: 'Cálculo Diferencial', fecha: '26 Sep 2026, 10:00 AM', estado: 'Confirmada', calif: null },
+  { id: 102, estudiante: 'Juan Pérez', monitor: 'Ana María López', materia: 'Álgebra Lineal', fecha: '25 Sep 2026, 2:00 PM', estado: 'Realizada', calif: 5 },
+  { id: 103, estudiante: 'María Gómez', monitor: 'Diego Herrera', materia: 'Programación I', fecha: '24 Sep 2026, 4:00 PM', estado: 'Realizada', calif: 4 },
+  { id: 104, estudiante: 'Pedro Sánchez', monitor: 'Laura Gutiérrez', materia: 'Microeconomía', fecha: '23 Sep 2026, 11:00 AM', estado: 'Cancelada', calif: null }
+];
 
-  const actividad = [
-    { texto: 'Carlos Ruiz cargó nuevo soporte académico', tiempo: 'Hace 2 horas' },
-    { texto: 'Nueva materia creada: Ecuaciones Diferenciales', tiempo: 'Hace 5 horas' },
-    { texto: '5 monitorías realizadas hoy', tiempo: 'Hace 8 horas' },
-    { texto: 'Respaldo automático completado', tiempo: 'Hoy 2:00 AM' }
-  ];
+const actividad = [
+  { texto: 'Carlos Ruiz cargó nuevo soporte académico', tiempo: 'Hace 2 horas' },
+  { texto: 'Nueva materia creada: Ecuaciones Diferenciales', tiempo: 'Hace 5 horas' },
+  { texto: '5 monitorías realizadas hoy', tiempo: 'Hace 8 horas' },
+  { texto: 'Respaldo automático completado', tiempo: 'Hoy 2:00 AM' }
+];
 
-  const notificaciones = [
-    { tipo: 'sol', titulo: 'Nuevo soporte pendiente', texto: 'Carlos Ruiz cargó historial académico para verificación', tiempo: 'Hace 2 horas' },
-    { tipo: 'aviso', titulo: 'Materia desactivada', texto: 'Microeconomía fue desactivada del catálogo', tiempo: 'Hace 5 horas' },
-    { tipo: 'rec', titulo: 'Reporte generado', texto: 'Reporte de monitorías de septiembre disponible', tiempo: 'Hace 1 día' }
-  ];
+const notificaciones = [
+  { tipo: 'sol', titulo: 'Nuevo soporte pendiente', texto: 'Carlos Ruiz cargó historial académico para verificación', tiempo: 'Hace 2 horas' },
+  { tipo: 'aviso', titulo: 'Materia desactivada', texto: 'Microeconomía fue desactivada del catálogo', tiempo: 'Hace 5 horas' },
+  { tipo: 'rec', titulo: 'Reporte generado', texto: 'Reporte de monitorías de septiembre disponible', tiempo: 'Hace 1 día' }
+];
 
-  let soporteActual = null;
+const FACULTADES = { ingenieria: 'Ingeniería', economia: 'Economía', matematicas: 'Matemáticas', derecho: 'Derecho' };
 
-  const $ = s => document.querySelector(s);
+let soporteActual = null;
+let avisoTimer = null;
 
-  function mostrarAviso(txt) {
-    const a = $('#aviso');
-    a.textContent = txt;
-    a.classList.add('ver');
-    setTimeout(() => a.classList.remove('ver'), 3000);
-  }
+const $ = s => document.querySelector(s);
 
-  // Notificaciones
-  function pintarNotificaciones() {
-    $('#notif-lista').innerHTML = notificaciones.map(n => `
-      <div class="notif-item">
-        <div class="icono ${n.tipo}">${n.tipo === 'sol' ? '📩' : n.tipo === 'rec' ? '✅' : '🔔'}</div>
-        <div class="txt">
-          <b>${n.titulo}</b>
-          <p>${n.texto}</p>
-        </div>
-        <time>${n.tiempo}</time>
+// Evita inyección de HTML al pintar texto escrito por el usuario
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const iniciales = nombre => nombre.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+const normalizar = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+function mostrarAviso(txt) {
+  const a = $('#aviso');
+  a.textContent = txt;
+  a.classList.add('ver');
+  clearTimeout(avisoTimer);
+  avisoTimer = setTimeout(() => a.classList.remove('ver'), 3000);
+}
+
+// Helpers genéricos de modales
+function abrirModal(id) {
+  const m = $('#' + id);
+  m.classList.add('ver');
+  m.setAttribute('aria-hidden', 'false');
+}
+
+function cerrarModal(id) {
+  const m = $('#' + id);
+  m.classList.remove('ver');
+  m.setAttribute('aria-hidden', 'true');
+}
+
+// Notificaciones
+function pintarNotificaciones() {
+  $('#notif-lista').innerHTML = notificaciones.map(n => `
+    <div class="notif-item">
+      <div class="icono ${n.tipo}">${n.tipo === 'sol' ? '📩' : n.tipo === 'rec' ? '✅' : '🔔'}</div>
+      <div class="txt">
+        <b>${esc(n.titulo)}</b>
+        <p>${esc(n.texto)}</p>
       </div>
-    `).join('');
-    $('#notif-count').textContent = notificaciones.length;
-  }
+      <time>${esc(n.tiempo)}</time>
+    </div>
+  `).join('');
+  $('#notif-count').textContent = notificaciones.length;
+}
 
-  function toggleNotificaciones() {
-    const panel = $('#notif-panel');
-    const visible = panel.classList.contains('ver');
-    panel.classList.toggle('ver', !visible);
-    panel.setAttribute('aria-hidden', visible ? 'true' : 'false');
-  }
+function toggleNotificaciones(forzar) {
+  const panel = $('#notif-panel');
+  const mostrar = typeof forzar === 'boolean' ? forzar : !panel.classList.contains('ver');
+  panel.classList.toggle('ver', mostrar);
+  panel.setAttribute('aria-hidden', mostrar ? 'false' : 'true');
+}
 
-  // Soportes (RQF006)
-  function pintarSoportes() {
-    const lista = $('#lista-soportes');
-    const pendientes = soportes.filter(s => s.estado === 'pendiente');
-    lista.innerHTML = pendientes.map(s => `
+// Soportes (RQF006)
+function pintarSoportes() {
+  const pendientes = soportes.filter(s => s.estado === 'pendiente');
+  $('#lista-soportes').innerHTML = pendientes.length
+    ? pendientes.map(s => `
       <div class="soporte-item" data-id="${s.id}">
         <div class="icono">📄</div>
         <div class="info">
-          <b>${s.monitor}</b>
-          <span>${s.tipo} • ${s.materia}</span>
+          <b>${esc(s.monitor)}</b>
+          <span>${esc(s.tipo)} • ${esc(s.materia)}</span>
         </div>
         <span class="estado pend">Pendiente</span>
       </div>
-    `).join('');
-    $('#conteo-soportes').textContent = `${pendientes.length} pendiente${pendientes.length !== 1 ? 's' : ''}`;
+    `).join('')
+    : '<p style="font-size:14px; color:var(--texto-suave);">No hay soportes pendientes 🎉</p>';
 
-    lista.querySelectorAll('.soporte-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const id = parseInt(item.dataset.id);
-        abrirDetalleSoporte(id);
-      });
-    });
-  }
+  $('#conteo-soportes').textContent = `${pendientes.length} pendiente${pendientes.length !== 1 ? 's' : ''}`;
+  const sis = $('#sis-soportes');
+  if (sis) sis.textContent = pendientes.length;
+}
 
-  function abrirDetalleSoporte(id) {
-    const s = soportes.find(x => x.id === id);
-    if (!s) return;
-    soporteActual = s;
+function abrirDetalleSoporte(id) {
+  const s = soportes.find(x => x.id === id);
+  if (!s) return;
+  soporteActual = s;
 
-    $('#soporte-detalle').innerHTML = `
-      <div style="display:grid; gap:14px;">
-        <div style="display:flex; align-items:center; gap:14px;">
-          <div class="av c2" style="--s:56px; font-size:22px;">${s.monitor.split(' ').map(n=>n[0]).join('')}</div>
-          <div>
-            <b style="font-size:18px; display:block;">${s.monitor}</b>
-            <span style="color:var(--texto-suave);">${s.email}</span>
-          </div>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; background:var(--fondo); padding:16px; border-radius:16px;">
-          <div><b style="font-size:13px; color:var(--texto-suave);">Tipo de soporte</b><div style="font-weight:700;">${s.tipo}</div></div>
-          <div><b style="font-size:13px; color:var(--texto-suave);">Materia</b><div style="font-weight:700;">${s.materia}</div></div>
-          <div><b style="font-size:13px; color:var(--texto-suave);">Fecha de carga</b><div style="font-weight:700;">${s.fecha}</div></div>
-          <div><b style="font-size:13px; color:var(--texto-suave);">Estado</b><div style="font-weight:700;" class="pend">Pendiente</div></div>
-        </div>
-        <div style="background:var(--lavanda); border:1px solid var(--linea); border-radius:16px; padding:16px; text-align:center;">
-          <p style="font-size:14px; color:var(--texto-suave); margin-bottom:10px;">Documento adjunto</p>
-          <b style="font-size:16px; color:var(--acento);">historico_academico.pdf</b>
-          <p style="font-size:12px; color:var(--texto-suave); margin-top:6px;">2.4 MB • Cargado el ${s.fecha}</p>
+  $('#soporte-detalle').innerHTML = `
+    <div style="display:grid; gap:14px;">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div class="av c2" style="--s:56px; font-size:22px;">${esc(iniciales(s.monitor))}</div>
+        <div>
+          <b style="font-size:18px; display:block;">${esc(s.monitor)}</b>
+          <span style="color:var(--texto-suave);">${esc(s.email)}</span>
         </div>
       </div>
-    `;
-
-    $('#modal-soporte').classList.add('ver');
-    $('#modal-soporte').setAttribute('aria-hidden', 'false');
-  }
-
-  function cerrarDetalleSoporte() {
-    $('#modal-soporte').classList.remove('ver');
-    $('#modal-soporte').setAttribute('aria-hidden', 'true');
-    soporteActual = null;
-  }
-
-  function aprobarSoporte() {
-    if (!soporteActual) return;
-    soporteActual.estado = 'aprobado';
-    mostrarAviso(`Soporte de ${soporteActual.monitor} aprobado ✅`);
-    cerrarDetalleSoporte();
-    pintarSoportes();
-    // Aquí se enviaría notificación al monitor (RQF038)
-  }
-
-  function rechazarSoporte() {
-    if (!soporteActual) return;
-    const motivo = prompt('Indica un motivo para el rechazo (opcional):');
-    soporteActual.estado = 'rechazado';
-    mostrarAviso(`Soporte de ${soporteActual.monitor} rechazado`);
-    cerrarDetalleSoporte();
-    pintarSoportes();
-    // Aquí se enviaría notificación al monitor (RQF038)
-  }
-
-  // Materias (RQF013)
-  function pintarMaterias() {
-    const tbody = $('#tabla-materias');
-    tbody.innerHTML = materias.map(m => `
-      <tr data-id="${m.id}">
-        <td><b>${m.codigo}</b></td>
-        <td>${m.nombre}</td>
-        <td>${m.facultad}</td>
-        <td>${m.creditos}</td>
-        <td><span class="estado ${m.activa ? 'ok' : 'urgente'}">${m.activa ? 'Activa' : 'Inactiva'}</span></td>
-        <td>
-          <div class="acciones-tabla">
-            <button type="button" class="btn-xs sec" data-editar="${m.id}">Editar</button>
-            <button type="button" class="btn-xs ${m.activa ? 'danger' : 'success'}" data-toggle="${m.id}">${m.activa ? 'Desactivar' : 'Activar'}</button>
-          </div>
-        </td>
-      </tr>
-    `).join('');
-    $('#conteo-materias').textContent = `${materias.length} materia${materias.length !== 1 ? 's' : ''}`;
-  }
-
-  // Usuarios
-  function pintarUsuarios() {
-    const lista = $('#lista-usuarios');
-    lista.innerHTML = usuarios.map(u => `
-      <div class="usuario-item">
-        <div class="avatar ${u.rol === 'Monitor' ? 'c2' : 'c1'}">${u.nombre.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
-        <div class="info">
-          <b>${u.nombre}</b>
-          <span>${u.rol} • ${u.carrera}</span>
-        </div>
-        <span class="estado info-badge">${u.fecha}</span>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; background:var(--fondo); padding:16px; border-radius:16px;">
+        <div><b style="font-size:13px; color:var(--texto-suave);">Tipo de soporte</b><div style="font-weight:700;">${esc(s.tipo)}</div></div>
+        <div><b style="font-size:13px; color:var(--texto-suave);">Materia</b><div style="font-weight:700;">${esc(s.materia)}</div></div>
+        <div><b style="font-size:13px; color:var(--texto-suave);">Fecha de carga</b><div style="font-weight:700;">${esc(s.fecha)}</div></div>
+        <div><b style="font-size:13px; color:var(--texto-suave);">Estado</b><div style="font-weight:700;" class="pend">Pendiente</div></div>
       </div>
-    `).join('');
-  }
-
-  // Monitorías (RQF029, RQF036)
-  function pintarMonitorias() {
-    const tbody = $('#tabla-monitorias');
-    tbody.innerHTML = monitorias.map(m => `
-      <tr>
-        <td>${m.estudiante}</td>
-        <td>${m.monitor}</td>
-        <td>${m.materia}</td>
-        <td>${m.fecha}</td>
-        <td><span class="estado ${m.estado === 'Confirmada' ? 'ok' : m.estado === 'Realizada' ? 'ok' : 'urgente'}">${m.estado}</span></td>
-        <td>${m.calif ? `<span class="tag">⭐ ${m.calif}</span>` : '-'}</td>
-      </tr>
-    `).join('');
-  }
-
-  // Actividad
-  function pintarActividad() {
-    $('#lista-actividad').innerHTML = actividad.map(a => `
-      <div style="font-size:14px; padding:10px 0; border-bottom:1px solid var(--linea);">
-        <p style="margin-bottom:4px;">${a.texto}</p>
-        <time style="font-size:12px; color:var(--texto-suave);">${a.tiempo}</time>
+      <div style="background:var(--lavanda); border:1px solid var(--linea); border-radius:16px; padding:16px; text-align:center;">
+        <p style="font-size:14px; color:var(--texto-suave); margin-bottom:10px;">Documento adjunto</p>
+        <b style="font-size:16px; color:var(--acento);">historico_academico.pdf</b>
+        <p style="font-size:12px; color:var(--texto-suave); margin-top:6px;">2.4 MB • Cargado el ${esc(s.fecha)}</p>
       </div>
-    `).slice(0, 4).join('');
-  }
+    </div>
+  `;
+  abrirModal('modal-soporte');
+}
 
-  // Modal de materia
-  function abrirNuevaMateria() {
-    $('#form-materia').reset();
-    $('#modal-materia').classList.add('ver');
-    $('#modal-materia').setAttribute('aria-hidden', 'false');
-  }
+function cerrarDetalleSoporte() {
+  cerrarModal('modal-soporte');
+  soporteActual = null;
+}
 
-  function cerrarNuevaMateria() {
-    $('#modal-materia').classList.remove('ver');
-    $('#modal-materia').setAttribute('aria-hidden', 'true');
-  }
-
-  // Modal de edición
-  function abrirEditarMateria(id) {
-    const m = materias.find(x => x.id === id);
-    if (!m) return;
-    $('#edit-mat-id').value = m.id;
-    $('#edit-nombre').value = m.nombre;
-    $('#edit-codigo').value = m.codigo;
-    $('#edit-facultad').value = m.facultad.toLowerCase();
-    $('#edit-creditos').value = m.creditos;
-    $('#modal-editar-materia').classList.add('ver');
-    $('#modal-editar-materia').setAttribute('aria-hidden', 'false');
-  }
-
-  function cerrarEditarMateria() {
-    $('#modal-editar-materia').classList.remove('ver');
-    $('#modal-editar-materia').setAttribute('aria-hidden', 'true');
-  }
-
-  // Modal de configuración
-  function abrirConfig() {
-    $('#modal-config').classList.add('ver');
-    $('#modal-config').setAttribute('aria-hidden', 'false');
-  }
-
-  function cerrarConfig() {
-    $('#modal-config').classList.remove('ver');
-    $('#modal-config').setAttribute('aria-hidden', 'true');
-  }
-
-  function guardarConfig() {
-    mostrarAviso('Configuración guardada ✅');
-    cerrarConfig();
-  }
-
-  function cerrarSesion() {
-    if (confirm('¿Seguro que quieres cerrar sesión?')) {
-      mostrarAviso('Sesión cerrada. Volviendo al inicio...');
-      setTimeout(() => { location.reload(); }, 1500);
-    }
-  }
-
-  function crearRespaldo() {
-    mostrarAviso('Creando respaldo...');
-    setTimeout(() => {
-      mostrarAviso('Respaldo creado exitosamente ✅');
-    }, 2000);
-  }
-
-  // Event listeners
-  document.addEventListener('click', e => {
-    if (e.target.id === 'btn-notif' || e.target.id === 'cerrar-notif') { toggleNotificaciones(); }
-    if (e.target.id === 'btn-nueva-materia') { abrirNuevaMateria(); }
-    if (e.target.id === 'cerrar-materia' || e.target.id === 'cancelar-materia') { cerrarNuevaMateria(); }
-    if (e.target.id === 'nav-config' || e.target.id === 'cerrar-config' || e.target.id === 'btn-yo') { abrirConfig(); }
-    if (e.target.id === 'guardar-config') { guardarConfig(); }
-    if (e.target.id === 'btn-cerrar-sesion') { cerrarSesion(); }
-    if (e.target.id === 'btn-respaldo') { crearRespaldo(); }
-    if (e.target.id === 'aprobar-soporte') { aprobarSoporte(); }
-    if (e.target.id === 'rechazar-soporte') { rechazarSoporte(); }
-    if (e.target.id === 'cerrar-soporte') { cerrarDetalleSoporte(); }
-
-    const editarBtn = e.target.closest('[data-editar]');
-    if (editarBtn) { abrirEditarMateria(parseInt(editarBtn.dataset.editar)); }
-
-    const cancelarEdit = e.target.closest('#cancelar-editar-materia');
-    if (cancelarEdit) { cerrarEditarMateria(); }
-
-    const cerrarEdit = e.target.closest('#cerrar-editar-materia');
-    if (cerrarEdit) { cerrarEditarMateria(); }
-
-    const toggleBtn = e.target.closest('[data-toggle]');
-    if (toggleBtn) {
-      const id = parseInt(toggleBtn.dataset.toggle);
-      const m = materias.find(x => x.id === id);
-      if (m) {
-        m.activa = !m.activa;
-        mostrarAviso(`Materia ${m.activa ? 'activada' : 'desactivada'}`);
-        pintarMaterias();
-      }
-    }
-
-    // Accesos rápidos
-    if (e.target.id === 'btn-ir-soportes') { $('#soportes').scrollIntoView({ behavior: 'smooth' }); }
-    if (e.target.id === 'btn-ir-materias') { $('#materias').scrollIntoView({ behavior: 'smooth' }); }
-    if (e.target.id === 'btn-ir-usuarios') { $('#usuarios').scrollIntoView({ behavior: 'smooth' }); }
-    if (e.target.id === 'btn-ir-monitorias') { $('#monitorias').scrollIntoView({ behavior: 'smooth' }); }
-  });
-
-  $('#form-materia').addEventListener('submit', e => {
-    e.preventDefault();
-    const facultades = { ingenieria: 'Ingeniería', economia: 'Economía', matematicas: 'Matemáticas', derecho: 'Derecho' };
-    materias.unshift({
-      id: materias.length + 1,
-      codigo: $('#mat-codigo').value,
-      nombre: $('#mat-nombre').value,
-      facultad: facultades[$('#mat-facultad').value],
-      creditos: parseInt($('#mat-creditos').value),
-      activa: true
-    });
-    mostrarAviso('Materia creada ✅');
-    cerrarNuevaMateria();
-    pintarMaterias();
-  });
-
-  $('#form-editar-materia').addEventListener('submit', e => {
-    e.preventDefault();
-    const id = parseInt($('#edit-mat-id').value);
-    const m = materias.find(x => x.id === id);
-    if (!m) return;
-    const facultades = { ingenieria: 'Ingeniería', economia: 'Economía', matematicas: 'Matemáticas', derecho: 'Derecho' };
-    m.nombre = $('#edit-nombre').value;
-    m.codigo = $('#edit-codigo').value;
-    m.facultad = facultades[$('#edit-facultad').value];
-    m.creditos = parseInt($('#edit-creditos').value);
-    mostrarAviso('Materia actualizada ✅');
-    cerrarEditarMateria();
-    pintarMaterias();
-  });
-
-  // Inicializar
-  pintarNotificaciones();
+function aprobarSoporte() {
+  if (!soporteActual) return;
+  soporteActual.estado = 'aprobado';
+  mostrarAviso(`Soporte de ${soporteActual.monitor} aprobado ✅`);
+  cerrarDetalleSoporte();
   pintarSoportes();
+  // Aquí se enviaría notificación al monitor (RQF038)
+}
+
+function rechazarSoporte() {
+  if (!soporteActual) return;
+  const motivo = prompt('Indica un motivo para el rechazo (opcional):');
+  if (motivo === null) return; // Canceló: no rechazar
+  soporteActual.estado = 'rechazado';
+  soporteActual.motivo = motivo.trim();
+  mostrarAviso(`Soporte de ${soporteActual.monitor} rechazado`);
+  cerrarDetalleSoporte();
+  pintarSoportes();
+  // Aquí se enviaría notificación al monitor (RQF038)
+}
+
+// Materias (RQF013)
+function pintarMaterias() {
+  $('#tabla-materias').innerHTML = materias.map(m => `
+    <tr data-id="${m.id}">
+      <td><b>${esc(m.codigo)}</b></td>
+      <td>${esc(m.nombre)}</td>
+      <td>${esc(m.facultad)}</td>
+      <td>${m.creditos}</td>
+      <td><span class="estado ${m.activa ? 'ok' : 'urgente'}">${m.activa ? 'Activa' : 'Inactiva'}</span></td>
+      <td>
+        <div class="acciones-tabla">
+          <button type="button" class="btn-xs sec" data-editar="${m.id}">Editar</button>
+          <button type="button" class="btn-xs ${m.activa ? 'danger' : 'success'}" data-toggle="${m.id}">${m.activa ? 'Desactivar' : 'Activar'}</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+  $('#conteo-materias').textContent = `${materias.length} materia${materias.length !== 1 ? 's' : ''}`;
+  $('#stat-materias').textContent = materias.filter(m => m.activa).length;
+}
+
+// Usuarios
+function pintarUsuarios() {
+  $('#lista-usuarios').innerHTML = usuarios.map(u => `
+    <div class="usuario-item">
+      <div class="avatar ${u.rol === 'Monitor' ? 'c2' : 'c1'}">${esc(iniciales(u.nombre))}</div>
+      <div class="info">
+        <b>${esc(u.nombre)}</b>
+        <span>${esc(u.rol)} • ${esc(u.carrera)}</span>
+      </div>
+      <span class="estado info-badge">${esc(u.fecha)}</span>
+    </div>
+  `).join('');
+}
+
+// Monitorías (RQF029, RQF036)
+function pintarMonitorias() {
+  $('#tabla-monitorias').innerHTML = monitorias.map(m => `
+    <tr>
+      <td>${esc(m.estudiante)}</td>
+      <td>${esc(m.monitor)}</td>
+      <td>${esc(m.materia)}</td>
+      <td>${esc(m.fecha)}</td>
+      <td><span class="estado ${m.estado === 'Cancelada' ? 'urgente' : 'ok'}">${esc(m.estado)}</span></td>
+      <td>${m.calif ? `<span class="tag">⭐ ${m.calif}</span>` : '-'}</td>
+    </tr>
+  `).join('');
+}
+
+// Actividad
+function pintarActividad() {
+  $('#lista-actividad').innerHTML = actividad.slice(0, 4).map(a => `
+    <div style="font-size:14px; padding:10px 0; border-bottom:1px solid var(--linea);">
+      <p style="margin-bottom:4px;">${esc(a.texto)}</p>
+      <time style="font-size:12px; color:var(--texto-suave);">${esc(a.tiempo)}</time>
+    </div>
+  `).join('');
+}
+
+// Modales de materia
+function abrirNuevaMateria() {
+  $('#form-materia').reset();
+  abrirModal('modal-materia');
+  $('#mat-nombre').focus();
+}
+
+function abrirEditarMateria(id) {
+  const m = materias.find(x => x.id === id);
+  if (!m) return;
+  $('#edit-mat-id').value = m.id;
+  $('#edit-nombre').value = m.nombre;
+  $('#edit-codigo').value = m.codigo;
+  $('#edit-facultad').value = normalizar(m.facultad); // "Matemáticas" -> "matematicas"
+  $('#edit-creditos').value = m.creditos;
+  abrirModal('modal-editar-materia');
+}
+
+function codigoDuplicado(codigo, ignorarId) {
+  return materias.some(m => m.id !== ignorarId && m.codigo.toLowerCase() === codigo.toLowerCase());
+}
+
+// Configuración
+function cerrarSesion() {
+  if (confirm('¿Seguro que quieres cerrar sesión?')) {
+    mostrarAviso('Sesión cerrada. Volviendo al inicio...');
+    setTimeout(() => location.reload(), 1500);
+  }
+}
+
+let respaldando = false;
+function crearRespaldo() {
+  if (respaldando) return;
+  respaldando = true;
+  mostrarAviso('Creando respaldo...');
+  setTimeout(() => {
+    respaldando = false;
+    mostrarAviso('Respaldo creado exitosamente ✅');
+  }, 2000);
+}
+
+// Eventos
+document.addEventListener('click', e => {
+  const t = e.target;
+
+  // Se usa closest() porque los botones contienen SVG/iconos hijos
+  if (t.closest('#btn-notif')) { toggleNotificaciones(); return; }
+  if (t.closest('#cerrar-notif')) { toggleNotificaciones(false); return; }
+  if (t.closest('#ver-todas')) { e.preventDefault(); mostrarAviso('Próximamente: historial completo'); return; }
+  if (!t.closest('#notif-panel')) toggleNotificaciones(false); // clic fuera cierra el panel
+
+  if (t.closest('#nav-config') || t.closest('#btn-yo')) { e.preventDefault(); abrirModal('modal-config'); return; }
+  if (t.closest('#cerrar-config')) { cerrarModal('modal-config'); return; }
+  if (t.closest('#guardar-config')) { mostrarAviso('Configuración guardada ✅'); cerrarModal('modal-config'); return; }
+  if (t.closest('#btn-cerrar-sesion')) { cerrarSesion(); return; }
+  if (t.closest('#btn-respaldo')) { crearRespaldo(); return; }
+
+  if (t.closest('#btn-nueva-materia')) { abrirNuevaMateria(); return; }
+  if (t.closest('#btn-ver-reportes')) { mostrarAviso('Próximamente: reportes'); return; }
+  if (t.closest('#cerrar-materia') || t.closest('#cancelar-materia')) { cerrarModal('modal-materia'); return; }
+  if (t.closest('#cerrar-editar-materia') || t.closest('#cancelar-editar-materia')) { cerrarModal('modal-editar-materia'); return; }
+
+  if (t.closest('#aprobar-soporte')) { aprobarSoporte(); return; }
+  if (t.closest('#rechazar-soporte')) { rechazarSoporte(); return; }
+  if (t.closest('#cerrar-soporte')) { cerrarDetalleSoporte(); return; }
+
+  const item = t.closest('.soporte-item');
+  if (item) { abrirDetalleSoporte(parseInt(item.dataset.id, 10)); return; }
+
+  const editarBtn = t.closest('[data-editar]');
+  if (editarBtn) { abrirEditarMateria(parseInt(editarBtn.dataset.editar, 10)); return; }
+
+  const toggleBtn = t.closest('[data-toggle]');
+  if (toggleBtn) {
+    const m = materias.find(x => x.id === parseInt(toggleBtn.dataset.toggle, 10));
+    if (m) {
+      m.activa = !m.activa;
+      mostrarAviso(`Materia ${m.activa ? 'activada' : 'desactivada'}`);
+      pintarMaterias();
+    }
+    return;
+  }
+
+  // Clic en el fondo oscuro del modal lo cierra
+  if (t.classList.contains('modal-backdrop')) {
+    if (t.id === 'modal-soporte') cerrarDetalleSoporte();
+    else cerrarModal(t.id);
+  }
+});
+
+// Escape cierra modales y panel de notificaciones
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  document.querySelectorAll('.modal-backdrop.ver').forEach(m => {
+    if (m.id === 'modal-soporte') cerrarDetalleSoporte();
+    else cerrarModal(m.id);
+  });
+  toggleNotificaciones(false);
+});
+
+$('#form-materia').addEventListener('submit', e => {
+  e.preventDefault();
+  const codigo = $('#mat-codigo').value.trim();
+  if (codigoDuplicado(codigo)) { mostrarAviso('Ya existe una materia con ese código'); return; }
+  materias.unshift({
+    id: Math.max(0, ...materias.map(m => m.id)) + 1,
+    codigo,
+    nombre: $('#mat-nombre').value.trim(),
+    facultad: FACULTADES[$('#mat-facultad').value],
+    creditos: parseInt($('#mat-creditos').value, 10),
+    activa: true
+  });
+  mostrarAviso('Materia creada ✅');
+  cerrarModal('modal-materia');
   pintarMaterias();
-  pintarUsuarios();
-  pintarMonitorias();
-  pintarActividad();
+});
+
+$('#form-editar-materia').addEventListener('submit', e => {
+  e.preventDefault();
+  const id = parseInt($('#edit-mat-id').value, 10);
+  const m = materias.find(x => x.id === id);
+  if (!m) return;
+  const codigo = $('#edit-codigo').value.trim();
+  if (codigoDuplicado(codigo, id)) { mostrarAviso('Ya existe una materia con ese código'); return; }
+  m.nombre = $('#edit-nombre').value.trim();
+  m.codigo = codigo;
+  m.facultad = FACULTADES[$('#edit-facultad').value];
+  m.creditos = parseInt($('#edit-creditos').value, 10);
+  mostrarAviso('Materia actualizada ✅');
+  cerrarModal('modal-editar-materia');
+  pintarMaterias();
+});
+
+// Inicializar
+pintarNotificaciones();
+pintarSoportes();
+pintarMaterias();
+pintarUsuarios();
+pintarMonitorias();
+pintarActividad();
 </script>
 </body>
 </html>
