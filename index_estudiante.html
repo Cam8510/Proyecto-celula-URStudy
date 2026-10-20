@@ -1,767 +1,489 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>URStudy | Monitorías Universidad del Rosario</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --primario: #1D2154;
-    --acento: #6564D5;
-    --purpura: #A078E8;
-    --lavanda: #EEE9FF;
-    --fondo: #F7F6FF;
-    --exito: #22C55E;
-    --advertencia: #EAB308;
-    --error: #EF4444;
-    --info: #3B82F6;
-
-    --texto: #1D2154;
-    --texto-suave: #5D6088;
-    --linea: #E1DCF7;
-    --superficie: #FFFFFF;
-
-    --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
-    --cuerpo: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: var(--cuerpo);
-    background: var(--fondo);
-    color: var(--texto);
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
-  button, input, select, textarea { font: inherit; color: inherit; }
-  button { cursor: pointer; border: 0; background: none; }
-  :focus-visible { outline: 3px solid var(--purpura); outline-offset: 2px; border-radius: 6px; }
-
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
-
-  /* ---------- Barra superior ---------- */
-  .topbar {
-    position: sticky; top: 0; z-index: 20;
-    background: rgba(247, 246, 255, .92);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--linea);
-  }
-  .topbar .wrap { display: flex; align-items: center; gap: 32px; height: 68px; }
-  .logo { display: flex; flex-direction: column; line-height: 1.05; text-decoration: none; color: var(--primario); }
-  .logo b { font-family: var(--display); font-weight: 800; font-size: 24px; letter-spacing: -.02em; }
-  .logo small { font-size: 11px; color: var(--texto-suave); }
-  .nav { display: flex; gap: 4px; margin-right: auto; }
-  .nav a {
-    text-decoration: none; color: var(--texto-suave); font-weight: 600; font-size: 15px;
-    padding: 8px 14px; border-radius: 999px; transition: background .15s, color .15s;
-  }
-  .nav a:hover { background: var(--lavanda); color: var(--primario); }
-  .nav a[aria-current="page"] { background: var(--primario); color: #fff; }
-  .usuario { display: flex; align-items: center; gap: 14px; position: relative; }
-  
-  /* Notificaciones dropdown */
-  .campana-wrap { position: relative; }
-  .campana { position: relative; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; }
-  .campana:hover { background: var(--lavanda); }
-  .campana i {
-    position: absolute; top: 3px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px;
-    border-radius: 9px; background: var(--error); color: #fff; font-style: normal; font-size: 11px; font-weight: 700;
-    display: grid; place-items: center;
-  }
-  .notif-panel {
-    position: absolute; right: 0; top: 52px; width: 340px; background: #fff; border: 1px solid var(--linea);
-    border-radius: 18px; box-shadow: 0 12px 40px rgba(29,33,84,.25); z-index: 70; display: none;
-  }
-  .notif-panel.ver { display: block; }
-  .notif-panel header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--linea); }
-  .notif-panel header h4 { font-family: var(--display); font-size: 16px; }
-  .notif-panel .lista { max-height: 360px; overflow-y: auto; }
-  .notif-item { display: flex; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--linea); }
-  .notif-item:last-child { border-bottom: 0; }
-  .notif-item .icono { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; flex: none; }
-  .notif-item .icono.sol { background: var(--lavanda); color: var(--acento); }
-  .notif-item .icono.rec { background: rgba(34,197,94,.12); color: var(--exito); }
-  .notif-item .icono.aviso { background: rgba(234,179,8,.15); color: var(--advertencia); }
-  .notif-item .txt { flex: 1; }
-  .notif-item .txt b { display: block; font-size: 14px; margin-bottom: 3px; }
-  .notif-item .txt p { font-size: 13px; color: var(--texto-suave); line-height: 1.35; }
-  .notif-item time { font-size: 11px; color: var(--texto-suave); }
-  .notif-panel footer { padding: 12px 18px; border-top: 1px solid var(--linea); text-align: center; }
-  .notif-panel footer a { font-size: 13px; color: var(--acento); font-weight: 600; text-decoration: none; }
-
-  .yo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-  .yo:hover { background: var(--lavanda); border-radius: 10px; }
-  .yo div { text-align: right; line-height: 1.2; }
-  .yo b { font-size: 14px; display: block; }
-  .yo span { font-size: 12px; color: var(--texto-suave); }
-
-  .av {
-    --s: 44px;
-    width: var(--s); height: var(--s); border-radius: 50%; flex: none;
-    display: grid; place-items: center; color: #fff; font-family: var(--display); font-weight: 700;
-    font-size: calc(var(--s) * .38); letter-spacing: .01em; position: relative;
-  }
-  .c1 { background: var(--acento); }
-  .c2 { background: var(--purpura); }
-  .c3 { background: var(--info); }
-  .c4 { background: var(--primario); box-shadow: inset 0 0 0 2px var(--purpura); }
-
-  /* ---------- Hero ---------- */
-  .hero {
-    background: var(--primario); color: #fff;
-    border-radius: 32px; margin-top: 24px; padding: 48px 48px 36px;
-    position: relative; overflow: hidden;
-  }
-  .hero::before, .hero::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
-  .hero::before { width: 380px; height: 380px; right: -110px; top: -150px; background: var(--acento); opacity: .55; }
-  .hero::after { width: 200px; height: 200px; right: 150px; top: 120px; background: var(--purpura); opacity: .28; }
-  .hero > * { position: relative; z-index: 1; }
-  .saludo { font-size: 16px; color: #CFCBF5; margin-bottom: 10px; }
-  .hero h1 {
-    font-family: var(--display); font-weight: 800; letter-spacing: -.03em;
-    font-size: clamp(34px, 5.2vw, 58px); line-height: 1.03; max-width: 14em;
-  }
-  .buscador {
-    margin-top: 28px; display: flex; gap: 8px; align-items: center; max-width: 760px;
-    background: #fff; border-radius: 22px; padding: 8px 8px 8px 22px;
-    box-shadow: 0 10px 0 -2px rgba(160, 120, 232, .45);
-  }
-  .buscador svg { flex: none; color: var(--acento); }
-  .buscador input, .buscador select {
-    flex: 1; min-width: 0; border: 0; outline: 0; background: transparent;
-    font-size: 18px; padding: 12px 6px; color: var(--primario);
-  }
-  .buscador input::placeholder { color: #8C8FB5; }
-  .buscador:focus-within { box-shadow: 0 10px 0 -2px var(--purpura); }
-  .btn {
-    background: var(--acento); color: #fff; font-weight: 700; padding: 14px 24px; border-radius: 16px;
-    transition: background .15s, transform .1s;
-  }
-  .btn:hover { background: #5453C4; }
-  .btn:active { transform: scale(.97); }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
-  .chip {
-    padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 14px;
-    background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.22);
-    transition: background .15s, color .15s;
-  }
-  .chip:hover { background: rgba(255,255,255,.2); }
-  .chip[aria-pressed="true"] { background: var(--lavanda); color: var(--primario); border-color: var(--lavanda); }
-
-  /* Filtros */
-  .filtros {
-    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; align-items: center;
-  }
-  .filtro {
-    display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--linea);
-    border-radius: 14px; padding: 8px 12px; font-size: 14px;
-  }
-  .filtro label { font-weight: 600; color: var(--texto-suave); font-size: 13px; }
-  .filtro select, .filtro input {
-    border: 0; outline: 0; background: transparent; font-size: 14px; min-width: 0;
-  }
-
-  /* Monitores en línea */
-  .ahora { margin-top: 36px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.16); }
-  .ahora h2 { font-family: var(--display); font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-  .pulso { width: 10px; height: 10px; border-radius: 50%; background: var(--exito); position: relative; flex: none; }
-  .pulso::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--exito); animation: pulso 1.8s ease-out infinite; }
-  @keyframes pulso { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(3); opacity: 0; } }
-  .fila-ahora { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: thin; }
-  .sala {
-    flex: none; display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 10px; padding-right: 12px;
-    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 20px; min-width: 268px;
-  }
-  .sala .av::after {
-    content: ""; position: absolute; right: -1px; bottom: -1px; width: 13px; height: 13px; border-radius: 50%;
-    background: var(--exito); border: 3px solid var(--primario);
-  }
-  .sala .info { flex: 1; line-height: 1.25; }
-  .sala .info b { display: block; font-size: 15px; }
-  .sala .info span { font-size: 13px; color: #CFCBF5; }
-  .entrar {
-    background: var(--exito); color: #0E2A18; font-weight: 700; font-size: 13px;
-    padding: 9px 14px; border-radius: 12px; transition: filter .15s;
-  }
-  .entrar:hover { filter: brightness(1.08); }
-
-  /* ---------- Contenido principal ---------- */
-  .main { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(300px, 1fr); gap: 40px; margin: 48px auto 96px; align-items: start; }
-  .titulo-seccion { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
-  .titulo-seccion h2 { font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
-  .titulo-seccion p { font-size: 14px; color: var(--texto-suave); }
-
-  .lista { display: flex; flex-direction: column; gap: 16px; }
-  .monitor {
-    background: var(--superficie); border: 1px solid var(--linea); border-radius: 24px; padding: 22px;
-    display: grid; grid-template-columns: auto 1fr; gap: 18px;
-  }
-  .monitor.ocultar { display: none; }
-  .monitor .cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-  .monitor h3 { font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
-  .carrera { font-size: 14px; color: var(--texto-suave); }
-  .nota { display: inline-flex; align-items: center; gap: 5px; font-weight: 700; font-size: 15px; background: var(--fondo); padding: 4px 10px; border-radius: 999px; }
-  .nota svg { color: var(--advertencia); }
-  .frase { margin: 12px 0; font-size: 16px; color: var(--primario); max-width: 52ch; }
-  .temas { display: flex; flex-wrap: wrap; gap: 6px; }
-  .tema { font-size: 13px; font-weight: 600; background: var(--lavanda); color: var(--acento); padding: 4px 11px; border-radius: 8px; }
-  .tema.hit { background: var(--acento); color: #fff; }
-  .confianza { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; font-size: 13px; color: var(--texto-suave); }
-  .confianza b { color: var(--primario); }
-  .agenda { grid-column: 1 / -1; border-top: 1px dashed var(--linea); padding-top: 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-  .agenda > span { font-size: 13px; font-weight: 600; color: var(--texto-suave); margin-right: 4px; }
-  .hora {
-    padding: 8px 14px; border-radius: 12px; border: 1.5px solid var(--linea); background: #fff;
-    font-size: 14px; font-weight: 600; transition: border-color .15s, background .15s, color .15s;
-  }
-  .hora:hover { border-color: var(--acento); }
-  .hora[aria-pressed="true"] { background: var(--primario); border-color: var(--primario); color: #fff; }
-  .acciones { display: flex; gap: 8px; margin-left: auto; }
-  .reservar, .fav { padding: 10px 20px; border-radius: 12px; font-size: 14px; }
-  .reservar:disabled { background: var(--lavanda); color: #9A9CC0; cursor: not-allowed; }
-  .fav { background: var(--lavanda); color: var(--acento); font-weight: 700; }
-  .fav[aria-pressed="true"] { background: var(--acento); color: #fff; }
-
-  .vacio { display: none; background: var(--superficie); border: 1.5px dashed var(--purpura); border-radius: 24px; padding: 36px; text-align: center; }
-  .vacio.ver { display: block; }
-  .vacio b { font-family: var(--display); font-size: 20px; display: block; margin-bottom: 6px; }
-  .vacio p { color: var(--texto-suave); margin-bottom: 16px; }
-
-  /* ---------- Columna lateral ---------- */
-  .lateral { display: flex; flex-direction: column; gap: 32px; position: sticky; top: 92px; }
-  .proxima { background: var(--lavanda); border-radius: 24px; padding: 22px; }
-  .proxima .quien { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-  .proxima .quien b { display: block; font-size: 16px; }
-  .proxima .quien span { font-size: 13px; color: var(--texto-suave); }
-  .datos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
-  .datos dt { font-size: 12px; color: var(--texto-suave); }
-  .datos dd { font-weight: 700; font-size: 15px; }
-  .estado { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 11px; border-radius: 999px; }
-  .ok { background: rgba(34,197,94,.16); color: #12803A; }
-  .pend { background: rgba(234,179,8,.2); color: #8A6A00; }
-  .rev { background: rgba(59,130,246,.15); color: #1D5CC7; }
-  .urgente { background: rgba(239,68,68,.14); color: #C42B2B; }
-
-  .semana ol { list-style: none; position: relative; margin-left: 8px; padding-left: 26px; border-left: 2px solid var(--linea); display: flex; flex-direction: column; gap: 20px; }
-  .semana li { position: relative; }
-  .semana li::before {
-    content: ""; position: absolute; left: -35px; top: 4px; width: 14px; height: 14px; border-radius: 50%;
-    background: var(--fondo); border: 3px solid var(--acento);
-  }
-  .semana li.parcial::before { border-color: var(--error); }
-  .semana li.entrega::before { border-color: var(--advertencia); }
-  .semana time { font-size: 13px; color: var(--texto-suave); display: block; }
-  .semana b { display: block; font-size: 16px; }
-  .semana .estado { margin-top: 6px; }
-
-  .progreso { background: var(--primario); color: #fff; border-radius: 24px; padding: 22px; display: flex; gap: 20px; align-items: center; }
-  .anillo { position: relative; width: 104px; height: 104px; flex: none; }
-  .anillo svg { transform: rotate(-90deg); }
-  .anillo .num { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; line-height: 1.1; font-family: var(--display); font-weight: 800; font-size: 26px; }
-  .anillo .num small { display: block; font-family: var(--cuerpo); font-weight: 500; font-size: 12px; color: #CFCBF5; }
-  .progreso h3 { font-family: var(--display); font-size: 18px; margin-bottom: 4px; }
-  .progreso p { font-size: 14px; color: #CFCBF5; }
-  .racha { display: flex; gap: 6px; margin-top: 12px; }
-  .racha span { width: 22px; height: 22px; border-radius: 7px; background: rgba(255,255,255,.14); display: grid; place-items: center; font-size: 10px; color: #CFCBF5; font-weight: 700; }
-  .racha span.on { background: var(--purpura); color: #fff; }
-
-  .solicitudes { display: flex; flex-direction: column; gap: 12px; }
-  .solicitud { display: flex; align-items: center; gap: 12px; background: var(--superficie); border: 1px solid var(--linea); border-radius: 18px; padding: 14px 16px; }
-  .solicitud .txt { flex: 1; line-height: 1.3; }
-  .solicitud b { display: block; font-size: 15px; }
-  .solicitud span { font-size: 13px; color: var(--texto-suave); }
-
-  /* ---------- Modal ---------- */
-  .modal-backdrop {
-    position: fixed; inset: 0; background: rgba(29,33,84,.5); backdrop-filter: blur(4px);
-    display: none; place-items: center; z-index: 60; padding: 24px;
-  }
-  .modal-backdrop.ver { display: grid; }
-  .modal {
-    background: #fff; border-radius: 24px; max-width: 560px; width: 100%;
-    box-shadow: 0 20px 50px rgba(29,33,84,.35); overflow: hidden;
-  }
-  .modal header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--linea); }
-  .modal header h3 { font-family: var(--display); font-size: 20px; }
-  .modal .cuerpo { padding: 24px; display: grid; gap: 16px; }
-  .campo { display: grid; gap: 6px; }
-  .campo label { font-weight: 600; font-size: 14px; color: var(--texto-suave); }
-  .campo input, .campo select, .campo textarea {
-    border: 1.5px solid var(--linea); border-radius: 12px; padding: 12px 14px; font-size: 15px;
-  }
-  .campo textarea { min-height: 90px; resize: vertical; }
-  .modal footer { padding: 16px 24px; border-top: 1px solid var(--linea); display: flex; justify-content: flex-end; gap: 10px; }
-  .btn-sec { background: var(--lavanda); color: var(--acento); font-weight: 700; padding: 12px 20px; border-radius: 12px; }
-  .btn-sec:hover { filter: brightness(.96); }
-
-  /* Perfil */
-  .perfil-card { background: var(--superficie); border: 1px solid var(--linea); border-radius: 24px; padding: 22px; }
-  .perfil-card h3 { font-family: var(--display); font-size: 18px; margin-bottom: 12px; }
-  .perfil-datos { display: grid; gap: 10px; font-size: 14px; }
-  .perfil-datos p { margin: 0; }
-  .perfil-datos b { color: var(--primario); }
-
-  /* ---------- Aviso ---------- */
-  .aviso {
-    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 24px); opacity: 0; pointer-events: none;
-    background: var(--primario); color: #fff; padding: 14px 22px; border-radius: 16px; font-weight: 600;
-    box-shadow: 0 14px 30px rgba(29,33,84,.3); transition: opacity .2s, transform .2s; z-index: 50; max-width: calc(100% - 32px);
-  }
-  .aviso.ver { opacity: 1; transform: translate(-50%, 0); }
-
-  /* ---------- Barra inferior móvil ---------- */
-  .tabbar { display: none; }
-
-  @media (max-width: 960px) {
-    .main { grid-template-columns: 1fr; }
-    .lateral { position: static; }
-  }
-  @media (max-width: 720px) {
-    .wrap { padding: 0 16px; }
-    .nav, .yo div { display: none; }
-    .topbar .wrap { justify-content: space-between; }
-    .hero { padding: 32px 22px 26px; border-radius: 26px; }
-    .buscador { flex-wrap: wrap; padding: 10px 10px 10px 16px; }
-    .buscador .btn { width: 100%; }
-    .sala { min-width: 240px; }
-    .monitor { grid-template-columns: 1fr; }
-    .monitor .cab { flex-direction: column; }
-    .acciones { width: 100%; margin-left: 0; }
-    .reservar, .fav { flex: 1; }
-    .progreso { flex-direction: column; text-align: center; }
-    .racha { justify-content: center; }
-    .tabbar {
-      display: grid; grid-template-columns: repeat(4, 1fr); position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
-      background: #fff; border-top: 1px solid var(--linea); padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
-    }
-    .tabbar a { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; font-weight: 600; color: var(--texto-suave); text-decoration: none; padding: 4px; }
-    .tabbar a[aria-current="page"] { color: var(--acento); }
-    .main { margin-bottom: 120px; }
-    .aviso { bottom: 84px; }
-    .notif-panel { right: -60px; top: 48px; width: 300px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saberio | Panel de Estudiante</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/estudiante.css">
 </head>
+
 <body>
 
-<!-- Modal de solicitud (RQF026, RQF028) -->
-<div class="modal-backdrop" id="modal-solicitud" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-solicitud">
-  <div class="modal">
-    <header>
-      <h3 id="titulo-solicitud">Solicitar monitoría</h3>
-      <button aria-label="Cerrar" id="cerrar-modal">✕</button>
-    </header>
-    <form class="cuerpo" id="form-solicitud">
-      <input type="hidden" id="sol-monitor-id">
-      <input type="hidden" id="sol-hora">
-      <div class="campo">
-        <label for="sol-materia">Materia</label>
-        <input type="text" id="sol-materia" required readonly>
-      </div>
-      <div class="campo">
-        <label for="sol-modalidad">Modalidad</label>
-        <select id="sol-modalidad" required>
-          <option value="">Selecciona</option>
-          <option value="Presencial">Presencial</option>
-          <option value="Virtual">Virtual</option>
-          <option value="Ambas">Ambas</option>
-        </select>
-      </div>
-      <div class="campo">
-        <label for="sol-tema">Tema o dudas específicas</label>
-        <textarea id="sol-tema" placeholder="Ej: integrales por partes, ejercicios de repaso..." required></textarea>
-      </div>
-      <div class="campo">
-        <label for="sol-objetivo">Objetivo de la sesión</label>
-        <input type="text" id="sol-objetivo" placeholder="Ej: preparar parcial, resolver taller 3" required>
-      </div>
-      <div class="campo">
-        <label for="sol-ubicacion">Ubicación sugerida (si es presencial)</label>
-        <input type="text" id="sol-ubicacion" placeholder="Ej: Biblioteca, Café U">
-      </div>
-      <div class="campo">
-        <label for="sol-obs">Observaciones</label>
-        <textarea id="sol-obs" placeholder="Cualquier detalle adicional..."></textarea>
-      </div>
-    </form>
-    <footer>
-      <button type="button" class="btn-sec" id="cancelar-sol">Cancelar</button>
-      <button type="submit" form="form-solicitud" class="btn">Enviar solicitud</button>
-    </footer>
+  <!-- Modal de solicitud (RQF026, RQF028) -->
+  <div class="modal-backdrop" id="modal-solicitud" aria-hidden="true" role="dialog" aria-modal="true"
+    aria-labelledby="titulo-solicitud">
+    <div class="modal">
+      <header>
+        <h3 id="titulo-solicitud">Solicitar monitoría</h3>
+        <button aria-label="Cerrar" id="cerrar-modal">✕</button>
+      </header>
+      <form class="cuerpo" id="form-solicitud">
+        <input type="hidden" id="sol-monitor-id">
+        <input type="hidden" id="sol-hora">
+        <div class="campo">
+          <label for="sol-materia">Materia</label>
+          <input type="text" id="sol-materia" required readonly>
+        </div>
+        <div class="campo">
+          <label for="sol-modalidad">Modalidad</label>
+          <select id="sol-modalidad" required>
+            <option value="">Selecciona</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Virtual">Virtual</option>
+            <option value="Ambas">Ambas</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="sol-tema">Tema o dudas específicas</label>
+          <textarea id="sol-tema" placeholder="Ej: integrales por partes, ejercicios de repaso..." required></textarea>
+        </div>
+        <div class="campo">
+          <label for="sol-objetivo">Objetivo de la sesión</label>
+          <input type="text" id="sol-objetivo" placeholder="Ej: preparar parcial, resolver taller 3" required>
+        </div>
+        <div class="campo">
+          <label for="sol-ubicacion">Ubicación sugerida (si es presencial)</label>
+          <input type="text" id="sol-ubicacion" placeholder="Ej: Biblioteca, Café U">
+        </div>
+        <div class="campo">
+          <label for="sol-obs">Observaciones</label>
+          <textarea id="sol-obs" placeholder="Cualquier detalle adicional..."></textarea>
+        </div>
+      </form>
+      <footer>
+        <button type="button" class="btn-sec" id="cancelar-sol">Cancelar</button>
+        <button type="submit" form="form-solicitud" class="btn">Enviar solicitud</button>
+      </footer>
+    </div>
   </div>
-</div>
 
-<!-- Modal de perfil (RQF009) -->
-<div class="modal-backdrop" id="modal-perfil" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-perfil">
-  <div class="modal">
-    <header>
-      <h3 id="titulo-perfil">Tu perfil de estudiante</h3>
-      <button aria-label="Cerrar" id="cerrar-perfil">✕</button>
-    </header>
-    <form class="cuerpo" id="form-perfil">
-      <div class="campo">
-        <label for="pf-carrera">Carrera</label>
-        <input type="text" id="pf-carrera" required>
-      </div>
-      <div class="campo">
-        <label for="pf-semestre">Semestre</label>
-        <input type="number" id="pf-semestre" min="1" max="12" required>
-      </div>
-      <div class="campo">
-        <label for="pf-materias">Materias de interés (separadas por coma)</label>
-        <input type="text" id="pf-materias" placeholder="Ej: Cálculo, Programación I">
-      </div>
-      <div class="campo">
-        <label for="pf-dispo">Disponibilidad preferida</label>
-        <input type="text" id="pf-dispo" placeholder="Ej: Mañanas, Lun-Mié-Vie">
-      </div>
-      <div class="campo">
-        <label for="pf-modalidad">Modalidad preferida</label>
-        <select id="pf-modalidad">
-          <option value="">Selecciona</option>
-          <option value="Presencial">Presencial</option>
-          <option value="Virtual">Virtual</option>
-          <option value="Ambas">Ambas</option>
-        </select>
-      </div>
-    </form>
-    <footer>
-      <button type="button" class="btn-sec" id="cancelar-perfil">Cancelar</button>
-      <button type="submit" form="form-perfil" class="btn">Guardar cambios</button>
-    </footer>
+  <!-- Modal de perfil (RQF009) -->
+  <div class="modal-backdrop" id="modal-perfil" aria-hidden="true" role="dialog" aria-modal="true"
+    aria-labelledby="titulo-perfil">
+    <div class="modal">
+      <header>
+        <h3 id="titulo-perfil">Tu perfil de estudiante</h3>
+        <button aria-label="Cerrar" id="cerrar-perfil">✕</button>
+      </header>
+      <form class="cuerpo" id="form-perfil">
+        <div class="campo">
+          <label for="pf-carrera">Carrera</label>
+          <input type="text" id="pf-carrera" required>
+        </div>
+        <div class="campo">
+          <label for="pf-semestre">Semestre</label>
+          <input type="number" id="pf-semestre" min="1" max="12" required>
+        </div>
+        <div class="campo">
+          <label for="pf-materias">Materias de interés (separadas por coma)</label>
+          <input type="text" id="pf-materias" placeholder="Ej: Cálculo, Programación I">
+        </div>
+        <div class="campo">
+          <label for="pf-dispo">Disponibilidad preferida</label>
+          <input type="text" id="pf-dispo" placeholder="Ej: Mañanas, Lun-Mié-Vie">
+        </div>
+        <div class="campo">
+          <label for="pf-modalidad">Modalidad preferida</label>
+          <select id="pf-modalidad">
+            <option value="">Selecciona</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Virtual">Virtual</option>
+            <option value="Ambas">Ambas</option>
+          </select>
+        </div>
+      </form>
+      <footer>
+        <button type="button" class="btn-sec" id="cancelar-perfil">Cancelar</button>
+        <button type="submit" form="form-perfil" class="btn">Guardar cambios</button>
+      </footer>
+    </div>
   </div>
-</div>
 
-<!-- Modal de Configuración -->
-<div class="modal-backdrop" id="modal-config" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="titulo-config">
-  <div class="modal">
-    <header>
-      <h3 id="titulo-config">Configuración</h3>
-      <button aria-label="Cerrar" id="cerrar-config">✕</button>
-    </header>
-    <div class="cuerpo">
-      <div class="campo">
-        <label>Preferencias de notificaciones</label>
-        <div style="display:grid; gap:10px;">
+  <!-- Modal de Configuración -->
+  <div class="modal-backdrop" id="modal-config" aria-hidden="true" role="dialog" aria-modal="true"
+    aria-labelledby="titulo-config">
+    <div class="modal">
+      <header>
+        <h3 id="titulo-config">Configuración</h3>
+        <button aria-label="Cerrar" id="cerrar-config">✕</button>
+      </header>
+      <div class="cuerpo">
+        <div class="campo">
+          <label>Preferencias de notificaciones</label>
+          <div style="display:grid; gap:10px;">
+            <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
+              <input type="checkbox" id="notif-email" checked style="width:18px; height:18px;">
+              Notificaciones por correo electrónico
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
+              <input type="checkbox" id="notif-push" checked style="width:18px; height:18px;">
+              Notificaciones push en la plataforma
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
+              <input type="checkbox" id="notif-recordatorios" checked style="width:18px; height:18px;">
+              Recordatorios de monitorías
+            </label>
+          </div>
+        </div>
+        <div class="campo">
+          <label>Privacidad</label>
+          <p style="font-size:14px; color:var(--texto-suave); margin:6px 0 10px;">
+            Tu información personal (correo, teléfono, documento) está oculta en perfiles públicos.
+          </p>
           <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
-            <input type="checkbox" id="notif-email" checked style="width:18px; height:18px;">
-            Notificaciones por correo electrónico
-          </label>
-          <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
-            <input type="checkbox" id="notif-push" checked style="width:18px; height:18px;">
-            Notificaciones push en la plataforma
-          </label>
-          <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
-            <input type="checkbox" id="notif-recordatorios" checked style="width:18px; height:18px;">
-            Recordatorios de monitorías
+            <input type="checkbox" id="perfil-publico" checked style="width:18px; height:18px;">
+            Mi perfil es visible para otros usuarios
           </label>
         </div>
+        <div class="campo">
+          <label>Cambio de rol (RQF008)</label>
+          <p style="font-size:14px; color:var(--texto-suave); margin:6px 0 10px;">
+            Tu cuenta tiene rol de <b>Estudiante</b>. Si también eres monitor, puedes alternar vistas.
+          </p>
+          <button type="button" class="btn-sec" id="btn-cambiar-rol" disabled>Cambiar a vista de Monitor</button>
+        </div>
       </div>
-      <div class="campo">
-        <label>Privacidad</label>
-        <p style="font-size:14px; color:var(--texto-suave); margin:6px 0 10px;">
-          Tu información personal (correo, teléfono, documento) está oculta en perfiles públicos.
-        </p>
-        <label style="display:flex; align-items:center; gap:10px; font-weight:500;">
-          <input type="checkbox" id="perfil-publico" checked style="width:18px; height:18px;">
-          Mi perfil es visible para otros usuarios
-        </label>
-      </div>
-      <div class="campo">
-        <label>Cambio de rol (RQF008)</label>
-        <p style="font-size:14px; color:var(--texto-suave); margin:6px 0 10px;">
-          Tu cuenta tiene rol de <b>Estudiante</b>. Si también eres monitor, puedes alternar vistas.
-        </p>
-        <button type="button" class="btn-sec" id="btn-cambiar-rol" disabled>Cambiar a vista de Monitor</button>
+      <footer>
+        <button type="button" class="btn-sec" id="btn-cerrar-sesion">Cerrar sesión</button>
+        <button type="button" class="btn" id="guardar-config">Guardar</button>
+      </footer>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="wrap">
+      <a class="logo" href="#" aria-label="Saberio">
+        <img src="imagenes/Loguito.png" alt="Saberio">
+      </a>
+      <nav class="nav" aria-label="Principal">
+        <a href="#" aria-current="page">Inicio</a>
+        <a href="#monitores">Buscar monitores</a>
+        <a href="#semana">Mis monitorías</a>
+        <a href="#historial">Historial</a>
+        <a href="#config" id="nav-config">Configuración</a>
+      </nav>
+      <div class="usuario">
+        <div class="campana-wrap">
+          <button class="campana" aria-label="Notificaciones" id="btn-notif">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+            </svg>
+            <i id="notif-count">3</i>
+          </button>
+          <div class="notif-panel" id="notif-panel" aria-hidden="true">
+            <header>
+              <h4>Notificaciones</h4>
+              <button id="cerrar-notif" aria-label="Cerrar">✕</button>
+            </header>
+            <div class="lista" id="notif-lista"></div>
+            <footer><a href="#" id="ver-todas">Ver todas</a></footer>
+          </div>
+        </div>
+        <div class="yo" id="btn-yo">
+          <div><b id="usuario-nombre">Sofía Martínez</b><span id="usuario-rol">Estudiante</span></div>
+          <span class="av c1" style="--s:42px" aria-hidden="true" id="avatar-usuario">SM</span>
+        </div>
       </div>
     </div>
-    <footer>
-      <button type="button" class="btn-sec" id="btn-cerrar-sesion">Cerrar sesión</button>
-      <button type="button" class="btn" id="guardar-config">Guardar</button>
-    </footer>
-  </div>
-</div>
+  </header>
 
-<header class="topbar">
   <div class="wrap">
-    <a class="logo" href="#" aria-label="URStudy, Universidad del Rosario">
-      <b>URStudy</b>
-      <small>Universidad del Rosario</small>
-    </a>
-    <nav class="nav" aria-label="Principal">
-      <a href="#" aria-current="page">Inicio</a>
-      <a href="#monitores">Buscar monitores</a>
-      <a href="#semana">Mis monitorías</a>
-      <a href="#historial">Historial</a>
-      <a href="#config" id="nav-config">Configuración</a>
-    </nav>
-    <div class="usuario">
-      <div class="campana-wrap">
-        <button class="campana" aria-label="Notificaciones" id="btn-notif">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-          <i id="notif-count">3</i>
-        </button>
-        <div class="notif-panel" id="notif-panel" aria-hidden="true">
-          <header>
-            <h4>Notificaciones</h4>
-            <button id="cerrar-notif" aria-label="Cerrar">✕</button>
-          </header>
-          <div class="lista" id="notif-lista"></div>
-          <footer><a href="#" id="ver-todas">Ver todas</a></footer>
+
+    <!-- HERO conversacional -->
+    <section class="hero" aria-labelledby="titulo-hero">
+      <p class="saludo">Hola, <span id="saludo-nombre">Sofía</span> 👋</p>
+      <h1 id="titulo-hero">¿Qué se te está complicando hoy?</h1>
+
+      <form class="buscador" id="form-busqueda" role="search" onsubmit="return false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </svg>
+        <input id="q" type="search" autocomplete="off" aria-label="Cuéntanos qué necesitas repasar"
+          placeholder="Ej: integrales por partes, parcial el jueves">
+        <button class="btn" id="btn-buscar" type="submit">Buscar monitor</button>
+      </form>
+
+      <div class="filtros" role="group" aria-label="Filtros de búsqueda (RQF021, RQF022, RQF024)">
+        <div class="filtro">
+          <label for="f-modalidad">Modalidad</label>
+          <select id="f-modalidad">
+            <option value="">Todas</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Virtual">Virtual</option>
+            <option value="Ambas">Ambas</option>
+          </select>
+        </div>
+        <div class="filtro">
+          <label for="f-calif">Calif. mínima</label>
+          <select id="f-calif">
+            <option value="">Sin filtro</option>
+            <option value="4.5">4.5+</option>
+            <option value="4.7">4.7+</option>
+            <option value="4.9">4.9+</option>
+          </select>
+        </div>
+        <div class="filtro">
+          <label for="f-orden">Ordenar por</label>
+          <select id="f-orden">
+            <option value="mejor">Mejor coincidencia</option>
+            <option value="dispo">Disponibilidad más próxima</option>
+            <option value="calif">Calificación</option>
+            <option value="precio">Precio</option>
+            <option value="exp">Experiencia</option>
+          </select>
         </div>
       </div>
-      <div class="yo" id="btn-yo">
-        <div><b id="usuario-nombre">Sofía Martínez</b><span id="usuario-rol">Estudiante</span></div>
-        <span class="av c1" style="--s:42px" aria-hidden="true" id="avatar-usuario">SM</span>
+
+      <div class="chips" role="group" aria-label="Materias frecuentes">
+        <button class="chip" type="button" data-q="Cálculo">Cálculo</button>
+        <button class="chip" type="button" data-q="Programación">Programación</button>
+        <button class="chip" type="button" data-q="Álgebra">Álgebra</button>
+        <button class="chip" type="button" data-q="Microeconomía">Microeconomía</button>
       </div>
-    </div>
-  </div>
-</header>
 
-<div class="wrap">
-
-  <!-- HERO conversacional -->
-  <section class="hero" aria-labelledby="titulo-hero">
-    <p class="saludo">Hola, <span id="saludo-nombre">Sofía</span> 👋</p>
-    <h1 id="titulo-hero">¿Qué se te está complicando hoy?</h1>
-
-    <form class="buscador" id="form-busqueda" role="search" onsubmit="return false">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" type="search" autocomplete="off" aria-label="Cuéntanos qué necesitas repasar"
-             placeholder="Ej: integrales por partes, parcial el jueves">
-      <button class="btn" id="btn-buscar" type="submit">Buscar monitor</button>
-    </form>
-
-    <div class="filtros" role="group" aria-label="Filtros de búsqueda (RQF021, RQF022, RQF024)">
-      <div class="filtro">
-        <label for="f-modalidad">Modalidad</label>
-        <select id="f-modalidad">
-          <option value="">Todas</option>
-          <option value="Presencial">Presencial</option>
-          <option value="Virtual">Virtual</option>
-          <option value="Ambas">Ambas</option>
-        </select>
-      </div>
-      <div class="filtro">
-        <label for="f-calif">Calif. mínima</label>
-        <select id="f-calif">
-          <option value="">Sin filtro</option>
-          <option value="4.5">4.5+</option>
-          <option value="4.7">4.7+</option>
-          <option value="4.9">4.9+</option>
-        </select>
-      </div>
-      <div class="filtro">
-        <label for="f-orden">Ordenar por</label>
-        <select id="f-orden">
-          <option value="mejor">Mejor coincidencia</option>
-          <option value="dispo">Disponibilidad más próxima</option>
-          <option value="calif">Calificación</option>
-          <option value="precio">Precio</option>
-          <option value="exp">Experiencia</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="chips" role="group" aria-label="Materias frecuentes">
-      <button class="chip" type="button" data-q="Cálculo">Cálculo</button>
-      <button class="chip" type="button" data-q="Programación">Programación</button>
-      <button class="chip" type="button" data-q="Álgebra">Álgebra</button>
-      <button class="chip" type="button" data-q="Microeconomía">Microeconomía</button>
-    </div>
-
-    <div class="ahora">
-      <h2><span class="pulso" aria-hidden="true"></span> Monitores en línea ahora</h2>
-      <div class="fila-ahora" id="fila-ahora"></div>
-    </div>
-  </section>
-
-  <div class="main">
-
-    <!-- Monitores -->
-    <section id="monitores" aria-labelledby="t-monitores">
-      <div class="titulo-seccion">
-        <h2 id="t-monitores">Monitores para ti</h2>
-        <p id="conteo" aria-live="polite"></p>
-      </div>
-      <div class="lista" id="lista"></div>
-      <div class="vacio" id="vacio">
-        <b>No encontramos monitores para eso</b>
-        <p>Prueba con el nombre de la materia, por ejemplo "Cálculo" o "Programación".</p>
-        <button class="btn" type="button" id="limpiar">Ver todos los monitores</button>
+      <div class="ahora">
+        <h2><span class="pulso" aria-hidden="true"></span> Monitores en línea ahora</h2>
+        <div class="fila-ahora" id="fila-ahora"></div>
       </div>
     </section>
 
-    <!-- Lateral -->
-    <aside class="lateral" aria-label="Tu actividad">
+    <div class="main">
 
-      <section class="perfil-card" aria-labelledby="t-perfil">
-        <div class="titulo-seccion"><h2 id="t-perfil" style="font-size:18px">Tu perfil</h2></div>
-        <div class="perfil-datos" id="perfil-resumen">
-          <p><b>Carrera:</b> Ingeniería de Sistemas</p>
-          <p><b>Semestre:</b> 5°</p>
-          <p><b>Materias de interés:</b> Cálculo, Programación I</p>
-          <p><b>Disponibilidad:</b> Mañanas, Lun-Mié-Vie</p>
-          <p><b>Modalidad:</b> Virtual</p>
+      <!-- Monitores -->
+      <section id="monitores" aria-labelledby="t-monitores">
+        <div class="titulo-seccion">
+          <h2 id="t-monitores">Monitores para ti</h2>
+          <p id="conteo" aria-live="polite"></p>
         </div>
-        <button class="btn" type="button" id="btn-editar-perfil" style="margin-top:14px">Editar perfil</button>
+        <div class="lista" id="lista"></div>
+        <div class="vacio" id="vacio">
+          <b>No encontramos monitores para eso</b>
+          <p>Prueba con el nombre de la materia, por ejemplo "Cálculo" o "Programación".</p>
+          <button class="btn" type="button" id="limpiar">Ver todos los monitores</button>
+        </div>
       </section>
 
-      <section id="semana" class="semana" aria-labelledby="t-semana">
-        <div class="titulo-seccion"><h2 id="t-semana">Tu semana</h2></div>
+      <!-- Lateral -->
+      <aside class="lateral" aria-label="Tu actividad">
 
-        <div class="proxima" style="margin-bottom: 26px;">
-          <div class="quien">
-            <span class="av c2" style="--s:46px" aria-hidden="true">CR</span>
-            <div><b>Carlos Ruiz</b><span>Monitor de Cálculo, Ingeniería de Sistemas</span></div>
+        <section class="perfil-card" aria-labelledby="t-perfil">
+          <div class="titulo-seccion">
+            <h2 id="t-perfil" style="font-size:18px">Tu perfil</h2>
           </div>
-          <dl class="datos">
-            <div><dt>Materia</dt><dd>Cálculo Diferencial</dd></div>
-            <div><dt>Modalidad</dt><dd>Virtual</dd></div>
-            <div><dt>Fecha y hora</dt><dd>Mié 17 Sep, 10:00 AM</dd></div>
-            <div><dt>Estado</dt><dd><span class="estado ok">Confirmada</span></dd></div>
-          </dl>
-        </div>
-
-        <ol>
-          <li>
-            <time>Mié 17 Sep, 10:00 AM</time>
-            <b>Monitoría de Cálculo Diferencial</b>
-            <span class="estado ok">Confirmada</span>
-          </li>
-          <li class="parcial">
-            <time>Vie 19 Sep</time>
-            <b>Parcial de Cálculo Diferencial</b>
-            <span class="estado urgente">Faltan 3 días</span>
-          </li>
-          <li class="entrega">
-            <time>Lun 22 Sep</time>
-            <b>Entrega de Programación I</b>
-            <span class="estado pend">Sin monitor asignado</span>
-          </li>
-        </ol>
-      </section>
-
-      <section class="progreso" aria-label="Progreso semanal">
-        <div class="anillo" role="img" aria-label="6 de 8 horas de estudio esta semana">
-          <svg width="104" height="104" viewBox="0 0 104 104">
-            <circle cx="52" cy="52" r="44" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="10"/>
-            <circle cx="52" cy="52" r="44" fill="none" stroke="#A078E8" stroke-width="10" stroke-linecap="round"
-                    stroke-dasharray="276.5" stroke-dashoffset="69.1"/>
-          </svg>
-          <div class="num"><div>6 h<small>de 8 h</small></div></div>
-        </div>
-        <div>
-          <h3>4 días seguidos</h3>
-          <p>Te falta 1 tutoría para cumplir tu meta de la semana.</p>
-          <div class="racha" aria-hidden="true">
-            <span class="on">L</span><span class="on">M</span><span class="on">X</span><span class="on">J</span><span>V</span><span>S</span><span>D</span>
+          <div class="perfil-datos" id="perfil-resumen">
+            <p><b>Carrera:</b> Ingeniería de Sistemas</p>
+            <p><b>Semestre:</b> 5°</p>
+            <p><b>Materias de interés:</b> Cálculo, Programación I</p>
+            <p><b>Disponibilidad:</b> Mañanas, Lun-Mié-Vie</p>
+            <p><b>Modalidad:</b> Virtual</p>
           </div>
-        </div>
-      </section>
+          <button class="btn" type="button" id="btn-editar-perfil" style="margin-top:14px">Editar perfil</button>
+        </section>
 
-      <section aria-labelledby="t-sol">
-        <div class="titulo-seccion"><h2 id="t-sol" style="font-size:22px">Solicitudes en proceso</h2></div>
-        <div class="solicitudes">
-          <div class="solicitud">
-            <span class="av c3" style="--s:38px" aria-hidden="true">AL</span>
-            <div class="txt"><b>Álgebra Lineal</b><span>Enviada a Ana María López</span></div>
-            <span class="estado pend">Pendiente</span>
+        <section id="semana" class="semana" aria-labelledby="t-semana">
+          <div class="titulo-seccion">
+            <h2 id="t-semana">Tu semana</h2>
           </div>
-          <div class="solicitud">
-            <span class="av c4" style="--s:38px" aria-hidden="true">AM</span>
-            <div class="txt"><b>Programación I</b><span>Enviada a Andrés Morales</span></div>
-            <span class="estado rev">En revisión</span>
+
+          <div class="proxima" style="margin-bottom: 26px;">
+            <div class="quien">
+              <span class="av c2" style="--s:46px" aria-hidden="true">CR</span>
+              <div><b>Carlos Ruiz</b><span>Monitor de Cálculo, Ingeniería de Sistemas</span></div>
+            </div>
+            <dl class="datos">
+              <div>
+                <dt>Materia</dt>
+                <dd>Cálculo Diferencial</dd>
+              </div>
+              <div>
+                <dt>Modalidad</dt>
+                <dd>Virtual</dd>
+              </div>
+              <div>
+                <dt>Fecha y hora</dt>
+                <dd>Mié 17 Sep, 10:00 AM</dd>
+              </div>
+              <div>
+                <dt>Estado</dt>
+                <dd><span class="estado ok">Confirmada</span></dd>
+              </div>
+            </dl>
           </div>
-        </div>
-      </section>
 
-      <section id="historial" aria-labelledby="t-hist">
-        <div class="titulo-seccion"><h2 id="t-hist" style="font-size:22px">Historial (RQF036)</h2></div>
-        <div class="solicitudes" id="lista-historial">
-          <!-- Se llena con JS -->
-        </div>
-      </section>
+          <ol>
+            <li>
+              <time>Mié 17 Sep, 10:00 AM</time>
+              <b>Monitoría de Cálculo Diferencial</b>
+              <span class="estado ok">Confirmada</span>
+            </li>
+            <li class="parcial">
+              <time>Vie 19 Sep</time>
+              <b>Parcial de Cálculo Diferencial</b>
+              <span class="estado urgente">Faltan 3 días</span>
+            </li>
+            <li class="entrega">
+              <time>Lun 22 Sep</time>
+              <b>Entrega de Programación I</b>
+              <span class="estado pend">Sin monitor asignado</span>
+            </li>
+          </ol>
+        </section>
 
-    </aside>
+        <section class="progreso" aria-label="Progreso semanal">
+          <div class="anillo" role="img" aria-label="6 de 8 horas de estudio esta semana">
+            <svg width="104" height="104" viewBox="0 0 104 104">
+              <circle cx="52" cy="52" r="44" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="10" />
+              <circle cx="52" cy="52" r="44" fill="none" stroke="#A078E8" stroke-width="10" stroke-linecap="round"
+                stroke-dasharray="276.5" stroke-dashoffset="69.1" />
+            </svg>
+            <div class="num">
+              <div>6 h<small>de 8 h</small></div>
+            </div>
+          </div>
+          <div>
+            <h3>4 días seguidos</h3>
+            <p>Te falta 1 tutoría para cumplir tu meta de la semana.</p>
+            <div class="racha" aria-hidden="true">
+              <span class="on">L</span><span class="on">M</span><span class="on">X</span><span
+                class="on">J</span><span>V</span><span>S</span><span>D</span>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="t-sol">
+          <div class="titulo-seccion">
+            <h2 id="t-sol" style="font-size:22px">Solicitudes en proceso</h2>
+          </div>
+          <div class="solicitudes">
+            <div class="solicitud">
+              <span class="av c3" style="--s:38px" aria-hidden="true">AL</span>
+              <div class="txt"><b>Álgebra Lineal</b><span>Enviada a Ana María López</span></div>
+              <span class="estado pend">Pendiente</span>
+            </div>
+            <div class="solicitud">
+              <span class="av c4" style="--s:38px" aria-hidden="true">AM</span>
+              <div class="txt"><b>Programación I</b><span>Enviada a Andrés Morales</span></div>
+              <span class="estado rev">En revisión</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="historial" aria-labelledby="t-hist">
+          <div class="titulo-seccion">
+            <h2 id="t-hist" style="font-size:22px">Historial (RQF036)</h2>
+          </div>
+          <div class="solicitudes" id="lista-historial">
+            <!-- Se llena con JS -->
+          </div>
+        </section>
+
+      </aside>
+    </div>
   </div>
-</div>
 
-<nav class="tabbar" aria-label="Navegación móvil">
-  <a href="#" aria-current="page"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</a>
-  <a href="#monitores"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Buscar</a>
-  <a href="#semana"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>Mi semana</a>
-  <a href="#historial"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Historial</a>
-</nav>
+  <nav class="tabbar" aria-label="Navegación móvil">
+    <a href="#" aria-current="page"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" />
+      </svg>Inicio</a>
+    <a href="#monitores"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.5-3.5" />
+      </svg>Buscar</a>
+    <a href="#semana"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="17" rx="3" />
+        <path d="M8 2v4M16 2v4M3 10h18" />
+      </svg>Mi semana</a>
+    <a href="#historial"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2" />
+      </svg>Historial</a>
+  </nav>
 
-<div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+  <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
-<script>
-  const monitores = [
-    { id: 'carlos', nombre: 'Carlos Ruiz', ini: 'CR', color: 'c2', carrera: 'Ingeniería de Sistemas', materia: 'Cálculo Diferencial',
-      nota: 4.8, ayudados: 61, resp: '8 min', online: true, modalidad: 'Virtual',
-      frase: 'Derivadas e integrales sin miedo: primero entiendes la idea, después la fórmula.',
-      temas: ['Límites', 'Derivadas', 'Integrales por partes'], claves: ['calculo', 'matematicas'],
-      horas: ['Hoy 4:00 PM', 'Mañana 10:00 AM', 'Jue 2:00 PM'] },
-    { id: 'laura', nombre: 'Laura Gutiérrez', ini: 'LG', color: 'c1', carrera: 'Economía', materia: 'Microeconomía',
-      nota: 4.9, ayudados: 48, resp: '10 min', online: true, modalidad: 'Ambas',
-      frase: 'La oferta y la demanda se entienden dibujando. Trae tu taller y lo resolvemos juntas.',
-      temas: ['Elasticidad', 'Equilibrio de mercado', 'Costos'], claves: ['microeconomia', 'economia'],
-      horas: ['Hoy 6:00 PM', 'Mié 8:00 AM', 'Vie 11:00 AM'] },
-    { id: 'diego', nombre: 'Diego Herrera', ini: 'DH', color: 'c3', carrera: 'Ingeniería de Sistemas', materia: 'Programación I',
-      nota: 4.7, ayudados: 36, resp: '15 min', online: true, modalidad: 'Presencial',
-      frase: 'Si tu código no corre, lo depuramos paso a paso hasta que sí.',
-      temas: ['Python', 'Ciclos', 'Funciones'], claves: ['programacion', 'codigo'],
-      horas: ['Hoy 5:00 PM', 'Mañana 3:00 PM', 'Jue 9:00 AM'] },
-    { id: 'ana', nombre: 'Ana María López', ini: 'AL', color: 'c2', carrera: 'Matemáticas', materia: 'Álgebra Lineal',
-      nota: 4.9, ayudados: 27, resp: '20 min', online: false, modalidad: 'Virtual',
-      frase: 'Matrices, vectores y espacios vectoriales: todo se conecta cuando ves el patrón.',
-      temas: ['Matrices', 'Determinantes', 'Valores propios'], claves: ['algebra', 'matematicas'],
-      horas: ['Mañana 1:00 PM', 'Jue 4:00 PM', 'Sáb 10:00 AM'] },
-    { id: 'andres', nombre: 'Andrés Morales', ini: 'AM', color: 'c4', carrera: 'Ingeniería de Sistemas', materia: 'Programación I',
-      nota: 4.6, ayudados: 22, resp: '25 min', online: false, modalidad: 'Ambas',
-      frase: 'Aprender a programar es practicar. Te dejo ejercicios justos para tu nivel.',
-      temas: ['Condicionales', 'Listas', 'Depuración'], claves: ['programacion', 'codigo'],
-      horas: ['Mié 2:00 PM', 'Vie 3:00 PM', 'Sáb 9:00 AM'] }
-  ];
+  <script>
+    const monitores = [
+      {
+        id: 'carlos', nombre: 'Carlos Ruiz', ini: 'CR', color: 'c2', carrera: 'Ingeniería de Sistemas', materia: 'Cálculo Diferencial',
+        nota: 4.8, ayudados: 61, resp: '8 min', online: true, modalidad: 'Virtual',
+        frase: 'Derivadas e integrales sin miedo: primero entiendes la idea, después la fórmula.',
+        temas: ['Límites', 'Derivadas', 'Integrales por partes'], claves: ['calculo', 'matematicas'],
+        horas: ['Hoy 4:00 PM', 'Mañana 10:00 AM', 'Jue 2:00 PM']
+      },
+      {
+        id: 'laura', nombre: 'Laura Gutiérrez', ini: 'LG', color: 'c1', carrera: 'Economía', materia: 'Microeconomía',
+        nota: 4.9, ayudados: 48, resp: '10 min', online: true, modalidad: 'Ambas',
+        frase: 'La oferta y la demanda se entienden dibujando. Trae tu taller y lo resolvemos juntas.',
+        temas: ['Elasticidad', 'Equilibrio de mercado', 'Costos'], claves: ['microeconomia', 'economia'],
+        horas: ['Hoy 6:00 PM', 'Mié 8:00 AM', 'Vie 11:00 AM']
+      },
+      {
+        id: 'diego', nombre: 'Diego Herrera', ini: 'DH', color: 'c3', carrera: 'Ingeniería de Sistemas', materia: 'Programación I',
+        nota: 4.7, ayudados: 36, resp: '15 min', online: true, modalidad: 'Presencial',
+        frase: 'Si tu código no corre, lo depuramos paso a paso hasta que sí.',
+        temas: ['Python', 'Ciclos', 'Funciones'], claves: ['programacion', 'codigo'],
+        horas: ['Hoy 5:00 PM', 'Mañana 3:00 PM', 'Jue 9:00 AM']
+      },
+      {
+        id: 'ana', nombre: 'Ana María López', ini: 'AL', color: 'c2', carrera: 'Matemáticas', materia: 'Álgebra Lineal',
+        nota: 4.9, ayudados: 27, resp: '20 min', online: false, modalidad: 'Virtual',
+        frase: 'Matrices, vectores y espacios vectoriales: todo se conecta cuando ves el patrón.',
+        temas: ['Matrices', 'Determinantes', 'Valores propios'], claves: ['algebra', 'matematicas'],
+        horas: ['Mañana 1:00 PM', 'Jue 4:00 PM', 'Sáb 10:00 AM']
+      },
+      {
+        id: 'andres', nombre: 'Andrés Morales', ini: 'AM', color: 'c4', carrera: 'Ingeniería de Sistemas', materia: 'Programación I',
+        nota: 4.6, ayudados: 22, resp: '25 min', online: false, modalidad: 'Ambas',
+        frase: 'Aprender a programar es practicar. Te dejo ejercicios justos para tu nivel.',
+        temas: ['Condicionales', 'Listas', 'Depuración'], claves: ['programacion', 'codigo'],
+        horas: ['Mié 2:00 PM', 'Vie 3:00 PM', 'Sáb 9:00 AM']
+      }
+    ];
 
-  const historialEjemplo = [
-    { materia: 'Cálculo Diferencial', monitor: 'Carlos Ruiz', fecha: '10 Sep 2026, 4:00 PM', estado: 'Realizada', calif: 5 },
-    { materia: 'Programación I', monitor: 'Diego Herrera', fecha: '03 Sep 2026, 5:00 PM', estado: 'Cancelada', calif: null },
-    { materia: 'Álgebra Lineal', monitor: 'Ana María López', fecha: '28 Ago 2026, 1:00 PM', estado: 'Realizada', calif: 4 }
-  ];
+    const historialEjemplo = [
+      { materia: 'Cálculo Diferencial', monitor: 'Carlos Ruiz', fecha: '10 Sep 2026, 4:00 PM', estado: 'Realizada', calif: 5 },
+      { materia: 'Programación I', monitor: 'Diego Herrera', fecha: '03 Sep 2026, 5:00 PM', estado: 'Cancelada', calif: null },
+      { materia: 'Álgebra Lineal', monitor: 'Ana María López', fecha: '28 Ago 2026, 1:00 PM', estado: 'Realizada', calif: 4 }
+    ];
 
-  const notificacionesEjemplo = [
-    { tipo: 'sol', titulo: 'Nueva solicitud de monitoría', texto: 'Álgebra Lineal • Vie 19 Sep, 2:00 PM', tiempo: 'Hace 5 min' },
-    { tipo: 'rec', titulo: 'Solicitud aceptada', texto: 'Carlos Ruiz aceptó tu solicitud de Cálculo Diferencial', tiempo: 'Hace 1 hora' },
-    { tipo: 'aviso', titulo: 'Recordatorio', texto: 'Monitoría de Cálculo mañana 10:00 AM', tiempo: 'Hace 2 horas' }
-  ];
+    const notificacionesEjemplo = [
+      { tipo: 'sol', titulo: 'Nueva solicitud de monitoría', texto: 'Álgebra Lineal • Vie 19 Sep, 2:00 PM', tiempo: 'Hace 5 min' },
+      { tipo: 'rec', titulo: 'Solicitud aceptada', texto: 'Carlos Ruiz aceptó tu solicitud de Cálculo Diferencial', tiempo: 'Hace 1 hora' },
+      { tipo: 'aviso', titulo: 'Recordatorio', texto: 'Monitoría de Cálculo mañana 10:00 AM', tiempo: 'Hace 2 horas' }
+    ];
 
-  const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const $ = s => document.querySelector(s);
-  const seleccion = {};
-  const favoritos = new Set();
+    const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const $ = s => document.querySelector(s);
+    const seleccion = {};
+    const favoritos = new Set();
 
-  const estrella = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>';
+    const estrella = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>';
 
-  function pintarEnLinea() {
-    $('#fila-ahora').innerHTML = monitores.filter(m => m.online).map(m => `
+    function pintarEnLinea() {
+      $('#fila-ahora').innerHTML = monitores.filter(m => m.online).map(m => `
       <div class="sala">
         <span class="av ${m.color}" aria-hidden="true">${m.ini}</span>
         <div class="info"><b>${m.nombre}</b><span>${m.materia}</span></div>
         <button class="entrar" type="button" data-sala="${m.id}">Entrar a sala</button>
       </div>`).join('');
-  }
+    }
 
-  function pintarLista() {
-    $('#lista').innerHTML = monitores.map(m => `
+    function pintarLista() {
+      $('#lista').innerHTML = monitores.map(m => `
       <article class="monitor" id="m-${m.id}" data-id="${m.id}" data-modalidad="${m.modalidad}" data-nota="${m.nota}" data-ayudados="${m.ayudados}">
         <span class="av ${m.color}" style="--s:60px" aria-hidden="true">${m.ini}</span>
         <div>
@@ -785,78 +507,78 @@
           </div>
         </div>
       </article>`).join('');
-  }
-
-  function aplicarFiltros(lista) {
-    const modalidad = $('#f-modalidad').value;
-    const califMin = parseFloat($('#f-calif').value || '0');
-    const orden = $('#f-orden').value;
-
-    if (modalidad) {
-      lista = lista.filter(m => m.modalidad === modalidad || m.modalidad === 'Ambas');
-    }
-    if (califMin) {
-      lista = lista.filter(m => m.nota >= califMin);
     }
 
-    if (orden === 'calif') lista.sort((a,b) => b.nota - a.nota);
-    if (orden === 'exp') lista.sort((a,b) => b.ayudados - a.ayudados);
-    if (orden === 'dispo') lista.sort((a,b) => a.horas.length - b.horas.length);
+    function aplicarFiltros(lista) {
+      const modalidad = $('#f-modalidad').value;
+      const califMin = parseFloat($('#f-calif').value || '0');
+      const orden = $('#f-orden').value;
 
-    return lista;
-  }
+      if (modalidad) {
+        lista = lista.filter(m => m.modalidad === modalidad || m.modalidad === 'Ambas');
+      }
+      if (califMin) {
+        lista = lista.filter(m => m.nota >= califMin);
+      }
 
-  function filtrar() {
-    const q = norm($('#q').value.trim());
-    const palabras = q.split(/[\s,.;]+/).filter(p => p.length > 3);
-    let visibles = 0;
-    const puntajes = [];
+      if (orden === 'calif') lista.sort((a, b) => b.nota - a.nota);
+      if (orden === 'exp') lista.sort((a, b) => b.ayudados - a.ayudados);
+      if (orden === 'dispo') lista.sort((a, b) => a.horas.length - b.horas.length);
 
-    monitores.forEach(m => {
-      const el = $('#m-' + m.id);
-      const campos = [m.nombre, m.materia, m.carrera, ...m.temas, ...m.claves].map(norm);
-      let puntos = 0;
-      el.querySelectorAll('.tema').forEach(t => t.classList.remove('hit'));
+      return lista;
+    }
 
-      palabras.forEach(p => {
-        const raiz = p.length > 6 ? p.slice(0, 6) : p;
-        if (campos.some(c => c.includes(raiz))) puntos++;
-        el.querySelectorAll('.tema').forEach(t => { if (t.dataset.t.includes(raiz)) t.classList.add('hit'); });
+    function filtrar() {
+      const q = norm($('#q').value.trim());
+      const palabras = q.split(/[\s,.;]+/).filter(p => p.length > 3);
+      let visibles = 0;
+      const puntajes = [];
+
+      monitores.forEach(m => {
+        const el = $('#m-' + m.id);
+        const campos = [m.nombre, m.materia, m.carrera, ...m.temas, ...m.claves].map(norm);
+        let puntos = 0;
+        el.querySelectorAll('.tema').forEach(t => t.classList.remove('hit'));
+
+        palabras.forEach(p => {
+          const raiz = p.length > 6 ? p.slice(0, 6) : p;
+          if (campos.some(c => c.includes(raiz))) puntos++;
+          el.querySelectorAll('.tema').forEach(t => { if (t.dataset.t.includes(raiz)) t.classList.add('hit'); });
+        });
+
+        const coincide = !palabras.length || puntos > 0;
+        el.classList.toggle('ocultar', !coincide);
+        if (coincide) { visibles++; puntajes.push({ el, puntos, online: m.online, data: m }); }
       });
 
-      const coincide = !palabras.length || puntos > 0;
-      el.classList.toggle('ocultar', !coincide);
-      if (coincide) { visibles++; puntajes.push({ el, puntos, online: m.online, data: m }); }
-    });
+      let listaFiltrada = puntajes.filter(p => !p.el.classList.contains('ocultar')).map(p => p.data);
+      listaFiltrada = aplicarFiltros(listaFiltrada);
 
-    let listaFiltrada = puntajes.filter(p => !p.el.classList.contains('ocultar')).map(p => p.data);
-    listaFiltrada = aplicarFiltros(listaFiltrada);
+      listaFiltrada.forEach(m => $('#lista').appendChild($('#m-' + m.id)));
 
-    listaFiltrada.forEach(m => $('#lista').appendChild($('#m-' + m.id)));
+      $('#vacio').classList.toggle('ver', visibles === 0);
+      $('#conteo').textContent = palabras.length
+        ? (visibles ? `${visibles} monitor${visibles > 1 ? 'es' : ''} para "${$('#q').value.trim()}"` : '')
+        : 'Ordenados por disponibilidad';
 
-    $('#vacio').classList.toggle('ver', visibles === 0);
-    $('#conteo').textContent = palabras.length
-      ? (visibles ? `${visibles} monitor${visibles > 1 ? 'es' : ''} para "${$('#q').value.trim()}"` : '')
-      : 'Ordenados por disponibilidad';
+      document.querySelectorAll('.chip').forEach(c => {
+        c.setAttribute('aria-pressed', String(!!q && norm(c.dataset.q) === q));
+      });
+    }
 
-    document.querySelectorAll('.chip').forEach(c => {
-      c.setAttribute('aria-pressed', String(!!q && norm(c.dataset.q) === q));
-    });
-  }
+    let aviso;
+    function mostrarAviso(txt) {
+      const a = $('#aviso');
+      a.textContent = txt;
+      a.classList.add('ver');
+      clearTimeout(aviso);
+      aviso = setTimeout(() => a.classList.remove('ver'), 3200);
+    }
 
-  let aviso;
-  function mostrarAviso(txt) {
-    const a = $('#aviso');
-    a.textContent = txt;
-    a.classList.add('ver');
-    clearTimeout(aviso);
-    aviso = setTimeout(() => a.classList.remove('ver'), 3200);
-  }
-
-  // Notificaciones
-  function pintarNotificaciones() {
-    const lista = $('#notif-lista');
-    lista.innerHTML = notificacionesEjemplo.map(n => `
+    // Notificaciones
+    function pintarNotificaciones() {
+      const lista = $('#notif-lista');
+      lista.innerHTML = notificacionesEjemplo.map(n => `
       <div class="notif-item">
         <div class="icono ${n.tipo}">${n.tipo === 'sol' ? '📩' : n.tipo === 'rec' ? '✅' : '🔔'}</div>
         <div class="txt">
@@ -866,109 +588,109 @@
         <time>${n.tiempo}</time>
       </div>
     `).join('');
-    $('#notif-count').textContent = notificacionesEjemplo.length;
-  }
+      $('#notif-count').textContent = notificacionesEjemplo.length;
+    }
 
-  function toggleNotificaciones() {
-    const panel = $('#notif-panel');
-    const visible = panel.classList.contains('ver');
-    panel.classList.toggle('ver', !visible);
-    panel.setAttribute('aria-hidden', visible ? 'true' : 'false');
-  }
+    function toggleNotificaciones() {
+      const panel = $('#notif-panel');
+      const visible = panel.classList.contains('ver');
+      panel.classList.toggle('ver', !visible);
+      panel.setAttribute('aria-hidden', visible ? 'true' : 'false');
+    }
 
-  // Modal de solicitud
-  function abrirModalSolicitud(monitorId, hora) {
-    const m = monitores.find(x => x.id === monitorId);
-    $('#sol-monitor-id').value = monitorId;
-    $('#sol-hora').value = hora;
-    $('#sol-materia').value = m.materia;
-    $('#sol-modalidad').value = '';
-    $('#sol-tema').value = '';
-    $('#sol-objetivo').value = '';
-    $('#sol-ubicacion').value = '';
-    $('#sol-obs').value = '';
-    $('#modal-solicitud').classList.add('ver');
-    $('#modal-solicitud').setAttribute('aria-hidden', 'false');
-  }
+    // Modal de solicitud
+    function abrirModalSolicitud(monitorId, hora) {
+      const m = monitores.find(x => x.id === monitorId);
+      $('#sol-monitor-id').value = monitorId;
+      $('#sol-hora').value = hora;
+      $('#sol-materia').value = m.materia;
+      $('#sol-modalidad').value = '';
+      $('#sol-tema').value = '';
+      $('#sol-objetivo').value = '';
+      $('#sol-ubicacion').value = '';
+      $('#sol-obs').value = '';
+      $('#modal-solicitud').classList.add('ver');
+      $('#modal-solicitud').setAttribute('aria-hidden', 'false');
+    }
 
-  function cerrarModalSolicitud() {
-    $('#modal-solicitud').classList.remove('ver');
-    $('#modal-solicitud').setAttribute('aria-hidden', 'true');
-  }
+    function cerrarModalSolicitud() {
+      $('#modal-solicitud').classList.remove('ver');
+      $('#modal-solicitud').setAttribute('aria-hidden', 'true');
+    }
 
-  // Modal de perfil
-  const perfilDefault = {
-    carrera: 'Ingeniería de Sistemas',
-    semestre: '5',
-    materias: 'Cálculo, Programación I',
-    dispo: 'Mañanas, Lun-Mié-Vie',
-    modalidad: 'Virtual'
-  };
+    // Modal de perfil
+    const perfilDefault = {
+      carrera: 'Ingeniería de Sistemas',
+      semestre: '5',
+      materias: 'Cálculo, Programación I',
+      dispo: 'Mañanas, Lun-Mié-Vie',
+      modalidad: 'Virtual'
+    };
 
-  function abrirModalPerfil() {
-    $('#pf-carrera').value = perfilDefault.carrera;
-    $('#pf-semestre').value = perfilDefault.semestre;
-    $('#pf-materias').value = perfilDefault.materias;
-    $('#pf-dispo').value = perfilDefault.dispo;
-    $('#pf-modalidad').value = perfilDefault.modalidad;
-    $('#modal-perfil').classList.add('ver');
-    $('#modal-perfil').setAttribute('aria-hidden', 'false');
-  }
+    function abrirModalPerfil() {
+      $('#pf-carrera').value = perfilDefault.carrera;
+      $('#pf-semestre').value = perfilDefault.semestre;
+      $('#pf-materias').value = perfilDefault.materias;
+      $('#pf-dispo').value = perfilDefault.dispo;
+      $('#pf-modalidad').value = perfilDefault.modalidad;
+      $('#modal-perfil').classList.add('ver');
+      $('#modal-perfil').setAttribute('aria-hidden', 'false');
+    }
 
-  function cerrarModalPerfil() {
-    $('#modal-perfil').classList.remove('ver');
-    $('#modal-perfil').setAttribute('aria-hidden', 'true');
-  }
+    function cerrarModalPerfil() {
+      $('#modal-perfil').classList.remove('ver');
+      $('#modal-perfil').setAttribute('aria-hidden', 'true');
+    }
 
-  function guardarPerfil() {
-    perfilDefault.carrera = $('#pf-carrera').value;
-    perfilDefault.semestre = $('#pf-semestre').value;
-    perfilDefault.materias = $('#pf-materias').value;
-    perfilDefault.dispo = $('#pf-dispo').value;
-    perfilDefault.modalidad = $('#pf-modalidad').value;
+    function guardarPerfil() {
+      perfilDefault.carrera = $('#pf-carrera').value;
+      perfilDefault.semestre = $('#pf-semestre').value;
+      perfilDefault.materias = $('#pf-materias').value;
+      perfilDefault.dispo = $('#pf-dispo').value;
+      perfilDefault.modalidad = $('#pf-modalidad').value;
 
-    $('#perfil-resumen').innerHTML = `
+      $('#perfil-resumen').innerHTML = `
       <p><b>Carrera:</b> ${perfilDefault.carrera}</p>
       <p><b>Semestre:</b> ${perfilDefault.semestre}°</p>
       <p><b>Materias de interés:</b> ${perfilDefault.materias}</p>
       <p><b>Disponibilidad:</b> ${perfilDefault.dispo}</p>
       <p><b>Modalidad:</b> ${perfilDefault.modalidad}</p>
     `;
-    mostrarAviso('Perfil actualizado ✅');
-    cerrarModalPerfil();
-  }
-
-  // Modal de configuración
-  function abrirConfig() {
-    $('#modal-config').classList.add('ver');
-    $('#modal-config').setAttribute('aria-hidden', 'false');
-  }
-
-  function cerrarConfig() {
-    $('#modal-config').classList.remove('ver');
-    $('#modal-config').setAttribute('aria-hidden', 'true');
-  }
-
-  function guardarConfig() {
-    const email = $('#notif-email').checked;
-    const push = $('#notif-push').checked;
-    const recordatorios = $('#notif-recordatorios').checked;
-    const publico = $('#perfil-publico').checked;
-    mostrarAviso('Configuración guardada ✅');
-    cerrarConfig();
-  }
-
-  function cerrarSesion() {
-    if (confirm('¿Seguro que quieres cerrar sesión?')) {
-      mostrarAviso('Sesión cerrada. Volviendo al inicio...');
-      // Aquí iría la redirección al login
-      setTimeout(() => { location.reload(); }, 1500);
+      mostrarAviso('Perfil actualizado ✅');
+      cerrarModalPerfil();
     }
-  }
 
-  // Historial (RQF036)
-  function pintarHistorial() {
-    $('#lista-historial').innerHTML = historialEjemplo.map(h => `
+    // Modal de configuración
+    function abrirConfig() {
+      $('#modal-config').classList.add('ver');
+      $('#modal-config').setAttribute('aria-hidden', 'false');
+    }
+
+    function cerrarConfig() {
+      $('#modal-config').classList.remove('ver');
+      $('#modal-config').setAttribute('aria-hidden', 'true');
+    }
+
+    function guardarConfig() {
+      const email = $('#notif-email').checked;
+      const push = $('#notif-push').checked;
+      const recordatorios = $('#notif-recordatorios').checked;
+      const publico = $('#perfil-publico').checked;
+      mostrarAviso('Configuración guardada ✅');
+      cerrarConfig();
+    }
+
+    function cerrarSesion() {
+      if (confirm('¿Seguro que quieres cerrar sesión?')) {
+        mostrarAviso('Sesión cerrada. Volviendo al inicio...');
+        // Aquí iría la redirección al login
+        setTimeout(() => { location.reload(); }, 1500);
+      }
+    }
+
+    // Historial (RQF036)
+    function pintarHistorial() {
+      $('#lista-historial').innerHTML = historialEjemplo.map(h => `
       <div class="solicitud">
         <div class="txt">
           <b>${h.materia}</b>
@@ -977,107 +699,108 @@
         <span class="estado ${h.estado === 'Realizada' ? 'ok' : h.estado === 'Cancelada' ? 'urgente' : 'pend'}">${h.estado}</span>
       </div>
     `).join('');
-  }
-
-  document.addEventListener('click', e => {
-    const chip = e.target.closest('.chip');
-    if (chip) {
-      const activo = chip.getAttribute('aria-pressed') === 'true';
-      $('#q').value = activo ? '' : chip.dataset.q;
-      filtrar();
-      if (!activo) $('#monitores').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return;
     }
 
-    const sala = e.target.closest('[data-sala]');
-    if (sala) {
-      const m = monitores.find(x => x.id === sala.dataset.sala);
-      mostrarAviso(`Entrando a la sala de ${m.nombre}...`);
-      return;
-    }
-
-    const hora = e.target.closest('.hora');
-    if (hora) {
-      const id = hora.dataset.m;
-      const yaActiva = hora.getAttribute('aria-pressed') === 'true';
-      document.querySelectorAll(`.hora[data-m="${id}"]`).forEach(b => b.setAttribute('aria-pressed', 'false'));
-      if (!yaActiva) hora.setAttribute('aria-pressed', 'true');
-      seleccion[id] = yaActiva ? null : hora.dataset.h;
-      document.querySelector(`[data-reservar="${id}"]`).disabled = !seleccion[id];
-      return;
-    }
-
-    const res = e.target.closest('[data-reservar]');
-    if (res && !res.disabled) {
-      const m = monitores.find(x => x.id === res.dataset.reservar);
-      abrirModalSolicitud(m.id, seleccion[m.id]);
-      return;
-    }
-
-    const fav = e.target.closest('[data-fav]');
-    if (fav) {
-      const id = fav.dataset.fav;
-      const activo = fav.getAttribute('aria-pressed') === 'true';
-      if (activo) {
-        favoritos.delete(id);
-        fav.setAttribute('aria-pressed', 'false');
-        fav.textContent = '♡';
-        mostrarAviso('Eliminado de favoritos');
-      } else {
-        favoritos.add(id);
-        fav.setAttribute('aria-pressed', 'true');
-        fav.textContent = '♥';
-        mostrarAviso('Guardado en favoritos');
+    document.addEventListener('click', e => {
+      const chip = e.target.closest('.chip');
+      if (chip) {
+        const activo = chip.getAttribute('aria-pressed') === 'true';
+        $('#q').value = activo ? '' : chip.dataset.q;
+        filtrar();
+        if (!activo) $('#monitores').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
       }
-      return;
-    }
 
-    if (e.target.id === 'limpiar') { $('#q').value = ''; filtrar(); }
-    if (e.target.id === 'cerrar-modal' || e.target.id === 'cancelar-sol') { cerrarModalSolicitud(); }
-    if (e.target.id === 'btn-notif' || e.target.id === 'cerrar-notif') { toggleNotificaciones(); }
-    if (e.target.id === 'btn-editar-perfil') { abrirModalPerfil(); }
-    if (e.target.id === 'cerrar-perfil' || e.target.id === 'cancelar-perfil') { cerrarModalPerfil(); }
-    if (e.target.id === 'nav-config' || e.target.id === 'cerrar-config') { abrirConfig(); }
-    if (e.target.id === 'guardar-config') { guardarConfig(); }
-    if (e.target.id === 'btn-cerrar-sesion') { cerrarSesion(); }
-    if (e.target.id === 'btn-yo') { abrirConfig(); }
-  });
+      const sala = e.target.closest('[data-sala]');
+      if (sala) {
+        const m = monitores.find(x => x.id === sala.dataset.sala);
+        mostrarAviso(`Entrando a la sala de ${m.nombre}...`);
+        return;
+      }
 
-  $('#form-solicitud').addEventListener('submit', e => {
-    e.preventDefault();
-    const monitorId = $('#sol-monitor-id').value;
-    const hora = $('#sol-hora').value;
-    const m = monitores.find(x => x.id === monitorId);
-    const modalidad = $('#sol-modalidad').value;
-    const tema = $('#sol-tema').value;
-    const objetivo = $('#sol-objetivo').value;
-    const ubicacion = $('#sol-ubicacion').value;
-    const obs = $('#sol-obs').value;
+      const hora = e.target.closest('.hora');
+      if (hora) {
+        const id = hora.dataset.m;
+        const yaActiva = hora.getAttribute('aria-pressed') === 'true';
+        document.querySelectorAll(`.hora[data-m="${id}"]`).forEach(b => b.setAttribute('aria-pressed', 'false'));
+        if (!yaActiva) hora.setAttribute('aria-pressed', 'true');
+        seleccion[id] = yaActiva ? null : hora.dataset.h;
+        document.querySelector(`[data-reservar="${id}"]`).disabled = !seleccion[id];
+        return;
+      }
 
-    mostrarAviso(`Solicitud enviada a ${m.nombre} para ${hora} (${modalidad})`);
-    cerrarModalSolicitud();
-  });
+      const res = e.target.closest('[data-reservar]');
+      if (res && !res.disabled) {
+        const m = monitores.find(x => x.id === res.dataset.reservar);
+        abrirModalSolicitud(m.id, seleccion[m.id]);
+        return;
+      }
 
-  $('#form-perfil').addEventListener('submit', e => {
-    e.preventDefault();
-    guardarPerfil();
-  });
+      const fav = e.target.closest('[data-fav]');
+      if (fav) {
+        const id = fav.dataset.fav;
+        const activo = fav.getAttribute('aria-pressed') === 'true';
+        if (activo) {
+          favoritos.delete(id);
+          fav.setAttribute('aria-pressed', 'false');
+          fav.textContent = '♡';
+          mostrarAviso('Eliminado de favoritos');
+        } else {
+          favoritos.add(id);
+          fav.setAttribute('aria-pressed', 'true');
+          fav.textContent = '♥';
+          mostrarAviso('Guardado en favoritos');
+        }
+        return;
+      }
 
-  $('#q').addEventListener('input', filtrar);
-  $('#f-modalidad').addEventListener('change', filtrar);
-  $('#f-calif').addEventListener('change', filtrar);
-  $('#f-orden').addEventListener('change', filtrar);
+      if (e.target.id === 'limpiar') { $('#q').value = ''; filtrar(); }
+      if (e.target.id === 'cerrar-modal' || e.target.id === 'cancelar-sol') { cerrarModalSolicitud(); }
+      if (e.target.id === 'btn-notif' || e.target.id === 'cerrar-notif') { toggleNotificaciones(); }
+      if (e.target.id === 'btn-editar-perfil') { abrirModalPerfil(); }
+      if (e.target.id === 'cerrar-perfil' || e.target.id === 'cancelar-perfil') { cerrarModalPerfil(); }
+      if (e.target.id === 'nav-config' || e.target.id === 'cerrar-config') { abrirConfig(); }
+      if (e.target.id === 'guardar-config') { guardarConfig(); }
+      if (e.target.id === 'btn-cerrar-sesion') { cerrarSesion(); }
+      if (e.target.id === 'btn-yo') { abrirConfig(); }
+    });
 
-  $('#form-busqueda').addEventListener('submit', () => {
+    $('#form-solicitud').addEventListener('submit', e => {
+      e.preventDefault();
+      const monitorId = $('#sol-monitor-id').value;
+      const hora = $('#sol-hora').value;
+      const m = monitores.find(x => x.id === monitorId);
+      const modalidad = $('#sol-modalidad').value;
+      const tema = $('#sol-tema').value;
+      const objetivo = $('#sol-objetivo').value;
+      const ubicacion = $('#sol-ubicacion').value;
+      const obs = $('#sol-obs').value;
+
+      mostrarAviso(`Solicitud enviada a ${m.nombre} para ${hora} (${modalidad})`);
+      cerrarModalSolicitud();
+    });
+
+    $('#form-perfil').addEventListener('submit', e => {
+      e.preventDefault();
+      guardarPerfil();
+    });
+
+    $('#q').addEventListener('input', filtrar);
+    $('#f-modalidad').addEventListener('change', filtrar);
+    $('#f-calif').addEventListener('change', filtrar);
+    $('#f-orden').addEventListener('change', filtrar);
+
+    $('#form-busqueda').addEventListener('submit', () => {
+      filtrar();
+      $('#monitores').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    pintarEnLinea();
+    pintarLista();
     filtrar();
-    $('#monitores').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-
-  pintarEnLinea();
-  pintarLista();
-  filtrar();
-  pintarHistorial();
-  pintarNotificaciones();
-</script>
+    pintarHistorial();
+    pintarNotificaciones();
+  </script>
 </body>
-</html>     
+
+</html>

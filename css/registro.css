@@ -1,0 +1,395 @@
+/* Saberio — estilos exclusivos para registro.html */
+:root {
+  --primario: #1D2154;
+  --acento: #6564D5;
+  --purpura: #A078E8;
+  --lavanda: #EEE9FF;
+  --fondo: #F7F6FF;
+  --exito: #22C55E;
+  --advertencia: #EAB308;
+  --error: #EF4444;
+  --info: #3B82F6;
+  --texto: #1D2154;
+  --texto-suave: #5D6088;
+  --linea: #E1DCF7;
+  --superficie: #FFFFFF;
+  --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --cuerpo: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--cuerpo); background: var(--fondo); color: var(--texto);
+  line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh;
+  display: grid; grid-template-rows: auto 1fr auto;
+}
+a { color: inherit; text-decoration: none; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; border: 0; background: none; }
+:focus-visible { outline: 3px solid var(--purpura); outline-offset: 3px; border-radius: 8px; }
+
+/* Encabezado */
+.topbar {
+    background: var(--primario);
+    border-bottom: 1px solid rgba(255, 255, 255, .14);
+}
+
+.topbar .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    height: 68px;
+}
+
+.topbar .logo {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.topbar .logo img {
+    display: block;
+    width: auto;
+    max-width: 190px;
+    height: 46px;
+    object-fit: contain;
+}
+
+/* Contenedor y tarjeta */
+.main-wrap {
+    display: grid;
+    place-items: center;
+    padding: 40px 24px 48px;
+}
+
+.card {
+    background: var(--superficie);
+    border: 1px solid var(--linea);
+    border-radius: 24px;
+    padding: 36px 40px;
+    max-width: 620px;
+    width: 100%;
+    box-shadow: 0 12px 40px rgba(29, 33, 84, .08);
+}
+
+.card>header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.card>header h1 {
+    font-family: var(--display);
+    font-size: clamp(25px, 4vw, 32px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    color: var(--primario);
+}
+
+.card>header p {
+    color: var(--texto-suave);
+    font-size: 15px;
+}
+
+/* Campos y validaciones */
+.campo {
+    margin-bottom: 19px;
+    min-width: 0;
+}
+
+.campo>label {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--texto-suave);
+    margin-bottom: 8px;
+}
+
+.campo input:not([type="checkbox"]):not([type="radio"]),
+.campo select {
+    display: block;
+    width: 100%;
+    min-height: 49px;
+    padding: 13px 15px;
+    border: 1.5px solid var(--linea);
+    border-radius: 12px;
+    background: #fff;
+    font-size: 15px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.campo input:focus,
+.campo select:focus {
+    border-color: var(--acento);
+    box-shadow: 0 0 0 3px rgba(101, 100, 213, .15);
+    outline: 0;
+}
+
+.campo input::placeholder {
+    color: #A8ABCA;
+}
+
+.campo .ayuda {
+    font-size: 13px;
+    color: var(--texto-suave);
+    margin-top: 6px;
+}
+
+.campo .ayuda b {
+    color: var(--primario);
+    font-weight: 700;
+}
+
+.campo .error {
+    display: none;
+    font-size: 13px;
+    color: var(--error);
+    margin-top: 6px;
+}
+
+.campo.error input:not([type="checkbox"]):not([type="radio"]),
+.campo.error select {
+    border-color: var(--error);
+    background: rgba(239, 68, 68, .025);
+}
+
+.campo.error .error {
+    display: block;
+}
+
+/* Selector de rol */
+.roles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.rol-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+    min-height: 155px;
+    padding: 18px 14px;
+    border: 2px solid var(--linea);
+    border-radius: 15px;
+    background: #fff;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+
+.rol-option:hover {
+    border-color: var(--acento);
+    background: #FAF9FF;
+    transform: translateY(-1px);
+}
+
+.rol-option[aria-checked="true"] {
+    border-color: var(--acento);
+    background: var(--lavanda);
+    box-shadow: 0 0 0 2px rgba(101, 100, 213, .08);
+}
+
+.rol-option input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.rol-icon {
+    display: block;
+    font-size: 29px;
+    line-height: 1.2;
+    margin-bottom: 9px;
+}
+
+.rol-option b {
+    display: block;
+    color: var(--primario);
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.rol-option span:not(.rol-icon) {
+    color: var(--texto-suave);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* Términos y condiciones */
+.campo.checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 4px;
+    margin-bottom: 20px;
+}
+
+.checkbox input[type="checkbox"] {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    margin-top: 3px;
+    accent-color: var(--acento);
+    cursor: pointer;
+}
+
+.checkbox label {
+    margin: 0;
+    color: var(--texto-suave);
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.checkbox a {
+    color: var(--acento);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.checkbox a:hover {
+    color: var(--primario);
+}
+
+/* Botón y confirmación */
+.btn-primario {
+    display: block;
+    width: 100%;
+    background: var(--acento);
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 15px 18px;
+    border-radius: 14px;
+    margin-top: 8px;
+    transition: background .15s ease, transform .1s ease;
+}
+
+.btn-primario:hover {
+    background: #5453C4;
+}
+
+.btn-primario:active {
+    transform: scale(.985);
+}
+
+.btn-primario:disabled {
+    background: var(--lavanda);
+    color: #9A9CC0;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.success-box {
+    display: none;
+    background: rgba(34, 197, 94, .1);
+    border: 1.5px solid var(--exito);
+    border-radius: 14px;
+    padding: 17px;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.success-box.ver {
+    display: block;
+}
+
+.success-box b {
+    display: block;
+    color: #12803A;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.success-box p {
+    font-size: 14px;
+    color: #155F2E;
+    overflow-wrap: anywhere;
+}
+
+/* Enlace al login y pie de página */
+.card-footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: var(--texto-suave);
+}
+
+.card-footer a {
+    color: var(--acento);
+    font-weight: 700;
+}
+
+.card-footer a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+body>footer {
+    border-top: 1px solid var(--linea);
+    padding: 20px 24px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--texto-suave);
+}
+
+@media (max-width: 560px) {
+    .topbar .wrap {
+        height: 62px;
+        padding: 0 18px;
+    }
+
+    .topbar .logo img {
+        max-height: 40px;
+        max-width: 160px;
+    }
+
+    .main-wrap {
+        padding: 24px 14px 32px;
+    }
+
+    .card {
+        padding: 27px 20px;
+        border-radius: 20px;
+    }
+
+    .card>header {
+        margin-bottom: 24px;
+    }
+
+    .roles {
+        grid-template-columns: 1fr;
+    }
+
+    .rol-option {
+        min-height: 0;
+        padding: 16px 12px;
+    }
+
+    body>footer {
+        padding: 18px 14px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: .01ms !important;
+    }
+}
