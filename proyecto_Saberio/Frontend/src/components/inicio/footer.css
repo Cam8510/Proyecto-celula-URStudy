@@ -1,0 +1,32 @@
+.footer {
+  border-top: 1px solid var(--linea);
+  padding: 28px 0 40px;
+  font-size: 14px;
+  color: var(--texto-suave);
+}
+
+.footer :global(.wrap) {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer nav {
+  display: flex;
+  gap: 20px;
+}
+
+.footer a {
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: var(--acento);
+}
+
+@media (max-width: 560px) {
+  .footer :global(.wrap) {
+    flex-direction: column;
+  }
+}

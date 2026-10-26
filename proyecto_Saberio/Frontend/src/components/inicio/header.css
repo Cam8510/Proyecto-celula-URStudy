@@ -1,0 +1,72 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(247, 246, 255, .92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--linea);
+}
+
+.topbar :global(.wrap) {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  height: 68px;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+  text-decoration: none;
+  margin-right: auto;
+}
+
+.logo b {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -.02em;
+}
+
+.logo small {
+  font-size: 11px;
+  color: var(--texto-suave);
+}
+
+.enlaces {
+  display: flex;
+  gap: 4px;
+}
+
+.enlaces a {
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--texto-suave);
+  padding: 8px 14px;
+  border-radius: 999px;
+  transition: background .15s, color .15s;
+}
+
+.enlaces a:hover {
+  background: var(--lavanda);
+  color: var(--primario);
+}
+
+.acciones {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+  .enlaces {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .acciones :global(.btn-borde) {
+    display: none;
+  }
+}
