@@ -10,6 +10,7 @@ import Alert from '../components/Alert/Alert'
 import { isInstitutionalEmail, isStrongPassword } from '../utils/validators'
 import { register } from '../services/authService'
 import type { SignUpRole } from '../types/auth'
+const logo = new URL('../assets/logo.png', import.meta.url).href
 
 interface FormErrors {
   name?: string
@@ -72,7 +73,7 @@ function RegisterPage() {
 
   return (
     <div className="page">
-      <Header brand="URStudy" subtitle="Universidad del Rosario" />
+      <Header brand="Saberio" logo={logo} subtitle="Universidad del Rosario" />
 
       <main className="page__content">
         <AuthCard
@@ -142,7 +143,7 @@ function RegisterPage() {
         </AuthCard>
       </main>
 
-      <Footer text="URStudy, Universidad del Rosario © 2026" />
+      <Footer text="Saberio, Universidad del Rosario © 2026" />
     </div>
   )
 }

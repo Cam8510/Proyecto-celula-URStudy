@@ -1,9 +1,10 @@
 import type { LinkItem, ActionItem } from '../../types/navigation'
-// @ts-ignore - Vite gestiona las importaciones de hojas de estilo.
+// @ts-ignore - the stylesheet is declared by the project's Vite setup
 import './header.css'
 
 interface HeaderProps {
   brand: string
+  logo?: string
   subtitle?: string
   homeHref?: string
   links?: LinkItem[]
@@ -12,6 +13,7 @@ interface HeaderProps {
 
 function Header({
   brand,
+  logo,
   subtitle,
   homeHref = '/',
   links = [],
@@ -20,9 +22,15 @@ function Header({
   return (
     <header className="header">
       <div className="header__wrap">
-        <a className="header__logo" href={homeHref}>
-          <b>{brand}</b>
-          {subtitle && <small>{subtitle}</small>}
+        <a className="header__logo" href={homeHref} aria-label={brand}>
+          {logo ? (
+            <img className="header__logo-img" src={logo} alt={brand} />
+          ) : (
+            <>
+              <b>{brand}</b>
+              {subtitle && <small>{subtitle}</small>}
+            </>
+          )}
         </a>
 
         {links.length > 0 && (

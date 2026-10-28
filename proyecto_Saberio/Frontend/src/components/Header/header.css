@@ -1,6 +1,6 @@
 .header {
-  background: rgba(247, 246, 255, 0.92);
-  border-bottom: 1px solid var(--linea);
+  background: var(--primario);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .header__wrap {
@@ -17,7 +17,8 @@
   display: flex;
   flex-direction: column;
   line-height: 1.05;
-  margin-right: auto; /* empuja lo demás a la derecha */
+  margin-right: auto;
+  color: #fff;
 }
 
 .header__logo b {
@@ -27,7 +28,13 @@
 
 .header__logo small {
   font-size: 11px;
-  color: var(--texto-suave);
+  color: #cfcbf5;
+}
+
+.header__logo-img {
+  height: 44px;
+  width: auto;
+  display: block;
 }
 
 .header__links {
@@ -40,12 +47,13 @@
   border-radius: 999px;
   font-weight: 600;
   font-size: 15px;
-  color: var(--texto-suave);
+  color: #cfcbf5;
+  transition: background 0.15s, color 0.15s;
 }
 
 .header__links a:hover {
-  background: var(--lavanda);
-  color: var(--primario);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
 }
 
 .header__actions {
@@ -58,6 +66,7 @@
   border-radius: 12px;
   font-weight: 700;
   font-size: 15px;
+  transition: background 0.15s, border-color 0.15s;
 }
 
 .btn--primary {
@@ -66,16 +75,18 @@
 }
 
 .btn--primary:hover {
-  background: #5453c4;
+  background: #7776e0;
 }
 
 .btn--outline {
-  background: #fff;
-  border: 1.5px solid var(--linea);
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
 }
 
 .btn--outline:hover {
-  border-color: var(--acento);
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 @media (max-width: 960px) {

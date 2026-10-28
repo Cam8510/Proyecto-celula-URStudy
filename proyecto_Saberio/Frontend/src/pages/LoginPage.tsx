@@ -9,6 +9,7 @@ import Alert from '../components/Alert/Alert'
 import ForgotPasswordModal from '../components/ForgotPassword/ForgotPassword'
 import { isInstitutionalEmail } from '../utils/validators'
 import { login, saveSession, redirectByRole } from '../services/authService'
+const logo = new URL('../assets/logo.png', import.meta.url).href
 
 function LoginPage() {
   const [email, setEmail] = useState('')
@@ -43,7 +44,7 @@ function LoginPage() {
 
   return (
     <div className="page">
-      <Header brand="URStudy" subtitle="Universidad del Rosario" />
+      <Header brand="Saberio" logo={logo} subtitle="Universidad del Rosario" />
 
       <main className="page__content">
         <AuthCard
@@ -96,7 +97,7 @@ function LoginPage() {
         </AuthCard>
       </main>
 
-      <Footer text="URStudy, Universidad del Rosario © 2026" />
+      <Footer text="Saberio, Universidad del Rosario © 2026" />
       <ForgotPasswordModal open={showRecover} onClose={() => setShowRecover(false)} />
     </div>
   )
