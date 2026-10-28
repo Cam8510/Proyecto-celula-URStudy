@@ -1,0 +1,46 @@
+.roles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.role-option {
+  font: inherit;
+  color: var(--primario);
+  background: #fff;
+  border: 2px solid var(--linea);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.role-option:hover,
+.role-option[aria-checked='true'] {
+  border-color: var(--acento);
+  background: var(--lavanda);
+}
+
+.role-option__icon {
+  display: block;
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.role-option b {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.role-option span:last-child {
+  font-size: 13px;
+  color: var(--texto-suave);
+}
+
+@media (max-width: 560px) {
+  .roles {
+    grid-template-columns: 1fr;
+  }
+}
