@@ -77,3 +77,27 @@
 @media (max-width: 720px) {
   .bell__panel { position: fixed; left: 16px; right: 16px; top: 76px; width: auto; }
 }
+.bell__button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+.mi-campana {
+  color: #cfcbf5;
+  width: 24px;
+  height: 24px;
+  display: block;
+  transition: color 0.2s ease;
+}
+
+.bell__button:hover .mi-campana,
+.bell__button:focus-visible .mi-campana {
+  color: #3182ce;
+}
