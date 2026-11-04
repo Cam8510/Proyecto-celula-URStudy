@@ -10,3 +10,7 @@ export function firstName(name: string): string {
 export function normalize(text: string): string {
   return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
 }
+// 2026-11-04: clave para guardar un día del calendario
+export function toDateKey(year: number, month: number, day: number): string {
+  return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+}

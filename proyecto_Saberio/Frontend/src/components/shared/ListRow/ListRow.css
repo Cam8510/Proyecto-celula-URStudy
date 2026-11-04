@@ -11,3 +11,5 @@
 .row__text { flex: 1; line-height: 1.3; min-width: 0; }
 .row__text b { display: block; font-size: 15px; }
 .row__text span { font-size: 13px; color: var(--texto-suave); }
+.row--click { cursor: pointer; }
+.row--click:hover { border-color: var(--acento); }

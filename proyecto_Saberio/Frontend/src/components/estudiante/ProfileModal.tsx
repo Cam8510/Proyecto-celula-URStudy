@@ -35,15 +35,17 @@ function ProfileModal({ profile, onClose, onSave }: ProfileModalProps) {
       <form id="form-perfil" onSubmit={handleSubmit}>
         <FormField id="pf-carrera" label="Carrera" value={form.career}
           onChange={(v) => setForm({ ...form, career: v })} />
+        <div className="form-row">
         <FormField id="pf-semestre" label="Semestre" value={String(form.semester)}
           onChange={(v) => setForm({ ...form, semester: Number(v) || 1 })} />
+        <SelectField id="pf-modalidad" label="Modalidad preferida" value={form.modality}
+          onChange={(v) => setForm({ ...form, modality: v })}
+          options={[{ value: 'Presencial', label: 'Presencial' }, { value: 'Virtual', label: 'Virtual' }, { value: 'Ambas', label: 'Ambas' }]} />
+          </div>
         <FormField id="pf-materias" label="Materias de interés (separadas por coma)" value={form.subjects}
           onChange={(v) => setForm({ ...form, subjects: v })} />
         <FormField id="pf-dispo" label="Disponibilidad preferida" value={form.availability}
           onChange={(v) => setForm({ ...form, availability: v })} />
-        <SelectField id="pf-modalidad" label="Modalidad preferida" value={form.modality}
-          onChange={(v) => setForm({ ...form, modality: v })}
-          options={[{ value: 'Presencial', label: 'Presencial' }, { value: 'Virtual', label: 'Virtual' }, { value: 'Ambas', label: 'Ambas' }]} />
       </form>
     </Modal>
   )

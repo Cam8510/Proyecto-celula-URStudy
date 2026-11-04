@@ -1,5 +1,5 @@
 // @ts-ignore - Vite gestiona las importaciones de hojas de estilo.
-import './FormControls.css'
+import './FormControl.css'
 
 interface SelectFieldProps {
   id: string

@@ -1,5 +1,12 @@
-.control { margin-bottom: 18px; }
-.control label { display: block; font-weight: 600; font-size: 14px; color: var(--texto-suave); margin-bottom: 8px; }
+.control { margin-bottom: 20px; }
+
+.control label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--texto-suave);
+  margin-bottom: 8px;
+}
 
 .control select,
 .control textarea {
@@ -24,4 +31,5 @@
 
 .control--error select,
 .control--error textarea { border-color: #ef4444; }
+
 .control p { font-size: 13px; color: #ef4444; margin-top: 6px; }

@@ -1,0 +1,51 @@
+.option {
+  align-self: stretch;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 20px;
+}
+
+.option__row { display: flex; align-items: center; gap: 12px; }
+.option__who { flex: 1; min-width: 0; line-height: 1.25; }
+.option__who b { display: block; font-size: 15px; }
+.option__who span { font-size: 13px; color: #cfcbf5; }
+
+.option__online {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0e2a18;
+  background: var(--exito);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.option__tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 10px; }
+
+.option__tags i {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--purpura);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 8px;
+}
+
+.option__slots { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.option__slots button {
+  padding: 6px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.option__slots button:hover:not(:disabled) { background: #fff; color: var(--primario); border-color: #fff; }
+.option__slots button:disabled { opacity: 0.45; cursor: default; }
+.option__slots button.is-selected { background: #fff; color: var(--primario); border-color: #fff; opacity: 1; }

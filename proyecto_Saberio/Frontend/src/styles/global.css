@@ -1,8 +1,13 @@
 :root {
   --primario: #1d2154;
   --acento: #6564d5;
+  --purpura: #a078e8;
   --lavanda: #eee9ff;
   --fondo: #f7f6ff;
+  --exito: #22c55e;
+  --advertencia: #eab308;
+  --error: #ef4444;
+  --info: #3b82f6;
   --texto-suave: #5d6088;
   --linea: #e1dcf7;
 }
@@ -79,4 +84,17 @@ a {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+input, select, textarea { max-width: 100%; }
+
+@media (max-width: 560px) {
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .page__content { padding: 28px 16px; }   /* login y registro con menos margen */
 }

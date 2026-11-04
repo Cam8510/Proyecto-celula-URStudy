@@ -3,6 +3,7 @@ import type { FormEvent } from 'react'
 import type { Monitor, SessionRequestForm } from '../../types/monitoring'
 import Modal from '../Modal/Modal'
 import Button from '../Button/Button'
+import Alert from '../Alert/Alert'
 import FormField from '../FormField/FormField'
 import SelectField from '../shared/FormControls/SelectField'
 import TextAreaField from '../shared/FormControls/TextAreaField'
@@ -14,13 +15,19 @@ interface RequestModalProps {
   onSubmit: (data: SessionRequestForm) => void
 }
 
-const EMPTY: SessionRequestForm = { modality: '', topic: '', goal: '', location: '', notes: '' }
+type FormErrors = Partial<Record<keyof SessionRequestForm, string>>
 
 function RequestModal({ monitor, slot, onClose, onSubmit }: RequestModalProps) {
-  const [form, setForm] = useState<SessionRequestForm>(EMPTY)
-  const [errors, setErrors] = useState<Partial<Record<keyof SessionRequestForm, string>>>({})
+  // Si el monitor ofrece una sola modalidad, ya la dejamos elegida
+  const [form, setForm] = useState<SessionRequestForm>({
+    modality: monitor.modality === 'Ambas' ? '' : monitor.modality,
+    topic: '',
+    goal: '',
+    location: '',
+    notes: '',
+  })
+  const [errors, setErrors] = useState<FormErrors>({})
 
-  // Actualiza un solo campo del formulario
   const update = (field: keyof SessionRequestForm) => (value: string) => {
     setForm({ ...form, [field]: value })
     setErrors({ ...errors, [field]: undefined })
@@ -28,13 +35,15 @@ function RequestModal({ monitor, slot, onClose, onSubmit }: RequestModalProps) {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    const found: typeof errors = {}
+    const found: FormErrors = {}
     if (!form.modality) found.modality = 'Selecciona una modalidad'
     if (!form.topic.trim()) found.topic = 'Cuéntanos qué dudas tienes'
     if (!form.goal.trim()) found.goal = 'Indica el objetivo de la sesión'
     setErrors(found)
     if (Object.keys(found).length === 0) onSubmit(form)
   }
+
+  const hasErrors = Object.values(errors).some(Boolean)
 
   const modalityOptions =
     monitor.modality === 'Ambas'
@@ -56,15 +65,26 @@ function RequestModal({ monitor, slot, onClose, onSubmit }: RequestModalProps) {
       <p style={{ marginBottom: 16, color: 'var(--texto-suave)' }}>
         <b style={{ color: 'var(--primario)' }}>{monitor.name}</b> · {monitor.subject} · {slot}
       </p>
+
+      {hasErrors && (
+        <Alert
+          type="error"
+          title="Revisa el formulario"
+          message="Completa los campos marcados con * para enviar tu solicitud."
+        />
+      )}
+
       <form id="form-solicitud" onSubmit={handleSubmit} noValidate>
-        <SelectField id="sol-modalidad" label="Modalidad" value={form.modality}
-          onChange={update('modality')} options={modalityOptions} error={errors.modality} />
-        <TextAreaField id="sol-tema" label="Tema o dudas específicas" value={form.topic}
+        <div className="form-row">
+          <SelectField id="sol-modalidad" label="Modalidad *" value={form.modality}
+            onChange={update('modality')} options={modalityOptions} error={errors.modality} />
+          <FormField id="sol-ubicacion" label="Ubicación (si es presencial)" value={form.location}
+            onChange={update('location')} placeholder="Ej: Biblioteca" />
+        </div>
+        <TextAreaField id="sol-tema" label="Tema o dudas específicas *" value={form.topic}
           onChange={update('topic')} placeholder="Ej: integrales por partes, ejercicios de repaso..." error={errors.topic} />
-        <FormField id="sol-objetivo" label="Objetivo de la sesión" value={form.goal}
+        <FormField id="sol-objetivo" label="Objetivo de la sesión *" value={form.goal}
           onChange={update('goal')} placeholder="Ej: preparar parcial" error={errors.goal} />
-        <FormField id="sol-ubicacion" label="Ubicación sugerida (si es presencial)" value={form.location}
-          onChange={update('location')} placeholder="Ej: Biblioteca" />
         <TextAreaField id="sol-obs" label="Observaciones" value={form.notes}
           onChange={update('notes')} placeholder="Cualquier detalle adicional..." />
       </form>

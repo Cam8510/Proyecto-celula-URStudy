@@ -12,6 +12,7 @@ export const ROLE_HOME: Record<Role, string> = {
 export const NAV_BY_ROLE: Record<Role, NavItem[]> = {
   estudiante: [
     { label: 'Inicio', to: '/estudiante', icon: '🏠' },
+    {label: 'Buscar monitoría', to: '/estudiante/buscar-monitoria', icon: '🔍' },
     { label: 'Mis monitorías', to: '/estudiante/mis-monitorias', icon: '📅' },
     { label: 'Historial', to: '/estudiante/historial', icon: '🕘' },
   ],
@@ -41,4 +42,10 @@ export const ROLE_COLOR: Record<Role, 'primary' | 'purple' | 'dark'> = {
   estudiante: 'primary',
   monitor: 'purple',
   admin: 'dark',
+}
+
+export const ROLE_SETTINGS: Record<Role, string> = {
+  estudiante: '/estudiante/configuracion',
+  monitor: '/monitor/configuracion',
+  admin: '/admin/configuracion',
 }

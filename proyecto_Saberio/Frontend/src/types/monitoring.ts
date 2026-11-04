@@ -65,3 +65,51 @@ export interface SessionRequestForm {
   location: string
   notes: string
 }
+export interface Publication {
+  id: number
+  subject: string
+  description: string
+  modality: Modality
+  rate: number
+  duration: number
+  active: boolean
+}
+
+export type PublicationForm = Omit<Publication, 'id' | 'active'>
+
+export type RequestStatus = 'pendiente' | 'aceptada' | 'rechazada'
+
+export interface IncomingRequest {
+  id: number
+  student: string
+  initials: string
+  color: AvatarColor
+  subject: string
+  date: string
+  modality: Modality
+  topic: string
+  goal: string
+  location: string
+  notes: string
+  status: RequestStatus
+  rejectReason?: string
+}
+
+export interface MonitorProfile {
+  bio: string
+  experience: string
+  approach: string
+  subjects: string
+  rate: number
+  modality: string
+  availability: string
+}
+
+export interface ScheduleSlot {
+  id: number
+  day: string
+  hours: string
+  active: boolean
+}
+
+export type AvailabilityMap = Record<string, 'available' | 'blocked'>

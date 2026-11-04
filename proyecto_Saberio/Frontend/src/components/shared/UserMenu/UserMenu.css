@@ -1,0 +1,62 @@
+.user-menu { position: relative; }
+
+.user-menu__button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 4px 10px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.user-menu__button:hover { background: rgba(255, 255, 255, 0.12); }
+.user-menu__button div { text-align: right; line-height: 1.2; }
+.user-menu__button b { display: block; font-size: 14px; }
+.user-menu__button span { font-size: 12px; color: #cfcbf5; }
+.user-menu__chevron { font-size: 12px; }
+
+.user-menu__panel {
+  position: absolute;
+  right: 0;
+  top: 56px;
+  z-index: 70;
+  width: 250px;
+  overflow: hidden;
+  background: #fff;
+  color: var(--primario);
+  border: 1px solid var(--linea);
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(29, 33, 84, 0.25);
+}
+
+.user-menu__who {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--linea);
+}
+
+.user-menu__who b { display: block; font-size: 15px; }
+.user-menu__who span { font-size: 13px; color: var(--texto-suave); word-break: break-all; }
+
+.user-menu__panel > button {
+  display: block;
+  width: 100%;
+  padding: 13px 18px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  color: var(--primario);
+  cursor: pointer;
+}
+
+.user-menu__panel > button:hover { background: var(--lavanda); }
+.user-menu__panel > button:last-child { color: #c42b2b; }
+
+/* En celular solo se ve el avatar con la flechita */
+@media (max-width: 720px) {
+  .user-menu__button div { display: none; }
+}
