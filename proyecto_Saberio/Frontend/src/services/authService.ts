@@ -1,5 +1,5 @@
 import type { RegisterData, User } from '../types/auth'
-
+import { ROLE_HOME } from '../config/navigation'
 const TEST_USERS = [
   { name: 'Sofía Martínez', email: 'sofia.martinez@urosario.edu.co', password: '12345678', role: 'estudiante' },
   { name: 'Carlos Ruiz', email: 'carlos.ruiz@urosario.edu.co', password: '12345678', role: 'monitor' },
@@ -33,6 +33,16 @@ export function saveSession(user: User, remember: boolean) {
 }
 
 export function redirectByRole(role: User['role']) {
-  const routes = { estudiante: '/', monitor: '/monitor', admin: '/admin' }
-  window.location.href = routes[role]
+  window.location.href = ROLE_HOME[role]
+}
+
+// Lee la sesión simulada (la guardó saveSession)
+export function getSession(): User | null {
+  const raw = localStorage.getItem('usuario') ?? sessionStorage.getItem('usuario')
+  return raw ? (JSON.parse(raw) as User) : null
+}
+
+export function logout() {
+  localStorage.removeItem('usuario')
+  sessionStorage.removeItem('usuario')
 }

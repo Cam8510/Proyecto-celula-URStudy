@@ -1,0 +1,13 @@
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 700;
+}
+
+.avatar--primary { background: var(--acento); }
+.avatar--purple { background: var(--purpura); }
+.avatar--blue { background: var(--info); }
+.avatar--dark { background: var(--primario); box-shadow: inset 0 0 0 2px var(--purpura); }

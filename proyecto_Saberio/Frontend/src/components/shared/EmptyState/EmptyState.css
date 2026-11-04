@@ -1,0 +1,18 @@
+.empty {
+  background: #fff;
+  border: 1.5px dashed var(--purpura);
+  border-radius: 24px;
+  padding: 36px;
+  text-align: center;
+}
+
+.empty b {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.empty p {
+  color: var(--texto-suave);
+  margin-bottom: 16px;
+}

@@ -1,0 +1,39 @@
+.hero-box {
+  position: relative;
+  overflow: hidden;
+  margin-top: 24px;
+  padding: 48px 48px 36px;
+  border-radius: 32px;
+  background: var(--primario);
+  color: #fff;
+}
+
+.hero-box::before {
+  content: '';
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  right: -110px;
+  top: -150px;
+  background: var(--acento);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.hero-box > * { position: relative; }
+.hero-box__greeting { font-size: 16px; color: #cfcbf5; margin-bottom: 10px; }
+
+.hero-box h1 {
+  font-size: clamp(34px, 5.2vw, 58px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.03;
+  max-width: 14em;
+}
+
+.hero-box__desc { max-width: 580px; color: #cfcbf5; margin-top: 12px; font-size: 16px; }
+
+@media (max-width: 720px) {
+  .hero-box { padding: 32px 22px 26px; border-radius: 26px; }
+}

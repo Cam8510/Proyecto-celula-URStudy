@@ -1,0 +1,79 @@
+.bell { position: relative; }
+
+.bell__button {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.bell__button:hover { background: rgba(255, 255, 255, 0.12); }
+
+.bell__button i {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: #ef4444;
+  color: #fff;
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.bell__panel {
+  position: absolute;
+  right: 0;
+  top: 52px;
+  width: 340px;
+  background: #fff;
+  color: var(--primario);
+  border: 1px solid var(--linea);
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(29, 33, 84, 0.25);
+  z-index: 70;
+}
+
+.bell__panel header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--linea);
+}
+
+.bell__panel header button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--primario);
+}
+
+.bell__list { max-height: 360px; overflow-y: auto; }
+
+.bell__item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--linea);
+}
+
+.bell__item:last-child { border-bottom: 0; }
+.bell__icon { font-size: 20px; }
+.bell__item b { display: block; font-size: 14px; margin-bottom: 3px; }
+.bell__item p { font-size: 13px; color: var(--texto-suave); line-height: 1.35; }
+.bell__item time { font-size: 11px; color: var(--texto-suave); white-space: nowrap; }
+.bell__empty { padding: 18px; font-size: 14px; color: var(--texto-suave); }
+
+@media (max-width: 720px) {
+  .bell__panel { position: fixed; left: 16px; right: 16px; top: 76px; width: auto; }
+}

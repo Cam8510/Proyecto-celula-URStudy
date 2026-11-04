@@ -8,6 +8,7 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary'
   loading?: boolean
   loadingText?: string
+  disabled?: boolean
   fullWidth?: boolean
   form?: string
   onClick?: () => void
@@ -19,6 +20,7 @@ function Button({
   variant = 'primary',
   loading = false,
   loadingText,
+  disabled = false,
   fullWidth = false,
   form,
   onClick,
@@ -28,7 +30,7 @@ function Button({
       type={type}
       form={form}
       onClick={onClick}
-      disabled={loading}
+      disabled={loading || disabled}
       className={`button button--${variant} ${fullWidth ? 'button--full' : ''}`}
     >
       {loading && loadingText ? loadingText : children}

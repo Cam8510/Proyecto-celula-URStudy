@@ -1,0 +1,17 @@
+.stat-card {
+  background: var(--lavanda);
+  border-radius: 20px;
+  padding: 18px;
+  text-align: center;
+}
+
+.stat-card b {
+  display: block;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.stat-card span {
+  font-size: 13px;
+  color: var(--texto-suave);
+}

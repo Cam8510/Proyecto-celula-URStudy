@@ -1,0 +1,29 @@
+.card {
+  background: #fff;
+  border: 1px solid var(--linea);
+  border-radius: 24px;
+  padding: 22px;
+}
+
+.card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.card__title {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.card__title--small {
+  font-size: 18px;
+}
+
+.card__head p {
+  font-size: 14px;
+  color: var(--texto-suave);
+}
